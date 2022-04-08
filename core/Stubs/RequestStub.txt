@@ -1,0 +1,12 @@
+<?php
+namespace {{namespace}};
+
+{{ model_namespace }}
+
+class {{ class_name }} extends FormRequest
+{
+    public function rules() : array
+    {
+        //TODO implement rules
+    }
+}

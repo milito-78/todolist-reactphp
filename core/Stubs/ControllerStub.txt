@@ -1,0 +1,10 @@
+<?php
+namespace {{namespace}};
+
+{{ model_namespace }}
+use Psr\Http\Message\RequestInterface;
+
+class {{ class_name }} extends Controller
+{
+
+}

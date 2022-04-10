@@ -1,20 +1,31 @@
 <?php
 
+use Core\Config\Config;
 use Core\Exceptions\ErrorHandler;
 use Core\Response\JsonRequestDecoder;
+use Core\Route\Route;
 use Core\Route\Router;
+use Dotenv\Dotenv;
+use FastRoute\DataGenerator\GroupCountBased;
+use FastRoute\RouteCollector;
+use FastRoute\RouteParser\Std;
 use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Http\Message\RequestInterface;
 use React\Http\HttpServer;
 use React\MySQL\Factory as Mysql;
+use React\Socket\SocketServer;
 
-require "vendor/autoload.php";
-
-$env = \Dotenv\Dotenv::createImmutable(__DIR__,"../.env");
+$env = Dotenv::createImmutable(__DIR__,"../.env");
 $env->load();
 
-date_default_timezone_set(env("TIMEZONE"));
+$config = new Config();
+$config->loadConfigurationFiles(__DIR__ . '/../config',env("APP_ENV","local"));
+
+
+date_default_timezone_set(config("app.timezone"));
+
 
 $container = new League\Container\Container();
 
@@ -24,19 +35,17 @@ $container->add("loop" ,$loop);
 $container->add("MysqlConnector" , new Mysql($loop));
 
 
-$aliases = include_once "app/Http/Middleware/MiddlewareAlias.php";
+Route::alias(config("app.middlewares"));
 
-\Core\Route\Route::alias($aliases);
-
-\Core\Route\Route::init(
-                            new \FastRoute\RouteCollector(new \FastRoute\RouteParser\Std() ,
-                            new \FastRoute\DataGenerator\GroupCountBased())
-                        );
+Route::init(
+                new RouteCollector(new Std() ,
+                new GroupCountBased())
+           );
 
 require_once "routes/router.php";
 
 
-$CorsOption =  function (\Psr\Http\Message\RequestInterface $request , callable $next){
+$CorsOption =  function (RequestInterface $request , callable $next){
     if (preg_match('/options/i',$request->getMethod()))
     {
         return json_no_content();
@@ -45,15 +54,13 @@ $CorsOption =  function (\Psr\Http\Message\RequestInterface $request , callable 
 };
 
 
+$server =  new HttpServer($loop, $CorsOption, new ErrorHandler(), new JsonRequestDecoder(), new Router(Route::getCollector()));
 
 
-$server =  new HttpServer($loop, $CorsOption, new ErrorHandler(), new JsonRequestDecoder(), new Router(\Core\Route\Route::getCollector()));
-
-
-$socket = new \React\Socket\SocketServer(
-    uri:"127.0.0.1:3000",
-    context:[],
-    loop:$loop
+$socket = new SocketServer(
+     config("app.socket_server") . ":" . config("app.socket_port"),
+    [],
+    $loop
 );
 
 $server->listen($socket);
@@ -61,6 +68,9 @@ $server->listen($socket);
 $logger = new Logger('errors');
 $logger->pushHandler(new StreamHandler(__DIR__.'/../storage/logs/app.log', Logger::DEBUG));
 $logger->pushHandler(new FirePHPHandler());
+
+
+$container->add("logger" , $logger);
 
 $server->on("error" , function ($data)use( $logger ) {
     $logger->error(get_class($data) . ' ' . $data->getMessage());

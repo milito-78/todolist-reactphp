@@ -38,16 +38,17 @@ class DBConnection
         return self::$instance;
     }
 
-    #[Pure]
     private function getUri(): string
     {
-        return  env("DB_USER") .
+        return  config("database.connections.mysql.username") .
                 ":" .
-                env("DB_PASSWORD") .
+                config("database.connections.mysql.password") .
                 "@".
-                env("DB_HOST") .
+                config("database.connections.mysql.host") .
+                ":" .
+                config("database.connections.mysql.port") .
                 "/".
-                env("DB_NAME");
+                config("database.connections.mysql.database");
     }
 
 }

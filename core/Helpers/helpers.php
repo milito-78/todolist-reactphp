@@ -55,3 +55,21 @@ if (!function_exists("env"))
         return $_ENV[$key]??$default;
     }
 }
+
+if (!function_exists("config"))
+{
+    function config(string $key, $default = null)
+    {
+        global $config;
+        return $config->get($key,$default);
+    }
+}
+
+if (!function_exists("logger"))
+{
+    function logger() :  Monolog\Logger
+    {
+        global $container;
+        return $container->get((string) "logger");
+    }
+}

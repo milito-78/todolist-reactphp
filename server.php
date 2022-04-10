@@ -4,7 +4,6 @@ require "vendor/autoload.php";
 
 $loop = include_once "bootstrap/bootstrap.php";
 
-echo "server run on 127.0.0.1:3000\n";
+echo "server run on ". config("app.socket_server") . ":" . config("app.socket_port") ."\n";
 
 $loop->run();
-

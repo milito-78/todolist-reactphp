@@ -13,6 +13,6 @@ return [
     "socket_port" => env("SOCKET_PORT","3000"),
 
     "middlewares" => [
-
+        "test" => \App\Middlewares\TestMiddleware::class
     ]
 ];

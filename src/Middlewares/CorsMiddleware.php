@@ -3,9 +3,11 @@
 
 namespace App\Middlewares;
 
+use Core\Response\JsonResponse;
+
 class CorsMiddleware
 {
-    public function __invoke($serverRequest, callable $next)
+    public function __invoke($serverRequest, callable $next):JsonResponse
     {
         if (preg_match('/options/i',$serverRequest->getMethod()))
         {

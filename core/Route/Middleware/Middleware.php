@@ -40,6 +40,6 @@ abstract class Middleware
     }
 
 
-    abstract public function handle(ServerRequestInterface $serverRequest, \Closure $middleware);
+    abstract public function handle(ServerRequestInterface $request, callable $next);
 
 }

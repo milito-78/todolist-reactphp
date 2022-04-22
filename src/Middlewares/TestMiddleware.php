@@ -1,11 +1,10 @@
 <?php
-namespace {{namespace}};
+namespace App\Middlewares;
 
-{{ model_namespace }}
-
+use Core\Route\Middleware\Middleware;
 use Psr\Http\Message\ServerRequestInterface;
 
-class {{ class_name }} extends Middleware
+class TestMiddleware extends Middleware
 {
     public function handle(ServerRequestInterface $request, callable $next)
     {

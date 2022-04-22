@@ -1,6 +1,7 @@
 <?php
 
 use App\Middlewares\CorsMiddleware;
+use App\Middlewares\JsonResponseMiddleware;
 use Core\ {
     Config\Config,
     Exceptions\ErrorHandler,
@@ -54,6 +55,7 @@ $server =  new HttpServer(
     new CorsMiddleware(),
     new ErrorHandler(),
     new JsonRequestDecoder(),
+    new JsonResponseMiddleware(),
     new Router(Route::getCollector()),
 );
 

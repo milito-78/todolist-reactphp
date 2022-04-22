@@ -1,17 +1,14 @@
 <?php
 
-use Core\Route\Route;
+use Core\Route\Facades\Route;
 use Psr\Http\Message\RequestInterface;
 
-Route::GROUP("prefix",function (){
-    Route::GET("/test-{name}",function (RequestInterface $request)
-    {
-        return response(["sss"]);
-    },["test"]);
+Route::group("prefix",function (){
 
-    Route::POST("/test-{name}",function (RequestInterface $request)
+    Route::get("/test-{name}",function (RequestInterface $request)
     {
-        return response(["sss"]);
-    },["test"]);
+        return ["test"];
+    });
+
 });
 

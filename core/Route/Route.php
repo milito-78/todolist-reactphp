@@ -10,41 +10,40 @@ class Route
 
     static private string $uri = "";
 
-
-    public function GET($path , callable $function, array $middleware = [])
+    public function get($path , callable $function, array $middleware = [])
     {
-        self::makeRoute('get',$path , $function,$middleware);
+        $this->makeRoute('get',$path , $function,$middleware);
     }
 
 
-    public function POST($path , callable $function, array $middleware = [])
+    public function post($path , callable $function, array $middleware = [])
     {
-        self::makeRoute('post',$path , $function,$middleware);
+        $this->makeRoute('post',$path , $function,$middleware);
     }
 
-    public function PUT($path , callable $function, array $middleware = [])
+    public function put($path , callable $function, array $middleware = [])
     {
-        self::makeRoute('put',$path , $function,$middleware);
-    }
-
-
-    public function PATCH($path , callable $function, array $middleware = [])
-    {
-        self::makeRoute('patch',$path , $function,$middleware);
+        $this->makeRoute('put',$path , $function,$middleware);
     }
 
 
-    public function DELETE($path , callable $function, array $middleware = [])
+    public function patch($path , callable $function, array $middleware = [])
     {
-        self::makeRoute('delete',$path , $function,$middleware);
+        $this->makeRoute('patch',$path , $function,$middleware);
     }
 
 
-    public function GROUP($prefix , callable $function, array $middleware = [])
+    public function delete($path , callable $function, array $middleware = [])
+    {
+        $this->makeRoute('delete',$path , $function,$middleware);
+    }
+
+
+    public function group($prefix , callable $function, array $middleware = [])
     {
         $previousGroupPrefix = self::$uri;
 
-        self::$uri = $previousGroupPrefix . static::uriSlashCheck($prefix);
+        self::$uri = $previousGroupPrefix . $this->uriSlashCheck($prefix);
 
 
         $prev_middleware = static::$middlewares;
@@ -59,14 +58,7 @@ class Route
     }
 
 
-    public static function __callStatic($method , $arguments)
-    {
-        $method = strtoupper($method);
-
-        return (new static)->$method(...$arguments);
-    }
-
-    public static function uriSlashCheck($path)
+    private function uriSlashCheck($path)
     {
         if (strlen($path) == 0 || $path == '/') {
             if (self::$uri == '')
@@ -83,9 +75,9 @@ class Route
     }
 
 
-    public static function makeRoute($type,$path,$function , $middleware)
+    private function makeRoute($type,$path,$function , $middleware)
     {
-        $path               = self::$uri . static::uriSlashCheck($path);
+        $path               = self::$uri . $this->uriSlashCheck($path);
         $prev_middleware    = static::$middleware;
         $prev_middlewares   = static::$middlewares;
 

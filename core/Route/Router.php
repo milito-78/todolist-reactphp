@@ -30,11 +30,12 @@ final class Router{
             $request->getMethod(), $request->getUri()->getPath()
         );
 
-        switch ($route[0]){
+        switch ($route[0])
+        {
             case \FastRoute\Dispatcher::NOT_FOUND:
                 throw new NotFoundException("Route Not Found",404);
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $method = $route[1][0];
+                $method     = $route[1][0];
                 $req_method =  $request->getMethod();
                 throw new MethodNotAllowedException("Method '$req_method' does not supported. Supported method is '$method' ",405);
             case \FastRoute\Dispatcher::FOUND:

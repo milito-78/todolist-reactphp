@@ -8,9 +8,8 @@ use React\Stream\ReadableStreamInterface;
 use RingCentral\Psr7\Response as Psr7Response;
 use function is_string;
 
-final class JsonResponse extends Psr7Response{
-
-
+final class JsonResponse extends Psr7Response
+{
     public function __construct(
         $status = 200,
         $data = '',
@@ -39,14 +38,7 @@ final class JsonResponse extends Psr7Response{
             $data = null;
         }
 
-        $header =
-            [
-                "Content-type" => "application/json" ,
-                "Access-Control-Allow-Origin" => '*' ,
-                "Access-Control-Allow-Credentials" => "true" ,
-                "Access-Control-Allow-Methods" => 'GET, PUT, POST, DELETE, OPTIONS',
-                "Access-Control-Allow-Headers" => 'Origin, Content-Type, X-Auth-Token , Authorization'
-            ];
+        $header = [];
 
         if ( is_array($headers))
             $header = array_merge($header,$headers);
@@ -105,10 +97,14 @@ final class JsonResponse extends Psr7Response{
 
     public static function validationError($reason) : self
     {
-
         $title = "Validation Failed!";
 
         return  new self(422, ErrorModel::error($title, $reason) );
+    }
+
+    public static function send($data = null, $code = 200, $headers = []) : self
+    {
+        return  new self($code, $data ,$headers);
     }
 
 }

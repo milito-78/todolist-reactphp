@@ -1,18 +1,16 @@
 <?php
 namespace Core\DataBase;
 
-
-use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use React\MySQL\Io\LazyConnection;
+use React\MySQL\ConnectionInterface;
 
 class DBConnection
 {
     /**
-     * @var LazyConnection
+     * @var ConnectionInterface
      */
-    private static LazyConnection $instance;
+    private static ConnectionInterface $instance;
 
     /**
      * @throws ContainerExceptionInterface
@@ -30,7 +28,7 @@ class DBConnection
                 );
     }
 
-    public static function getInstance(): LazyConnection
+    public static function getInstance(): ConnectionInterface
     {
         if (is_null(self::$instance)) {
             new self();

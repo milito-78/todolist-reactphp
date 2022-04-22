@@ -85,7 +85,7 @@ class Route
 
     public static function makeRoute($type,$path,$function , $middleware)
     {
-        $path = self::$uri . static::uriSlashCheck($path);
+        $path               = self::$uri . static::uriSlashCheck($path);
         $prev_middleware    = static::$middleware;
         $prev_middlewares   = static::$middlewares;
 

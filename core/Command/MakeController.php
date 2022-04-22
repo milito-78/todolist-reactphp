@@ -44,7 +44,7 @@ class MakeController extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument($this->commandArgumentName);
 

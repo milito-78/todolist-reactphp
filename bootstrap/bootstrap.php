@@ -1,10 +1,14 @@
 <?php
 
-use Core\Config\Config;
-use Core\Exceptions\ErrorHandler;
-use Core\Response\JsonRequestDecoder;
-use Core\Route\Route;
-use Core\Route\Router;
+use App\Middlewares\CorsMiddleware;
+use Core\ {
+    Config\Config,
+    Exceptions\ErrorHandler,
+    Response\JsonRequestDecoder,
+    Route\Route,
+    Route\Router,
+};
+
 use Dotenv\Dotenv;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
@@ -45,16 +49,13 @@ Route::init(
 require_once "routes/router.php";
 
 
-$CorsOption =  function (RequestInterface $request , callable $next){
-    if (preg_match('/options/i',$request->getMethod()))
-    {
-        return json_no_content();
-    }
-    return $next($request);
-};
-
-
-$server =  new HttpServer($loop, $CorsOption, new ErrorHandler(), new JsonRequestDecoder(), new Router(Route::getCollector()));
+$server =  new HttpServer(
+    $loop,
+    new CorsMiddleware(),
+    new ErrorHandler(),
+    new JsonRequestDecoder(),
+    new Router(Route::getCollector()),
+);
 
 
 $socket = new SocketServer(

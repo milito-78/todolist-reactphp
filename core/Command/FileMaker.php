@@ -17,19 +17,19 @@ trait FileMaker
         'controller' => [
                             "base"      => "/app/Http/Controller/",
                             "namespace" => "App\Http\Controller",
-                            "implement" => "App\Http\Controller\Controller",
+                            "implement" => "Core\Request\Controller",
                             "stub"      => "ControllerStub.txt"
                         ],
         'middleware' => [
                             "base"      => "/app/Http/Middleware/",
                             "namespace" => "App\Http\Middleware",
-                            "implement" => "App\Core\Route\Middleware",
+                            "implement" => "Core\Route\Middleware\Middleware",
                             "stub"      => "MiddlewareStub.txt"
                         ],
         'request' => [
                             "base"      => "/app/Http/Request/",
                             "namespace" => "App\Http\Request",
-                            "implement" => "App\Core\Request\FormRequest",
+                            "implement" => "Core\Request\FormRequest",
                             "stub"      => "RequestStub.txt"
                         ]
         ];
@@ -108,7 +108,8 @@ trait FileMaker
         return preg_replace('/\{\{\s*class_name\s*\}\}/i',$name,$stub);
     }
 
-    #[ArrayShape(["namespace" => "string[]", "name" => "string"])] public function parseNameSpace($name): array
+    #[ArrayShape(["namespace" => "string[]", "name" => "string"])]
+    public function parseNameSpace($name): array
     {
         $temp = explode("\\" , $name);
 

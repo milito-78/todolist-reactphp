@@ -48,9 +48,9 @@ if (!function_exists("abort")){
     }
 }
 
-if (!function_exists("env"))
+if (!function_exists("envGet"))
 {
-    function env(string $key,?string $default = null)
+    function envGet(string $key,$default = null)
     {
         return $_ENV[$key]??$default;
     }
@@ -71,5 +71,39 @@ if (!function_exists("logger"))
     {
         global $container;
         return $container->get((string) "logger");
+    }
+}
+
+if (!function_exists("waitForPromise")){
+    function waitForPromise(\React\Promise\PromiseInterface $promise) {
+        $result = null;
+        $exception = null;
+        $isRejected = false;
+
+        $wait = true;
+        while ($wait) {
+            $promise
+                ->then(function ($r) use (&$result) {
+                    $result = $r;
+                }, function ($e) use (&$exception, &$isRejected) {
+                    $exception = $e;
+                    $isRejected = true;
+                })
+                ->always(function () use (&$wait) {
+                    $wait = false;
+                });
+        }
+
+        if ($isRejected) {
+            if (!$exception instanceof \Exception) {
+                $exception = new \UnexpectedValueException(
+                    'Promise rejected with unexpected value of type ' . (is_object($exception) ? get_class($exception) : gettype($exception))
+                );
+            }
+
+            throw $exception;
+        }
+
+        return $result;
     }
 }

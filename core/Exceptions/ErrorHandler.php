@@ -9,7 +9,7 @@ use Throwable;
 
 final class ErrorHandler
 {
-    public function __invoke(ServerRequest $request, callable $next): JsonResponse
+    public function __invoke(ServerRequest $request, callable $next)
     {
         global $server;
 

@@ -19,7 +19,8 @@ trait ValidationTrait
      */
     private function findController($middleware)
     {
-        if (is_array($middleware)){
+        if (is_array($middleware))
+        {
             return new ReflectionMethod($middleware[0], $middleware[1]);
         }
         else if ($middleware instanceof \Closure)
@@ -49,6 +50,21 @@ trait ValidationTrait
         }
 
         return $validation;
+    }
+
+
+    private function findControllerClass($middleware)
+    {
+        if (is_array($middleware))
+        {
+            return ["controller" =>$middleware[0], "action" => $middleware[1]];
+        }
+        else if ($middleware instanceof \Closure)
+        {
+            return $middleware;
+        }
+
+        return $this->findControllerClass($middleware->middleware);
     }
 
 }

@@ -41,7 +41,16 @@ final class Router{
             case \FastRoute\Dispatcher::FOUND:
                 $params = array_values($route[2]);
 
-                $request = $this->checkRequestInstance($route[1], $request);
+                $request    = $this->checkRequestInstance($route[1], $request);
+                $controller = $this->findControllerClass($route[1]);
+
+                if (isset($controller["controller"]))
+                {
+                    $action = $controller["action"];
+                    $controller = $this->dependencyInjection($controller["controller"]);
+
+                    return $controller->{$action}($request,...$params);
+                }
 
                 return $route[1]($request, ...$params);
         }
@@ -63,6 +72,18 @@ final class Router{
         }
 
         return $request;
+    }
+
+
+    private function dependencyInjection($controller)
+    {
+        global $container;
+
+        if ($container->has($controller)){
+            return $container->get($controller);
+        }
+
+        return new $controller();
     }
 
 }

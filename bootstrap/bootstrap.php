@@ -19,25 +19,26 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
 use React\Http\HttpServer;
-use React\MySQL\Factory as Mysql;
 use React\Socket\SocketServer;
 
 $env = Dotenv::createImmutable(__DIR__,"../.env");
 $env->load();
 
 $config = new Config();
-$config->loadConfigurationFiles(__DIR__ . '/../config',env("APP_ENV","local"));
-
+$config->loadConfigurationFiles(__DIR__ . '/../config',envGet("APP_ENV","local"));
 
 date_default_timezone_set(config("app.timezone"));
-
 
 $container = new League\Container\Container();
 
 $loop = React\EventLoop\Loop::get();
 
-$container->add("loop" ,$loop);
-$container->add("MysqlConnector" , new Mysql($loop));
+$providers = \config("app.providers");
+
+foreach ($providers as $provider){
+    $container->addServiceProvider(new $provider());
+}
+
 
 
 Route::alias(config("app.middlewares"));
@@ -76,7 +77,7 @@ $logger->pushHandler(new FirePHPHandler());
 $container->add("logger" , $logger);
 
 $server->on("error" , function ($data)use( $logger ) {
-    $logger->error(get_class($data) . ' ' . $data->getMessage());
+    $logger->error(get_class($data) . ' ' . $data->getMessage(),["trace" => $data]);
 });
 
 return $loop;

@@ -1,16 +1,16 @@
 <?php
 
 return [
-    "name" => env("APP_NAME","Test"),
+    "name" => envGet("APP_NAME","Test"),
 
-    "env" => env("APP_ENV","local"),
+    "env" => envGet("APP_ENV","local"),
 
-    "url" => env("APP_URL","http://127.0.0.1/"),
+    "url" => envGet("APP_URL","http://127.0.0.1/"),
 
     "timezone" => "UTC",
 
-    "socket_server" => env("SOCKET_SERVER","127.0.0.1"),
-    "socket_port" => env("SOCKET_PORT","3000"),
+    "socket_server" => envGet("SOCKET_SERVER","127.0.0.1"),
+    "socket_port" => envGet("SOCKET_PORT","3000"),
 
     "middlewares" => [
 

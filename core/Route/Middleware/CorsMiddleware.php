@@ -1,9 +1,6 @@
 <?php
+namespace Core\Route\Middleware;
 
-
-namespace App\Middlewares;
-
-use Core\Response\JsonResponse;
 use React\Promise\Promise;
 
 class CorsMiddleware

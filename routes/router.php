@@ -12,5 +12,5 @@ Route::group("prefix",function (){
 
 });
 
-Route::get("user" , [\App\Core\Controller\UserController::class,"index"]);
+// Route::get("user" , [\App\Core\Controller\UserController::class,"index"]);
 

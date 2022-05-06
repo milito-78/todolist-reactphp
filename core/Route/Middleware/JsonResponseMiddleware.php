@@ -1,5 +1,5 @@
 <?php
-namespace App\Middlewares;
+namespace Core\Route\Middleware;
 
 use Core\Response\JsonResponse;
 use React\Promise\Promise;

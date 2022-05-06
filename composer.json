@@ -20,7 +20,8 @@
         "monolog/monolog": "^2.5",
         "illuminate/config": "~5.0",
         "symfony/finder": "~2.6",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "doctrine/migrations": "^3.5"
     },
     "autoload": {
         "psr-4": {
@@ -30,5 +31,10 @@
         "files": [
             "core/Helpers/helpers.php"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     }
 }

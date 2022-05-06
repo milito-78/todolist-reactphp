@@ -1,7 +1,7 @@
 <?php
 
-use App\Middlewares\CorsMiddleware;
-use App\Middlewares\JsonResponseMiddleware;
+use Core\Route\Middleware\CorsMiddleware;
+use Core\Route\Middleware\JsonResponseMiddleware;
 use Core\ {
     Config\Config,
     Exceptions\ErrorHandler,

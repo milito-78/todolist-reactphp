@@ -13,9 +13,13 @@ RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
 ADD ./composer.json /var/www/composer.json
 ADD ./composer.lock /var/www/composer.lock
 
+RUN chown -R www-data:www-data \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache
+        
 ADD ./ /var/www
 WORKDIR /var/www
 
 EXPOSE 8000
 
-CMD [ "php", "server.php" ]
+CMD [ "php", "-a" ]

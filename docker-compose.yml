@@ -1,9 +1,9 @@
-version: '3.7'
+version: '3.6'
 
 ## Volumes
 ###############################################################################
 volumes:
-    db_data:
+    db_data: 
 
 ## Services
 ###############################################################################
@@ -18,21 +18,28 @@ services:
         volumes:
             - ./:/var/www:cached
         depends_on:
-            - mysql
+            - db
         tty: true
 
-    mysql:
+    db:
+        container_name: db
         ports:
             - '3306:3306'
         restart: always
         image: mysql:8.0
         volumes:
+            # - ./Docker/setup.sql:/docker-entrypoint-initdb.d/init.sql
             - db_data:/var/lib/mysql
+            # - ./Docker/my.cnf:/etc/mysql/my.cnf
+            # - ./mysql-files:/var/lib/mysql-files
         cap_add:
             - SYS_NICE
         command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: ddd_db
-            MYSQL_PASSWORD: root
+            MYSQL_DATABASE: todolist
+            MYSQL_USER: todolist_user
+            MYSQL_PASSWORD: milito
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
 

@@ -14,6 +14,7 @@ class Console
             MakeModel::class,
             MakeRequest::class,
             MakeMigrationCommand::class,
+            MigrateCommand::class,
         ];
     }
 }

@@ -14,18 +14,32 @@ final class Version20220425184330 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create users table.';
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        $sql = <<<SQL
+CREATE TABLE users (
+    id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+    full_name VARCHAR (100) NOT NULL,
+    email VARCHAR (255) NOT NULL,
+    password VARCHAR (255) NOT NULL,
+    api_key VARCHAR (100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL,
+    PRIMARY KEY(id),
+    UNIQUE KEY unique_email (email),
+    UNIQUE KEY unique_api_key (api_key)
+)
+SQL;
 
+        $this->addSql($sql);
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql('DROP TABLE users');
     }
 }

@@ -14,18 +14,32 @@ final class Version20220425194121 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create tasks table.';
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        $sql = <<<SQL
+CREATE TABLE tasks (
+    id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+    title VARCHAR (100) NOT NULL,
+    description TEXT,
+    user_id BIGINT UNSIGNED NOT NULL,
+    image_path VARCHAR(100) NULL,
+    deadline TIMESTAMP DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP DEFAULT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)
+SQL;
 
+        $this->addSql($sql);
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql('DROP TABLE tasks');
     }
 }

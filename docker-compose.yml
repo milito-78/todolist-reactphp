@@ -28,7 +28,7 @@ services:
         restart: always
         image: mysql:8.0
         volumes:
-            # - ./Docker/setup.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./Docker/setup.sql:/docker-entrypoint-initdb.d/init.sql
             - db_data:/var/lib/mysql
             # - ./Docker/my.cnf:/etc/mysql/my.cnf
             # - ./mysql-files:/var/lib/mysql-files

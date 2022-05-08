@@ -63,6 +63,10 @@ trait ValidationTrait
         {
             return $middleware;
         }
+        elseif(is_string($middleware))
+        {
+            return ["invoke" => $middleware];
+        }
 
         return $this->findControllerClass($middleware->middleware);
     }

@@ -1,8 +1,3 @@
--- create the databases
-CREATE DATABASE IF NOT EXISTS todolist;
-
--- create the users for each database
-CREATE USER 'todolist_user'@'%' IDENTIFIED BY 'milito';
-GRANT CREATE, ALTER, INDEX, LOCK TABLES, REFERENCES, UPDATE, DELETE, DROP, SELECT, INSERT ON `todolist`.* TO 'todolist_user'@'%';
-
-FLUSH PRIVILEGES;
+-- Insert test user
+INSERT INTO users (id, full_name , email,password,api_key)
+VALUES (null, 'test user', 'test@todolist.com', '$2y$10$rOP6g9AAzqdJefu1sO9Zaut63USR8weQHTEQjnl5ID2xTieF2eAGu','wsdhjfgtygefvdgvfsdgbegvcgvtdyec');

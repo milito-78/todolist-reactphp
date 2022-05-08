@@ -10,30 +10,30 @@ class Route
 
     static private string $uri = "";
 
-    public function get($path , callable $function, array $middleware = [])
+    public function get($path , $function, array $middleware = [])
     {
         $this->makeRoute('get',$path , $function,$middleware);
     }
 
 
-    public function post($path , callable $function, array $middleware = [])
+    public function post($path , $function, array $middleware = [])
     {
         $this->makeRoute('post',$path , $function,$middleware);
     }
 
-    public function put($path , callable $function, array $middleware = [])
+    public function put($path , $function, array $middleware = [])
     {
         $this->makeRoute('put',$path , $function,$middleware);
     }
 
 
-    public function patch($path , callable $function, array $middleware = [])
+    public function patch($path , $function, array $middleware = [])
     {
         $this->makeRoute('patch',$path , $function,$middleware);
     }
 
 
-    public function delete($path , callable $function, array $middleware = [])
+    public function delete($path , $function, array $middleware = [])
     {
         $this->makeRoute('delete',$path , $function,$middleware);
     }

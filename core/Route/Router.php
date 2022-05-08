@@ -51,6 +51,12 @@ final class Router{
 
                     return $controller->{$action}($request,...$params);
                 }
+                else if (isset($controller["invoke"]))
+                {
+                    $controller = $this->dependencyInjection($controller["invoke"]);
+
+                    return $controller($request,...$params);
+                }
 
                 return $route[1]($request, ...$params);
         }

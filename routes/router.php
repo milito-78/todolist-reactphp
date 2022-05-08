@@ -1,16 +1,8 @@
 <?php
 
+use App\Core\Controller\SplashController;
 use Core\Route\Facades\Route;
 use Psr\Http\Message\RequestInterface;
 
-Route::group("prefix",function (){
-
-    Route::get("/test-{name}",function (RequestInterface $request)
-    {
-        return ["test"];
-    });
-
-});
-
-// Route::get("user" , [\App\Core\Controller\UserController::class,"index"]);
+Route::get('/splash', SplashController::class);
 

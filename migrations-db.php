@@ -2,8 +2,8 @@
 
 return [
     'dbname' => 'todolist',
-    'user' => 'todolist_user',
-    'password' => 'milito',
-    'host' => 'db',
+    'user' => 'root',
+    'password' => '',
+    'host' => 'localhost',
     'driver' => 'pdo_mysql',
 ];

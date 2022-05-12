@@ -15,7 +15,7 @@ class SplashController extends Controller
         $this->userRepository   = $userRepository;
     }
 
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
         $token = $request->getHeader("Authorization");
 
@@ -28,18 +28,23 @@ class SplashController extends Controller
             "is_essential_update" => false
         ];
 
+        // $token = ["wsdhjfgtygefvdgvfsdgbegvcgvtdyec"];
+
         if(count($token) && $token = $token[0])
         {
             return $this->userRepository
                         ->findByToken($token)
-                        ->then(function($data) use ($response){
-                            echo get_class($data);
+                        ->then(function($user) use ($response){
                             
-                            if(!is_null($data)){
-                                $response["user"] = $data;
+                            if(!is_null($user)){
+                                $response["user"] = $user;
                             }
 
                             return response($response);
+                        },
+                        function($exception)
+                        {
+                            return response("sss");
                         });
         }
 

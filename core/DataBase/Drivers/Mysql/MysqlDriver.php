@@ -38,7 +38,7 @@ class MysqlDriver implements DriverInterface
         $values = array_values($data);
         $sql =  "INSERT INTO " . $table  .
                 " (". implode(",",$fields) .") ".
-                " VALUES (". array_fill(0,count($fields),"?") .")";
+                " VALUES (". implode(",",array_fill(0,count($fields),"?")) .")";
 
         return $this->instance->query($sql,$values)
                     ->then(function(QueryResult $result) use ($data){

@@ -5,6 +5,7 @@ namespace Core\Request;
 
 
 use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Validator;
 
 class Request implements ServerRequestInterface
 {
@@ -14,5 +15,37 @@ class Request implements ServerRequestInterface
 
     public function __construct(ServerRequestInterface $request) {
         $this->request = $request;
+    }
+
+
+    public function __get($name)
+    {
+        if (property_exists($this , $name)){
+            return $this->{$name};
+        }
+
+        $parsed_body = $this->request->getParsedBody();
+        if (isset($parsed_body[$name]))
+        {
+            return $parsed_body[$name];
+        }
+
+        $query_params = $this->getQueryParams();
+        if (isset($query_params[$name]))
+        {
+            return $query_params[$name];
+        }
+
+        return null;
+    }
+
+    public function validate(): void
+    {
+        Validator::allOf(...$this->rules())->assert($this->request->getParsedBody());
+    }
+
+    public function rules() : array
+    {
+        return [];
     }
 }

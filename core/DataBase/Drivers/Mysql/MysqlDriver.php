@@ -59,13 +59,19 @@ class MysqlDriver implements DriverInterface
                 " SET ". implode(",",$fields) .
                 " WHERE id = " . $id;
 
-        return $this->instance->query($sql,$values);
+        return $this->instance->query($sql,$values)
+                    ->then(function(QueryResult $result){
+                        return (bool)$result->affectedRows;
+                    }); 
     }
 
     public function delete(string $table, int $id): PromiseInterface
     {
         $sql =  "DELETE FROM " . $table . " WHERE id = ?";
-        return $this->instance->query($sql,[$id]);
+        return $this->instance->query($sql,[$id])
+                    ->then(function(QueryResult $result){
+                        return (bool)$result->affectedRows;
+                    });
     }
 
     public function find(string $table, int $id, array $fields = ["*"]): PromiseInterface

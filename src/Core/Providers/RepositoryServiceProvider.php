@@ -3,7 +3,8 @@
 
 namespace App\Core\Providers;
 
-
+use App\Domain\Repositories\TaskRepository;
+use App\Domain\Repositories\TaskRepositoryInterface;
 use App\Domain\Repositories\UserRepository;
 use App\Domain\Repositories\UserRepositoryInterface;
 use Core\DataBase\Interfaces\DatabaseInterface;
@@ -17,6 +18,8 @@ class RepositoryServiceProvider extends AbstractServiceProvider
         $services = [
             UserRepositoryInterface::class,
             UserRepository::class,
+            TaskRepositoryInterface::class,
+            TaskRepository::class,
             DatabaseInterface::class,
         ];
 
@@ -29,5 +32,12 @@ class RepositoryServiceProvider extends AbstractServiceProvider
             ->add(UserRepositoryInterface::class,function (){
                 return new UserRepository($this->getContainer()->get(DatabaseInterface::class));
             });
+    
+        $this->getContainer()
+            ->add(TaskRepositoryInterface::class,function (){
+                return new TaskRepository($this->getContainer()->get(DatabaseInterface::class));
+            });
+
+        
     }
 }

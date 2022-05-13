@@ -5,6 +5,11 @@ use App\Core\Controller\ProfileController;
 use App\Core\Controller\RegisterController;
 use App\Core\Controller\SplashController;
 use App\Core\Controller\LogoutController;
+use App\Core\Controller\Task\TaskDeleteController;
+use App\Core\Controller\Task\TaskIndexController;
+use App\Core\Controller\Task\TaskShowController;
+use App\Core\Controller\Task\TaskStoreController;
+use App\Core\Controller\Task\TaskUpdateController;
 use Core\Route\Facades\Route;
 use Psr\Http\Message\RequestInterface;
 
@@ -12,9 +17,17 @@ Route::get('/splash', [SplashController::class, "index"]);
 
 Route::group("user",function () {
 
-    Route::post("register"  , [RegisterController::class, "store"]);
-    Route::post("login"     , [LoginController::class, "store"]);
+    Route::post("register"      , [RegisterController::class, "store"]);
+    Route::post("login"         , [LoginController::class, "store"]);
     //Add auth middleware
-    Route::get("profile"    , [ProfileController::class,"show"]);
-    Route::patch("logout"   , [LogoutController::class,"patch"]);
+    Route::get("profile"        , [ProfileController::class,"show"]);
+    Route::patch("logout"       , [LogoutController::class,"patch"]);
+
+    Route::group("tasks",function(){
+        Route::get(""           , [TaskIndexController::class,"index"]);
+        Route::post(""          , [TaskStoreController::class,"store"]);
+        Route::get("/{task}"    , [TaskShowController::class,"show"]);
+        Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
+        Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
+    });
 });

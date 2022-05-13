@@ -10,7 +10,7 @@ use App\Core\Controller\Task\TaskIndexController;
 use App\Core\Controller\Task\TaskShowController;
 use App\Core\Controller\Task\TaskStoreController;
 use App\Core\Controller\Task\TaskUpdateController;
-use Core\Route\Facades\Route;
+use Core\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
 
 Route::get('/splash', [SplashController::class, "index"]);
@@ -31,3 +31,29 @@ Route::group("user",function () {
         Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
     });
 });
+
+
+
+// Route::get('/splash', function(){
+//     return "from herer";
+// });
+
+// Route::get('/splash/{test}', function(){
+//     return "from herer";
+// });
+
+// Route::get('/splash2/{x}', function(){
+//     return "from herer";
+// },["testapi","sss"]);
+
+// Route::group("group",function () {
+//     Route::post('/splash2', function(){
+//         return "from herer";
+//     },["testapi","a"]); 
+
+//     Route::post('/splash3', function(){
+//         return "from herer";
+//     },["testapi","b"]); 
+    
+// },["hello"]);
+

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Core\Route\Facades;
+namespace Core\Route;
 
 /**
  * @method static get($path , callable $function, array $middleware = [])
@@ -10,18 +10,22 @@ namespace Core\Route\Facades;
  * @method static patch($path , callable $function, array $middleware = [])
  * @method static delete($path , callable $function, array $middleware = [])
  * @method static group($prefix , callable $function, array $middleware = [])
+ * @method static getRoutesMiddleware()
  *
  * @see \Core\Route\Route
  */
 
-class Route
+use FastRoute\RouteCollector;
+
+class RouteFacade
 {
-    static private ?\Core\Route\Route $route = null;
+    static private ?Router $router = null;
 
     public static function __callStatic($name, $arguments)
     {
         $response = self::getOrCreateFacade();
-        if (method_exists($response,$name)){
+        if (method_exists($response,$name))
+        {
             return $response->{$name}(...$arguments);
         }
 
@@ -29,11 +33,15 @@ class Route
     }
 
 
-    private static function getOrCreateFacade(): \Core\Route\Route
+    private static function getOrCreateFacade(): Router
     {
-        if (!self::$route)
-            return self::$route = new \Core\Route\Route();
-        return self::$route;
+        if (!self::$router)
+        {
+            global $container;
+            return self::$router = new Router($container->get(RouteCollector::class));
+        }
+
+        return self::$router;
     }
 
 }

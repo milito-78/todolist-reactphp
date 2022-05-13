@@ -1,95 +1,107 @@
 <?php
+
 namespace Core\Route;
 
-use Core\Exceptions\MethodNotAllowedException;
-use Core\Exceptions\NotFoundException;
-use FastRoute\Dispatcher\GroupCountBased;
 use FastRoute\RouteCollector;
-use LogicException;
-use Psr\Http\Message\ServerRequestInterface;
-use ReflectionException;
+
+class Router
+{
+    static private string $uri = "";
+
+    private RouteCollector $routeCollector;
+    private $route_middlewares = [];
+    private $middlewares = [];
 
 
-final class Router{
-
-    use ValidationTrait;
-
-    private GroupCountBased $dispatch;
-
-    public function __construct(RouteCollector $collector)
+    public function __construct(RouteCollector $router)
     {
-        $this->dispatch = new GroupCountBased($collector->getData());
+        $this->routeCollector = $router;
     }
 
-    /**
-     * @throws ReflectionException
-     */
-    public function __invoke(ServerRequestInterface $request)
+    public function get($path , $function, array $middleware = [])
     {
-        $route = $this->dispatch->dispatch(
-            $request->getMethod(), $request->getUri()->getPath()
-        );
+        $this->makeRoute('get',$path , $function,$middleware);
+    }
 
-        switch ($route[0])
+
+    public function post($path , $function, array $middleware = [])
+    {
+        $this->makeRoute('post',$path , $function,$middleware);
+    }
+
+    public function put($path , $function, array $middleware = [])
+    {
+        $this->makeRoute('put',$path , $function,$middleware);
+    }
+
+
+    public function patch($path , $function, array $middleware = [])
+    {
+        $this->makeRoute('patch',$path , $function,$middleware);
+    }
+
+
+    public function delete($path , $function, array $middleware = [])
+    {
+        $this->makeRoute('delete',$path , $function,$middleware);
+    }
+
+
+    public function group($prefix , callable $function, array $middleware = [])
+    {
+        $previousGroupPrefix    = self::$uri;
+        self::$uri              = $previousGroupPrefix . $this->uriSlashCheck($prefix);
+        $prev_middlewares       = $this->middlewares;
+        $this->middlewares      = array_merge($this->middlewares,$middleware);
+        
+        // routes inside group
+        $function();
+
+        $this->middlewares      = $prev_middlewares;
+        self::$uri              = $previousGroupPrefix;
+    }
+
+    private function uriSlashCheck($path)
+    {
+        if (strlen($path) == 0 || $path == '/') {
+            if (self::$uri == '')
+                return '/';
+            return '';
+        }
+
+        if (substr($path , 0,1) != '/')
+            $path =  '/' . $path;
+        if (substr($path,-1) == '/')
+            $path = substr($path,0,-1);
+
+        return $path;
+    }
+
+    private function makeRoute($type,$path,$function , $middleware)
+    {
+        $path               = self::$uri . $this->uriSlashCheck($path);
+
+        $this->addMiddlewareToRoutes($type,$path,array_merge($this->middlewares,$middleware));
+
+        $this->routeCollector->{$type}($path,$function);
+    }
+
+    private function addMiddlewareToRoutes($method,$path,$middleware)
+    {
+        $method = strtoupper($method);
+
+        if(isset($this->route_middlewares[$method]))
         {
-            case \FastRoute\Dispatcher::NOT_FOUND:
-                throw new NotFoundException("Route Not Found",404);
-            case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $method     = $route[1][0];
-                $req_method =  $request->getMethod();
-                throw new MethodNotAllowedException("Method '$req_method' does not supported. Supported method is '$method' ",405);
-            case \FastRoute\Dispatcher::FOUND:
-                $params = array_values($route[2]);
-
-                $request    = $this->checkRequestInstance($route[1], $request);
-                $controller = $this->findControllerClass($route[1]);
-
-                if (isset($controller["controller"]))
-                {
-                    $action = $controller["action"];
-                    $controller = $this->dependencyInjection($controller["controller"]);
-
-                    return $controller->{$action}($request,...$params);
-                }
-                else if (isset($controller["invoke"]))
-                {
-                    $controller = $this->dependencyInjection($controller["invoke"]);
-
-                    return $controller($request,...$params);
-                }
-
-                return $route[1]($request, ...$params);
+            $this->route_middlewares[$method][$path] = array_merge($this->route_middlewares[$method][$path]??[],$middleware);
         }
-
-        throw new LogicException("wrong");
-    }
-
-
-    /**
-     * @throws ReflectionException
-     */
-    private function checkRequestInstance($route, $request)
-    {
-        $validation = $this->getController($route);
-
-        if ($validation)
+        else
         {
-            $request = new $validation($request);
+            $this->route_middlewares[$method] = [$path => $middleware];
         }
-
-        return $request;
     }
 
-
-    private function dependencyInjection($controller)
-    {
-        global $container;
-
-        if ($container->has($controller)){
-            return $container->get($controller);
-        }
-
-        return new $controller();
+    public function getRoutesMiddleware(){
+        return $this->route_middlewares;
     }
 
 }

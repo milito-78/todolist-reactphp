@@ -6,8 +6,6 @@ use Core\ {
     Config\Config,
     Exceptions\ErrorHandler,
     Response\JsonRequestDecoder,
-    Route\Route,
-    Route\Router,
 };
 
 use Dotenv\Dotenv;
@@ -20,6 +18,9 @@ use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
 use React\Http\HttpServer;
 use React\Socket\SocketServer;
+
+//////////////////////
+use Core\Route\RouteCollector as Router;
 
 $env = Dotenv::createImmutable(__DIR__,"../.env");
 $env->load();
@@ -39,14 +40,13 @@ foreach ($providers as $provider){
     $container->addServiceProvider(new $provider());
 }
 
+// Route::alias(config("app.middlewares"));
+// Route::init(
+//                 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() )
+//            );
+$routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
+$container->add(RouteCollector::class,$routeCollector);
 
-
-Route::alias(config("app.middlewares"));
-
-Route::init(
-                new RouteCollector(new Std() ,
-                new GroupCountBased())
-           );
 
 require_once "routes/router.php";
 
@@ -57,7 +57,7 @@ $server =  new HttpServer(
     new ErrorHandler(),
     new JsonRequestDecoder(),
     new JsonResponseMiddleware(),
-    new Router(Route::getCollector()),
+    new Router($routeCollector),
 );
 
 

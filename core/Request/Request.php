@@ -1,11 +1,8 @@
 <?php
-
-
 namespace Core\Request;
 
 
 use Psr\Http\Message\ServerRequestInterface;
-use Respect\Validation\Validator;
 
 class Request implements ServerRequestInterface
 {
@@ -16,7 +13,6 @@ class Request implements ServerRequestInterface
     public function __construct(ServerRequestInterface $request) {
         $this->request = $request;
     }
-
 
     public function __get($name)
     {
@@ -39,13 +35,8 @@ class Request implements ServerRequestInterface
         return null;
     }
 
-    public function validate(): void
+    public function input($input)
     {
-        Validator::allOf(...$this->rules())->assert($this->request->getParsedBody());
-    }
-
-    public function rules() : array
-    {
-        return [];
+        return $this->{$input};
     }
 }

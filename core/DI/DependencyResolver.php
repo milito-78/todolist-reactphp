@@ -3,7 +3,7 @@ namespace Core\DI;
 
 use League\Container\DefinitionContainerInterface;
 
-class DependencyResolver
+class DependencyResolver implements DependencyResolverInterface
 {
 
     private DefinitionContainerInterface $container;

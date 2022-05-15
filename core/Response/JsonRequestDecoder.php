@@ -1,6 +1,7 @@
 <?php
 namespace Core\Response;
 
+use Core\Request\Request;
 use React\Http\Message\ServerRequest;
 
 
@@ -12,7 +13,8 @@ class JsonRequestDecoder{
                 json_decode($request->getBody()->getContents(),true)
             );
         }
-
+        
+        $request = new Request($request);
         return $next($request);
     }
 }

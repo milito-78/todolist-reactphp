@@ -7,7 +7,7 @@ use Core\ {
     Exceptions\ErrorHandler,
     Response\JsonRequestDecoder,
 };
-
+use Core\DI\DependencyResolver;
 use Dotenv\Dotenv;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
@@ -40,10 +40,6 @@ foreach ($providers as $provider){
     $container->addServiceProvider(new $provider());
 }
 
-// Route::alias(config("app.middlewares"));
-// Route::init(
-//                 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() )
-//            );
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container->add(RouteCollector::class,$routeCollector);
 
@@ -57,7 +53,7 @@ $server =  new HttpServer(
     new ErrorHandler(),
     new JsonRequestDecoder(),
     new JsonResponseMiddleware(),
-    new Router($routeCollector),
+    new Router($routeCollector,new DependencyResolver),
 );
 
 

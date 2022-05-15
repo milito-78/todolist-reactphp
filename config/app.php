@@ -19,6 +19,5 @@ return [
     "providers" => [
         \Core\Providers\AppServiceProvider::class,
         \App\Core\Providers\RepositoryServiceProvider::class,
-        \App\Core\Providers\ControllerServiceProvider::class,
     ]
 ];

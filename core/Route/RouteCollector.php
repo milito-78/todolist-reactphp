@@ -1,6 +1,7 @@
 <?php
 namespace Core\Route;
 
+use Core\DI\DependencyResolverInterface;
 use Core\Exceptions\MethodNotAllowedException;
 use Core\Exceptions\NotFoundException;
 // use FastRoute\Dispatcher\GroupCountBased;
@@ -13,10 +14,12 @@ use Psr\Http\Message\ServerRequestInterface;
 final class RouteCollector{
 
     private GroupCountBased $dispatch;
+    private DependencyResolverInterface $resolver;
 
-    public function __construct(FastCollector $collector)
+    public function __construct(FastCollector $collector,DependencyResolverInterface $diResolver)
     {
         $this->dispatch = new GroupCountBased($collector->getData());
+        $this->resolver = $diResolver;
     }
 
     public function __invoke(ServerRequestInterface $request)
@@ -69,16 +72,17 @@ final class RouteCollector{
             if(isset($controller["controller"]))
             {
                 $action     = $controller["action"];
-                $controller = new $controller["controller"]();
+                $controller = $this->resolver->make($controller["controller"]);
                 $response   = $controller->{$action}($request,...$params);
             }
             else if (isset($controller["invoke"]))
             {
-                $controller = new $controller["invoke"]();
+                $controller = $this->resolver->make($controller["controller"]);
+                $response   = $controller($request,...$params);
             }
         }
-
-        $response = $controller($request,...$params);
+        else
+            $response = $controller($request,...$params);
 
         return $response;
     }

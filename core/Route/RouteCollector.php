@@ -8,7 +8,6 @@ use Core\Exceptions\NotFoundException;
 use Core\Route\Dispatcher\GroupCountBased;
 use Exception;
 use FastRoute\RouteCollector as FastCollector;
-use League\Container\DefinitionContainerInterface;
 use LogicException;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,14 +16,12 @@ final class RouteCollector{
 
     private GroupCountBased $dispatch;
     private DependencyResolverInterface $resolver;
-    private DefinitionContainerInterface $container;
     private $middlewares_pool = [];
     private $controllers_pool = [];
-    public function __construct(FastCollector $collector,DependencyResolverInterface $diResolver,DefinitionContainerInterface $container)
+    public function __construct(FastCollector $collector,DependencyResolverInterface $diResolver)
     {
         $this->dispatch     = new GroupCountBased($collector->getData());
         $this->resolver     = $diResolver;
-        $this->container    = $container;
     }
 
     public function __invoke(ServerRequestInterface $request)

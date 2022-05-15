@@ -53,7 +53,7 @@ $server =  new HttpServer(
     new ErrorHandler(),
     new JsonRequestDecoder(),
     new JsonResponseMiddleware(),
-    new Router($routeCollector,new DependencyResolver,$container),
+    new Router($routeCollector,new DependencyResolver),
 );
 
 

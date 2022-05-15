@@ -15,7 +15,7 @@ class SplashController extends Controller
         $this->userRepository   = $userRepository;
     }
 
-    public function index(Request $request)
+    public function __invoke(Request $request)
     {
         $token = $request->getHeader("Authorization");
 

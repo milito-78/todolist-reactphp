@@ -107,3 +107,15 @@ if (!function_exists("waitForPromise")){
         return $result;
     }
 }
+
+if(!function_exists("head")){
+    function head(array $arr) {
+        return reset($arr);
+    }
+}
+
+if(!function_exists("tail")){
+    function tail(array $arr) {
+        return array_slice($arr, 1);
+    }
+}

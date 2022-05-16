@@ -13,47 +13,23 @@ use App\Core\Controller\Task\TaskUpdateController;
 use Core\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
 
-Route::get('/splash', SplashController::class,["test:user"]);
+Route::get('/splash'            , SplashController::class, ["test:user"]);
 
 Route::group("user",function () {
 
     Route::post("register"      , [RegisterController::class, "store"]);
     Route::post("login"         , [LoginController::class, "store"]);
-    //Add auth middleware
-    Route::get("profile"        , [ProfileController::class,"show"]);
-    Route::patch("logout"       , [LogoutController::class,"patch"]);
+    Route::group('/',function () {
+        Route::get("profile"        , [ProfileController::class,"show"]);
+        Route::patch("logout"       , [LogoutController::class,"patch"]);
 
-    Route::group("tasks",function(){
-        Route::get(""           , [TaskIndexController::class,"index"]);
-        Route::post(""          , [TaskStoreController::class,"store"]);
-        Route::get("/{task}"    , [TaskShowController::class,"show"]);
-        Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
-        Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
+        Route::group("tasks",function(){
+            Route::get(""           , [TaskIndexController::class,"index"]);
+            Route::post(""          , [TaskStoreController::class,"store"]);
+            Route::get("/{task}"    , [TaskShowController::class,"show"]);
+            Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
+            Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
+        });
     });
+    //Add auth middleware
 });
-
-
-
-// Route::get('/splash', function(){
-//     return "from herer";
-// });
-
-// Route::get('/splash/{test}', function(){
-//     return "from herer";
-// });
-
-// Route::get('/splash2/{x}', function(){
-//     return "from herer";
-// },["testapi","sss"]);
-
-// Route::group("group",function () {
-//     Route::post('/splash2', function(){
-//         return "from herer";
-//     },["testapi","a"]); 
-
-//     Route::post('/splash3', function(){
-//         return "from herer";
-//     },["testapi","b"]); 
-    
-// },["hello"]);
-

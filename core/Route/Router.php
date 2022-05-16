@@ -69,8 +69,18 @@ class Router
             return '';
         }
 
-        if (substr($path , 0,1) != '/')
+        var_dump(" ssss " . $path . " " . self::$uri . ' -- ' . substr(self::$uri , 0,-1));
+
+        if (substr(self::$uri ,-1) == '/' && substr($path , 0,1) == '/')
+        {
+            $path =  substr($path , 1);
+        }
+        elseif (substr(self::$uri ,-1) != '/' && substr($path , 0,1) != '/')
+        {
             $path =  '/' . $path;
+        }
+
+
         if (substr($path,-1) == '/')
             $path = substr($path,0,-1);
 

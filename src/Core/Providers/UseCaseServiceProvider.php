@@ -7,6 +7,8 @@ use App\UseCase\AuthenticateUseCase;
 use App\UseCase\AuthenticateUseCaseInterface;
 use App\UseCase\LoginUseCase;
 use App\UseCase\LoginUseCaseInterface;
+use App\UseCase\LogoutUseCase;
+use App\UseCase\LogoutUseCaseInterface;
 use App\UseCase\RegisterUseCaseInterface;
 use App\UseCase\RegisterUseCase;
 use App\UseCase\SplashUseCase;
@@ -25,7 +27,9 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             RegisterUseCaseInterface::class,
             RegisterUseCase::class,
             LoginUseCaseInterface::class,
-            LoginUseCase::class
+            LoginUseCase::class,
+            LogoutUseCaseInterface::class,
+            LogoutUseCase::class
         ];
 
         return in_array($id, $services);
@@ -52,6 +56,11 @@ class UseCaseServiceProvider extends AbstractServiceProvider
         $this->getContainer()
             ->add(LoginUseCaseInterface::class, function (){
                 return new LoginUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(LogoutUseCaseInterface::class, function (){
+                return new LogoutUseCase($this->getContainer()->get(UserRepositoryInterface::class));
             });
     }
 }

@@ -2,42 +2,22 @@
 
 namespace App\Core\Controller;
 
-use App\Core\Repositories\UserRepositoryInterface;
+use App\UseCase\LogoutUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class LogoutController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
+    private LogoutUseCaseInterface $logoutService;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(LogoutUseCaseInterface $logoutService)
     {
-        $this->userRepository   = $userRepository;
+        $this->logoutService   = $logoutService;
     }
     
     public function patch(Request $request)
     {
-        $token = $request->getHeader("Authorization");
-
-        if(count($token) && $token = $token[0])
-        {
-            return $this->userRepository
-                        ->findByToken($token)
-                        ->then(function($user)
-                        {   
-                            if(is_null($user)){
-                                return  response("Un authenticated" , 401);
-                            }
-
-                            return response("Logout successfully");
-                        },
-                        function($exception)
-                        {
-                            return response($exception->getMessage());
-                        });
-        }
-
-        return  response("Un authenticated" , 401);
+        return $this->logoutService->handle($request);
     }
 
 }

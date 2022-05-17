@@ -41,6 +41,11 @@ class Request implements ServerRequestInterface
         return $this->{$input};
     }
 
+    public function all()
+    {
+        return $this->request->getParsedBody();
+    }
+
     public function addAuth($auth)
     {
         $this->auth = $auth;

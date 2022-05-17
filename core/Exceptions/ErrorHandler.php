@@ -14,7 +14,7 @@ final class ErrorHandler
     public function __invoke(ServerRequest $request, callable $next)
     {
         global $server;
-
+        
         try {
             $response = $next($request);
             
@@ -61,7 +61,6 @@ final class ErrorHandler
         }
         catch (Throwable $error){
             $server->emit("error" , [$error]);
-            var_dump($error->getMessage());
 
             return JsonResponse::internalServerError($error->getMessage());
         }
@@ -70,40 +69,27 @@ final class ErrorHandler
     private function checkErrorResponse($response){
         global $server;
 
+
         if ($response instanceof NestedValidationException)
         {
             return JsonResponse::validationError(array_values($response->getMessages()));
-        }
-        if ($response instanceof ValidationException)
+        }elseif ($response instanceof ValidationException)
         {
             return JsonResponse::validationError($response->getMessage());
-        }
-        if ($response instanceof MethodNotAllowedException ){
+        }elseif ($response instanceof MethodNotAllowedException ){
             $server->emit("error" , [$response]);
-
             return JsonResponse::methodNotAllowed($response->getMessage());
-        }
-        
-        if ($response instanceof NotFoundException ){
+        }elseif ($response instanceof NotFoundException ){
             $server->emit("error" , [$response]);
-
             return JsonResponse::notFound($response->getMessage());
-        }
-        
-        if ($response instanceof AuthorizationException ){
+        }elseif ($response instanceof AuthorizationException ){
             $server->emit("error" , [$response]);
-
             return JsonResponse::unAuthorized($response->getMessage());
-        }
-        
-        if ($response instanceof ForbiddenException ){
+        }elseif ($response instanceof ForbiddenException ){
             $server->emit("error" , [$response]);
-
             return JsonResponse::Aborted($response->getMessage());
-        }
-        
-        if ($response instanceof Throwable){
-            $server->emit("error" , []);
+        }elseif ($response instanceof Throwable){
+            $server->emit("error" , [$response]);
 
             return JsonResponse::internalServerError($response->getMessage());
         }

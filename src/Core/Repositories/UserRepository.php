@@ -3,7 +3,7 @@
 
 namespace App\Core\Repositories;
 
-use App\Common\Repsitories\Repository;
+use App\Common\Repositories\Repository;
 use React\Promise\PromiseInterface;
 
 class UserRepository extends Repository implements UserRepositoryInterface

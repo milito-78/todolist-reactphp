@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Common\Repsitories;
+namespace App\Common\Repositories;
 
 
 use React\Promise\PromiseInterface;

@@ -3,6 +3,8 @@
 namespace App\UseCase;
 
 use App\Core\Repositories\UserRepositoryInterface;
+use App\Domain\Entities\User;
+use App\Domain\Outputs\SplashOutput;
 use Core\Request\Request;
 
 class SplashUseCase implements SplashUseCaseInterface
@@ -18,29 +20,29 @@ class SplashUseCase implements SplashUseCaseInterface
     {
         $token = getAuthToken($request);
 
-        $response = [
-            "user" => null,
-            "timestamp" => time(),
-            "version" => "1.0",
-            "update_version" => "1.0",
-            "api_version" => "1.0",
-            "is_essential_update" => false
+        $option = [
+            "user"                  => null,
+            "timestamp"             => time(),
+            "version"               => "1.0",
+            "update_version"        => "1.0",
+            "api_version"           => "1.0",
+            "is_essential_update"   => false
         ];
 
         if($token)
         {
             return $this->userRepository
                     ->findByToken($token)
-                    ->then(function($user) use ($response){
+                    ->then(function($user) use ($option){
                         
                         if(!is_null($user)){
-                            $response["user"] = $user;
+                            $user = new User($user);
                         }
 
-                        return response($response);
+                        return response(new SplashOutput($option,$user));
                     });
         }
 
-        return  response($response);
+        return response(new SplashOutput($option,null));
     }
 }

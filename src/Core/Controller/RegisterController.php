@@ -2,39 +2,26 @@
 
 namespace App\Core\Controller;
 
-use App\Core\Repositories\UserRepositoryInterface;
+use App\Domain\Inputs\RegisterInput;
+use App\UseCase\RegisterUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class RegisterController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
+    private RegisterUseCaseInterface $registerService;
+    public function __construct(RegisterUseCaseInterface $registerService)
     {
-        $this->userRepository   = $userRepository;
+        $this->registerService   = $registerService;
     }
     
     public function store(Request $request)
     {
-        $data = [
-            "email"     => $request->email,
-            "password"  => password_hash($request->password, PASSWORD_BCRYPT),
-            "full_name" => $request->full_name,
-            "api_key"   => $this->generateApiKey()
-        ];
         
-        return $this->userRepository->create($data)
-                    ->then(function($result){
-                    
-                        return response($result);
-                    },function($ex){
-                        return response($ex->getMessage());
-                    });
+        $input = new RegisterInput($request);
+        $input->validate();
+
+        return $this->registerService->handle($input);
     }
 
-    public function generateApiKey()
-    {
-        return md5(uniqid(rand(), true));
-    }
 }

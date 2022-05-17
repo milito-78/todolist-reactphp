@@ -13,7 +13,7 @@ use App\Core\Controller\Task\TaskUpdateController;
 use Core\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
 
-Route::get('/splash'            , SplashController::class, ["test:user"]);
+Route::get('/splash'            , SplashController::class, ["auth"]);
 
 Route::group("user",function () {
 

@@ -1,5 +1,6 @@
 <?php
 
+use Psr\Http\Message\ServerRequestInterface;
 
 if (!function_exists("response"))
 {
@@ -74,40 +75,6 @@ if (!function_exists("logger"))
     }
 }
 
-if (!function_exists("waitForPromise")){
-    function waitForPromise(\React\Promise\PromiseInterface $promise) {
-        $result = null;
-        $exception = null;
-        $isRejected = false;
-
-        $wait = true;
-        while ($wait) {
-            $promise
-                ->then(function ($r) use (&$result) {
-                    $result = $r;
-                }, function ($e) use (&$exception, &$isRejected) {
-                    $exception = $e;
-                    $isRejected = true;
-                })
-                ->always(function () use (&$wait) {
-                    $wait = false;
-                });
-        }
-
-        if ($isRejected) {
-            if (!$exception instanceof \Exception) {
-                $exception = new \UnexpectedValueException(
-                    'Promise rejected with unexpected value of type ' . (is_object($exception) ? get_class($exception) : gettype($exception))
-                );
-            }
-
-            throw $exception;
-        }
-
-        return $result;
-    }
-}
-
 if(!function_exists("head")){
     function head(array $arr) {
         return reset($arr);
@@ -117,5 +84,15 @@ if(!function_exists("head")){
 if(!function_exists("tail")){
     function tail(array $arr) {
         return array_slice($arr, 1);
+    }
+}
+
+
+if(!function_exists("getAuthToken"))
+{
+    function getAuthToken(ServerRequestInterface $request)
+    {
+        $token = $request->getHeader("Authorization");
+        return count($token) && $token[0] ? $token[0] : null;
     }
 }

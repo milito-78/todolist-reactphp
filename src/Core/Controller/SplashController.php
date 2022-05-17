@@ -2,25 +2,25 @@
 
 namespace App\Core\Controller;
 
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\UseCase\AuthenticateUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class SplashController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
+    private AuthenticateUseCaseInterface $authService;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(AuthenticateUseCaseInterface $authService)
     {
-        $this->userRepository   = $userRepository;
+        $this->authService   = $authService;
     }
 
     public function __invoke(Request $request)
     {
-        $token = $request->getHeader("Authorization");
+        $auth = $request->getAuth();
 
         $response = [
-            "user" => null,
+            "user" => $auth,
             "timestamp" => time(),
             "version" => "1.0",
             "update_version" => "1.0",
@@ -28,26 +28,7 @@ class SplashController extends Controller
             "is_essential_update" => false
         ];
 
-        // $token = ["wsdhjfgtygefvdgvfsdgbegvcgvtdyec"];
-
-        if(count($token) && $token = $token[0])
-        {
-            return $this->userRepository
-                        ->findByToken($token)
-                        ->then(function($user) use ($response){
-                            
-                            if(!is_null($user)){
-                                $response["user"] = $user;
-                            }
-
-                            return response($response);
-                        },
-                        function($exception)
-                        {
-                            return response("sss");
-                        });
-        }
-
+        
         return  response($response);
     }
 }

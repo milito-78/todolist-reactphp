@@ -2,13 +2,15 @@
 namespace Core\Response;
 
 use Core\Exceptions\Model\ErrorModel;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\StreamInterface;
 use React\Http\Io\HttpBodyStream;
 use React\Stream\ReadableStreamInterface;
 use RingCentral\Psr7\Response as Psr7Response;
+use React\Http\Message\Response;
 use function is_string;
 
-final class JsonResponse extends Psr7Response
+final class JsonResponse extends Psr7Response implements StatusCodeInterface
 {
     public function __construct(
         $status = 200,

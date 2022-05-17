@@ -9,7 +9,8 @@ class Request implements ServerRequestInterface
     use ServerRequestImplementsTrait;
 
     public ServerRequestInterface $request;
-
+    private $auth = null;
+    
     public function __construct(ServerRequestInterface $request) {
         $this->request = $request;
     }
@@ -38,5 +39,15 @@ class Request implements ServerRequestInterface
     public function input($input)
     {
         return $this->{$input};
+    }
+
+    public function addAuth($auth)
+    {
+        $this->auth = $auth;
+    }
+
+    public function getAuth()
+    {
+        return $this->auth;
     }
 }

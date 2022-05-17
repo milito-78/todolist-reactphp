@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Middlewares\AuthMiddleware;
 use App\Core\Middlewares\TestMiddleware;
 
 return [
@@ -15,11 +16,13 @@ return [
     "socket_port" => envGet("SOCKET_PORT","3000"),
 
     "middlewares" => [
-        'test' => TestMiddleware::class
+        'test' => TestMiddleware::class,
+        'auth' => AuthMiddleware::class,
     ],
 
     "providers" => [
         \Core\Providers\AppServiceProvider::class,
         \App\Core\Providers\RepositoryServiceProvider::class,
+        \App\Core\Providers\UseCaseServiceProvider::class,
     ]
 ];

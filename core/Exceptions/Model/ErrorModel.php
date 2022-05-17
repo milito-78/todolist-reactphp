@@ -10,7 +10,7 @@ final class ErrorModel{
 
     public array $message;
 
-    public function __construct(string $title ,array $message = [])
+    public function __construct(string $title ,$message = [])
     {
         $this->title = $title;
         $this->message = $message;

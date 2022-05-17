@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Context;
+namespace App\Common\Repsitories;
 
 
 use Core\DataBase\Interfaces\DatabaseInterface;

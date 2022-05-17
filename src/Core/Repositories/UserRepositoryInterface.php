@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Domain\Repositories;
+namespace App\Core\Repositories;
 
 
-use App\Domain\Context\RepositoryInterface;
+use App\Common\Repsitories\RepositoryInterface;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {

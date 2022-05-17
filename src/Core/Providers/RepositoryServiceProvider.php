@@ -3,10 +3,10 @@
 
 namespace App\Core\Providers;
 
-use App\Domain\Repositories\TaskRepository;
-use App\Domain\Repositories\TaskRepositoryInterface;
-use App\Domain\Repositories\UserRepository;
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\Core\Repositories\TaskRepository;
+use App\Core\Repositories\TaskRepositoryInterface;
+use App\Core\Repositories\UserRepository;
+use App\Core\Repositories\UserRepositoryInterface;
 use Core\DataBase\Interfaces\DatabaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 

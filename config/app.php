@@ -1,7 +1,6 @@
 <?php
 
 use App\Core\Middlewares\AuthMiddleware;
-use App\Core\Middlewares\TestMiddleware;
 
 return [
     "name" => envGet("APP_NAME","Test"),
@@ -16,7 +15,6 @@ return [
     "socket_port" => envGet("SOCKET_PORT","3000"),
 
     "middlewares" => [
-        'test' => TestMiddleware::class,
         'auth' => AuthMiddleware::class,
     ],
 

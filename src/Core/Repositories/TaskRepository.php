@@ -1,7 +1,7 @@
 <?php
-namespace App\Domain\Repositories;
+namespace App\Core\Repositories;
 
-use App\Domain\Context\Repository;
+use App\Common\Repsitories\Repository;
 use React\MySQL\QueryResult;
 use React\Promise\PromiseInterface;
 

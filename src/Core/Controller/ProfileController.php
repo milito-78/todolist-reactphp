@@ -2,7 +2,7 @@
 
 namespace App\Core\Controller;
 
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\Core\Repositories\UserRepositoryInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 

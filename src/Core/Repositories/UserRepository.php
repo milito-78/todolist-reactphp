@@ -1,10 +1,9 @@
 <?php
 
 
-namespace App\Domain\Repositories;
+namespace App\Core\Repositories;
 
-use App\Domain\Context\Repository;
-use Core\DataBase\Interfaces\DatabaseInterface;
+use App\Common\Repsitories\Repository;
 use React\Promise\PromiseInterface;
 
 class UserRepository extends Repository implements UserRepositoryInterface

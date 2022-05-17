@@ -2,33 +2,21 @@
 
 namespace App\Core\Controller;
 
-use App\UseCase\AuthenticateUseCaseInterface;
+use App\UseCase\SplashUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class SplashController extends Controller
 {
-    private AuthenticateUseCaseInterface $authService;
+    private SplashUseCaseInterface $splashService;
 
-    public function __construct(AuthenticateUseCaseInterface $authService)
+    public function __construct(SplashUseCaseInterface $splashService)
     {
-        $this->authService   = $authService;
+        $this->splashService   = $splashService;
     }
 
     public function __invoke(Request $request)
     {
-        $auth = $request->getAuth();
-
-        $response = [
-            "user" => $auth,
-            "timestamp" => time(),
-            "version" => "1.0",
-            "update_version" => "1.0",
-            "api_version" => "1.0",
-            "is_essential_update" => false
-        ];
-
-        
-        return  response($response);
+        return $this->splashService->handle($request);
     }
 }

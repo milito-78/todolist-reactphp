@@ -3,7 +3,7 @@
 namespace App\UseCase;
 
 use App\Domain\Entities\User;
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\Core\Repositories\UserRepositoryInterface;
 use Core\Exceptions\AuthorizationException;
 
 class AuthenticateUseCase implements AuthenticateUseCaseInterface

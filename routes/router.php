@@ -13,12 +13,13 @@ use App\Core\Controller\Task\TaskUpdateController;
 use Core\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
 
-Route::get('/splash'            , SplashController::class, ["auth"]);
+Route::get('/splash'            , SplashController::class);
 
 Route::group("user",function () {
 
     Route::post("register"      , [RegisterController::class, "store"]);
     Route::post("login"         , [LoginController::class, "store"]);
+    
     Route::group('/',function () {
         Route::get("profile"        , [ProfileController::class,"show"]);
         Route::patch("logout"       , [LogoutController::class,"patch"]);
@@ -30,6 +31,6 @@ Route::group("user",function () {
             Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
             Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
         });
-    });
-    //Add auth middleware
+    },["auth"]);
+
 });

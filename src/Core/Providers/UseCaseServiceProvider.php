@@ -5,6 +5,8 @@ namespace App\Core\Providers;
 use App\Core\Repositories\UserRepositoryInterface;
 use App\UseCase\AuthenticateUseCase;
 use App\UseCase\AuthenticateUseCaseInterface;
+use App\UseCase\LoginUseCase;
+use App\UseCase\LoginUseCaseInterface;
 use App\UseCase\RegisterUseCaseInterface;
 use App\UseCase\RegisterUseCase;
 use App\UseCase\SplashUseCase;
@@ -21,7 +23,9 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             SplashUseCaseInterface::class,
             SplashUseCase::class,
             RegisterUseCaseInterface::class,
-            RegisterUseCase::class
+            RegisterUseCase::class,
+            LoginUseCaseInterface::class,
+            LoginUseCase::class
         ];
 
         return in_array($id, $services);
@@ -43,6 +47,11 @@ class UseCaseServiceProvider extends AbstractServiceProvider
         $this->getContainer()
             ->add(RegisterUseCaseInterface::class, function (){
                 return new RegisterUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(LoginUseCaseInterface::class, function (){
+                return new LoginUseCase($this->getContainer()->get(UserRepositoryInterface::class));
             });
     }
 }

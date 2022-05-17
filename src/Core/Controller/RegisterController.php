@@ -17,7 +17,6 @@ class RegisterController extends Controller
     
     public function store(Request $request)
     {
-        
         $input = new RegisterInput($request);
         $input->validate();
 

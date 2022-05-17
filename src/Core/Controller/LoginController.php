@@ -2,39 +2,26 @@
 
 namespace App\Core\Controller;
 
-use App\Core\Repositories\UserRepositoryInterface;
+use App\Domain\Inputs\LoginInput;
+use App\UseCase\LoginUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class LoginController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
+    private LoginUseCaseInterface $loginService;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(LoginUseCaseInterface $loginService)
     {
-        $this->userRepository   = $userRepository;
+        $this->loginService   = $loginService;
     }
     
     public function store(Request $request)
     {
-       
-        
-        return $this->userRepository->findByEmail($request->email)
-                    ->then(function($result) use ($request){
-                        if(is_null($result))
-                        {
-                            return response("failed to login" , 401);
-                        }
-                        
-                        if(!password_verify($request->password, $result["password"]))
-                        {
-                            return response("password is incorrect" , 401);
-                        }
+        $input = new LoginInput($request);
+        $input->validate();
 
-                        return response($result);
-                    },function($ex){
-                        return response($ex->getMessage());
-                    });
+        return $this->loginService->handle($input);
     }
 
 }

@@ -38,11 +38,12 @@ class SplashUseCase implements SplashUseCaseInterface
                         if(!is_null($user)){
                             $user = new User($user);
                         }
-
-                        return response(new SplashOutput($option,$user));
+                        $output = new SplashOutput($option,$user);
+                        return response($output->output());
                     });
         }
+        $output = new SplashOutput($option,null);
 
-        return response(new SplashOutput($option,null));
+        return response($output->output());
     }
 }

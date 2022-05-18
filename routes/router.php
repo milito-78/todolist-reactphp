@@ -17,12 +17,12 @@ Route::get('/splash'            , SplashController::class);
 
 Route::group("user",function () {
 
-    Route::post("register"      , [RegisterController::class, "store"]);
-    Route::post("login"         , [LoginController::class, "store"]);
+    Route::post("register"      , RegisterController::class);
+    Route::post("login"         , LoginController::class);
     
     Route::group('/',function () {
-        Route::get("profile"        , [ProfileController::class,"show"]);
-        Route::patch("logout"       , [LogoutController::class,"patch"]);
+        Route::get("profile"        , ProfileController::class);
+        Route::patch("logout"       , LogoutController::class);
 
         Route::group("tasks",function(){
             Route::get(""           , [TaskIndexController::class,"index"]);

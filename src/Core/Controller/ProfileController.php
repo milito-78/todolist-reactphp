@@ -15,7 +15,7 @@ class ProfileController extends Controller
         $this->profileService   = $profileService;
     }
     
-    public function show(Request $request)
+    public function __invoke(Request $request)
     {
        return $this->profileService->handle($request);
     }

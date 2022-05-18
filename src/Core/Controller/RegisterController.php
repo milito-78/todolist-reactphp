@@ -15,7 +15,7 @@ class RegisterController extends Controller
         $this->registerService   = $registerService;
     }
     
-    public function store(Request $request)
+    public function __invoke(Request $request)
     {
         $input = new RegisterInput($request);
         $input->validate();

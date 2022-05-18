@@ -16,7 +16,7 @@ class LoginController extends Controller
         $this->loginService   = $loginService;
     }
     
-    public function store(Request $request)
+    public function __invoke(Request $request)
     {
         $input = new LoginInput($request);
         $input->validate();

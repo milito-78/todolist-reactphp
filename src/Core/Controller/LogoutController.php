@@ -15,7 +15,7 @@ class LogoutController extends Controller
         $this->logoutService   = $logoutService;
     }
     
-    public function patch(Request $request)
+    public function __invoke(Request $request)
     {
         return $this->logoutService->handle($request);
     }

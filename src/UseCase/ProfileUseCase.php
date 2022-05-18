@@ -3,10 +3,12 @@
 namespace App\UseCase;
 
 use App\Core\Repositories\UserRepositoryInterface;
+use App\Domain\Entities\User;
+use App\Domain\Outputs\ProfileOutput;
 use Core\Request\Request;
 
 
-class LogoutUseCase implements LogoutUseCaseInterface
+class ProfileUseCase implements ProfileUseCaseInterface
 {
     private UserRepositoryInterface $userRepository;
 
@@ -17,8 +19,9 @@ class LogoutUseCase implements LogoutUseCaseInterface
 
     public function handle(Request $input)
     {
-        return response(["message" => "Logout completed successfully"]);
+        $user = $input->getAuth();
+
+        $output = new ProfileOutput(new User($user));
+        return response($output->output());
     }
-
-
 }

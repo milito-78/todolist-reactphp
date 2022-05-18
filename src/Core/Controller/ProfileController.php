@@ -2,42 +2,22 @@
 
 namespace App\Core\Controller;
 
-use App\Core\Repositories\UserRepositoryInterface;
+use App\UseCase\ProfileUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class ProfileController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
+    private ProfileUseCaseInterface $profileService;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(ProfileUseCaseInterface $profileService)
     {
-        $this->userRepository   = $userRepository;
+        $this->profileService   = $profileService;
     }
     
     public function show(Request $request)
     {
-        $token = $request->getHeader("Authorization");
-
-        if(count($token) && $token = $token[0])
-        {
-            return $this->userRepository
-                        ->findByToken($token)
-                        ->then(function($user)
-                        {   
-                            if(is_null($user)){
-                                return  response("Un authenticated" , 401);
-                            }
-
-                            return response($user);
-                        },
-                        function($exception)
-                        {
-                            return response($exception->getMessage());
-                        });
-        }
-
-        return  response("Un authenticated" , 401);
+       return $this->profileService->handle($request);
     }
 
 }

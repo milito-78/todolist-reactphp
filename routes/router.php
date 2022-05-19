@@ -29,7 +29,7 @@ Route::group("user",function () {
             Route::post(""          , [TaskStoreController::class,"store"]);
             Route::get("/{task}"    , TaskShowController::class);
             Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
-            Route::delete("/{task}" , [TaskDeleteController::class,"destroy"]);
+            Route::delete("/{task}" , TaskDeleteController::class);
         });
     },["auth"]);
 

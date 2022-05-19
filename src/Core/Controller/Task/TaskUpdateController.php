@@ -2,41 +2,28 @@
 
 namespace App\Core\Controller\Task;
 
-use App\Domain\Repositories\TaskRepositoryInterface;
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\Domain\Inputs\TaskUpdateInput;
+use App\UseCase\TaskUpdateUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class TaskUpdateController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-    private TaskRepositoryInterface $taskRepository;
+    private TaskUpdateUseCaseInterface $taskService;
 
-    public function __construct(TaskRepositoryInterface $taskRepository,UserRepositoryInterface $userRepository)
+    public function __construct(TaskUpdateUseCaseInterface $taskService)
     {
-        $this->taskRepository = $taskRepository;
-        $this->userRepository = $userRepository;
+        $this->taskService = $taskService;
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$task)
     {
-        $token = $request->getHeader("Authorization");
+        var_dump($task);
+        
+        $input = new TaskUpdateInput($request);
+        $input->validate();
+        
+        return $this->taskService->handle($input,$task);
 
-        return $this->userRepository
-                    ->findByToken($token[0]??"")
-                    ->then(function($user)use($request){
-                        if(!is_null($user)){
-                            return $this->taskRepository
-                                    ->update($user["id"],[
-                                        "title"         => $request->title,
-                                        "description"   => $request->description
-                                    ])
-                                    ->then(function($result){
-                                        return response($result);
-                                    });
-                        }
-                        
-                        return response("Un authenticate",401);
-                    });
     }
 }

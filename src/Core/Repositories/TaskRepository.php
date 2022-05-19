@@ -22,4 +22,18 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
                 });
     }
 
+    public function getTaskForUser($task_id,$user_id)
+    {
+        $sql = <<<SQL
+        SELECT * FROM `tasks` WHERE `id` = ? AND `user_id` = ? AND `deleted_at` is NULL ORDER BY `id` DESC LIMIT 1
+        SQL;
+        return $this->query($sql , [$task_id,$user_id])
+                ->then(function (QueryResult $result)
+                {
+                    if (!@$result->resultRows[0])
+                        return null;
+                    return $result->resultRows[0];
+                });
+    }
+
 }

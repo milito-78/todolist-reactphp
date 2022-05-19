@@ -18,6 +18,8 @@ use App\UseCase\SplashUseCase;
 use App\UseCase\SplashUseCaseInterface;
 use App\UseCase\TaskIndexUseCase;
 use App\UseCase\TaskIndexUseCaseInterface;
+use App\UseCase\TaskShowUseCase;
+use App\UseCase\TaskShowUseCaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 class UseCaseServiceProvider extends AbstractServiceProvider
@@ -38,7 +40,9 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             ProfileUseCaseInterface::class,
             ProfileUseCase::class,
             TaskIndexUseCaseInterface::class,
-            TaskIndexUseCase::class
+            TaskIndexUseCase::class,
+            TaskShowUseCaseInterface::class,
+            TaskShowUseCase::class,
         ];
 
         return in_array($id, $services);
@@ -76,12 +80,19 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             ->add(ProfileUseCaseInterface::class, function (){
                 return new ProfileUseCase($this->getContainer()->get(UserRepositoryInterface::class));
             });
+
         $this->getContainer()
             ->add(TaskIndexUseCaseInterface::class, function (){
                 return new TaskIndexUseCase(
                     $this->getContainer()->get(UserRepositoryInterface::class),
                     $this->getContainer()->get(TaskRepositoryInterface::class)
                 );
+            });
+
+
+        $this->getContainer()
+            ->add(TaskShowUseCaseInterface::class, function (){
+                return new TaskShowUseCase($this->getContainer()->get(TaskRepositoryInterface::class));
             });
     }
 }

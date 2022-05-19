@@ -22,6 +22,8 @@ use App\UseCase\TaskIndexUseCase;
 use App\UseCase\TaskIndexUseCaseInterface;
 use App\UseCase\TaskShowUseCase;
 use App\UseCase\TaskShowUseCaseInterface;
+use App\UseCase\TaskStoreUseCase;
+use App\UseCase\TaskStoreUseCaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 class UseCaseServiceProvider extends AbstractServiceProvider
@@ -47,6 +49,8 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             TaskShowUseCase::class,
             TaskDeleteUseCaseInterface::class,
             TaskDeleteUseCase::class,
+            TaskStoreUseCaseInterface::class,
+            TaskStoreUseCase::class
         ];
 
         return in_array($id, $services);
@@ -101,6 +105,11 @@ class UseCaseServiceProvider extends AbstractServiceProvider
         $this->getContainer()
             ->add(TaskDeleteUseCaseInterface::class, function (){
                 return new TaskDeleteUseCase($this->getContainer()->get(TaskRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(TaskStoreUseCaseInterface::class, function (){
+                return new TaskStoreUseCase($this->getContainer()->get(TaskRepositoryInterface::class));
             });
     }
 }

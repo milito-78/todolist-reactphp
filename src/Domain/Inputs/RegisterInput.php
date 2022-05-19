@@ -55,7 +55,7 @@ class RegisterInput{
         return [
             "full_name" => $this->request->full_name,
             "email"     => $this->request->email,
-            "password"  => password_hash($this->request->password, PASSWORD_BCRYPT),
+            "password"  => $this->passwordHashed(),
         ];
     }
 

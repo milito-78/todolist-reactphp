@@ -2,43 +2,25 @@
 
 namespace App\Core\Controller\Task;
 
-use App\Domain\Repositories\TaskRepositoryInterface;
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\Domain\Inputs\TaskStoreInput;
+use App\UseCase\TaskStoreUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class TaskStoreController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-    private TaskRepositoryInterface $taskRepository;
+    private TaskStoreUseCaseInterface $taskService;
 
-    public function __construct(TaskRepositoryInterface $taskRepository,UserRepositoryInterface $userRepository)
+    public function __construct(TaskStoreUseCaseInterface $taskService)
     {
-        $this->taskRepository = $taskRepository;
-        $this->userRepository = $userRepository;
+        $this->taskService = $taskService;
     }
 
     public function store(Request $request)
     {
-        $token = $request->getHeader("Authorization");
-
-        return $this->userRepository
-                    ->findByToken($token[0]??"")
-                    ->then(function($user) use ($request){
-                        if(!is_null($user)){
-                            
-                            return $this->taskRepository
-                                    ->create([
-                                        "user_id"   => $user["id"],
-                                        "title"     => $request->title,
-                                        "description" => $request->description
-                                    ])
-                                    ->then(function($result){
-                                        return response($result);
-                                    });
-                        }
-                        
-                        return response("Un authenticate",401);
-                    });
+        $input = new TaskStoreInput($request);
+        $input->validate();
+        
+        return $this->taskService->handle($input); 
     }
 }

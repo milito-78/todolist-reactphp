@@ -2,6 +2,7 @@
 
 namespace App\Core\Providers;
 
+use App\Core\Repositories\TaskRepositoryInterface;
 use App\Core\Repositories\UserRepositoryInterface;
 use App\UseCase\AuthenticateUseCase;
 use App\UseCase\AuthenticateUseCaseInterface;
@@ -15,6 +16,8 @@ use App\UseCase\RegisterUseCaseInterface;
 use App\UseCase\RegisterUseCase;
 use App\UseCase\SplashUseCase;
 use App\UseCase\SplashUseCaseInterface;
+use App\UseCase\TaskIndexUseCase;
+use App\UseCase\TaskIndexUseCaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 class UseCaseServiceProvider extends AbstractServiceProvider
@@ -33,7 +36,9 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             LogoutUseCaseInterface::class,
             LogoutUseCase::class,
             ProfileUseCaseInterface::class,
-            ProfileUseCase::class
+            ProfileUseCase::class,
+            TaskIndexUseCaseInterface::class,
+            TaskIndexUseCase::class
         ];
 
         return in_array($id, $services);
@@ -66,9 +71,17 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             ->add(LogoutUseCaseInterface::class, function (){
                 return new LogoutUseCase($this->getContainer()->get(UserRepositoryInterface::class));
             });
+
         $this->getContainer()
             ->add(ProfileUseCaseInterface::class, function (){
                 return new ProfileUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+        $this->getContainer()
+            ->add(TaskIndexUseCaseInterface::class, function (){
+                return new TaskIndexUseCase(
+                    $this->getContainer()->get(UserRepositoryInterface::class),
+                    $this->getContainer()->get(TaskRepositoryInterface::class)
+                );
             });
     }
 }

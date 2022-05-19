@@ -2,38 +2,21 @@
 
 namespace App\Core\Controller\Task;
 
-use App\Domain\Repositories\TaskRepositoryInterface;
-use App\Domain\Repositories\UserRepositoryInterface;
+use App\UseCase\TaskIndexUseCaseInterface;
 use Core\Request\Controller;
 use Core\Request\Request;
 
 class TaskIndexController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-    private TaskRepositoryInterface $taskRepository;
+    private TaskIndexUseCaseInterface $taskService;
 
-    public function __construct(TaskRepositoryInterface $taskRepository,UserRepositoryInterface $userRepository)
+    public function __construct(TaskIndexUseCaseInterface $taskService)
     {
-        $this->taskRepository = $taskRepository;
-        $this->userRepository = $userRepository;
+        $this->taskService = $taskService;
     }
 
-    public function index(Request $request)
+    public function __invoke(Request $request)
     {
-        $token = $request->getHeader("Authorization");
-
-        return $this->userRepository
-                    ->findByToken($token[0]??"")
-                    ->then(function($user){
-                        if(!is_null($user)){
-                            return $this->taskRepository
-                                    ->getTasksForUser($user["id"])
-                                    ->then(function($result){
-                                        return response($result);
-                                    });
-                        }
-                        
-                        return response("Un authenticate",401);
-                    });
+        return $this->taskService->handle($request);
     }
 }

@@ -25,7 +25,7 @@ Route::group("user",function () {
         Route::patch("logout"       , LogoutController::class);
 
         Route::group("tasks",function(){
-            Route::get(""           , [TaskIndexController::class,"index"]);
+            Route::get(""           , TaskIndexController::class);
             Route::post(""          , [TaskStoreController::class,"store"]);
             Route::get("/{task}"    , [TaskShowController::class,"show"]);
             Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);

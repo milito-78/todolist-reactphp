@@ -1,9 +1,8 @@
 <?php
 namespace App\Core\Repositories;
 
-use App\Common\Repsitories\Repository;
+use App\Common\Repositories\Repository;
 use React\MySQL\QueryResult;
-use React\Promise\PromiseInterface;
 
 class TaskRepository extends Repository implements TaskRepositoryInterface
 {
@@ -15,7 +14,7 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
     public function getTasksForUser($user_id)
     {
         $sql = <<<SQL
-        SELECT * FROM `tasks` WHERE `user_id` = ?
+        SELECT * FROM `tasks` WHERE `user_id` = ? AND deleted_at is NULL ORDER BY id DESC
         SQL;
         return $this->query($sql , [$user_id])
                 ->then(function (QueryResult $result){

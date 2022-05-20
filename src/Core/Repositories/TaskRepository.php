@@ -3,6 +3,7 @@ namespace App\Core\Repositories;
 
 use App\Common\Repositories\Repository;
 use React\MySQL\QueryResult;
+use React\Promise\PromiseInterface;
 
 class TaskRepository extends Repository implements TaskRepositoryInterface
 {
@@ -11,7 +12,7 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
         return "tasks";
     }
 
-    public function getTasksForUser($user_id)
+    public function getTasksForUser($user_id): PromiseInterface
     {
         $sql = <<<SQL
         SELECT * FROM `tasks` WHERE `user_id` = ? AND deleted_at is NULL ORDER BY id DESC
@@ -22,7 +23,7 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
                 });
     }
 
-    public function getTaskForUser($task_id,$user_id)
+    public function getTaskForUser($task_id,$user_id): PromiseInterface
     {
         $sql = <<<SQL
         SELECT * FROM `tasks` WHERE `id` = ? AND `user_id` = ? AND `deleted_at` is NULL ORDER BY `id` DESC LIMIT 1

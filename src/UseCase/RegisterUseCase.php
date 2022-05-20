@@ -7,7 +7,6 @@ use App\Domain\Entities\User;
 use App\Domain\Inputs\RegisterInput;
 use App\Domain\Outputs\RegisterOutput;
 use App\Infrastructure\Exceptions\EmailTakenException;
-use Core\Response\JsonResponse;
 
 use function React\Promise\reject;
 use function React\Promise\resolve;

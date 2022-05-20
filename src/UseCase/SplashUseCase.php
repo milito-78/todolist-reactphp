@@ -42,8 +42,8 @@ class SplashUseCase implements SplashUseCaseInterface
                         return response($output->output());
                     });
         }
-        $output = new SplashOutput($option,null);
 
+        $output = new SplashOutput($option,null);
         return response($output->output());
     }
 }

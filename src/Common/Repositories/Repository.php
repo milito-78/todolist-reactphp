@@ -22,10 +22,6 @@ abstract class Repository implements RepositoryInterface
     abstract public function table(): string;
 
 
-    /**
-     * @param string $table
-     * @return Repository
-     */
     public function setTable(string $table): Repository
     {
         $this->table = $table;

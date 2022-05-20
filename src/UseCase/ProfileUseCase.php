@@ -10,12 +10,6 @@ use Core\Request\Request;
 
 class ProfileUseCase implements ProfileUseCaseInterface
 {
-    private UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository) 
-    {
-        $this->userRepository = $userRepository;
-    }
 
     public function handle(Request $input)
     {

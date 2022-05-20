@@ -26,9 +26,9 @@ Route::group("user",function () {
 
         Route::group("tasks",function(){
             Route::get(""           , TaskIndexController::class);
-            Route::post(""          , [TaskStoreController::class,"store"]);
+            Route::post(""          , TaskStoreController::class);
             Route::get("/{task}"    , TaskShowController::class);
-            Route::patch("/{task}"  , [TaskUpdateController::class,"update"]);
+            Route::patch("/{task}"  , TaskUpdateController::class);
             Route::delete("/{task}" , TaskDeleteController::class);
         });
     },["auth"]);

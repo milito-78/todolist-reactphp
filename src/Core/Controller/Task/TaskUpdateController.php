@@ -16,9 +16,8 @@ class TaskUpdateController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function update(Request $request,$task)
+    public function __invoke(Request $request,$task)
     {
-        var_dump($task);
         
         $input = new TaskUpdateInput($request);
         $input->validate();

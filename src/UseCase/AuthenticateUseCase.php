@@ -2,7 +2,6 @@
 
 namespace App\UseCase;
 
-use App\Domain\Entities\User;
 use App\Core\Repositories\UserRepositoryInterface;
 use Core\Exceptions\AuthorizationException;
 

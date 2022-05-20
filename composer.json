@@ -35,6 +35,9 @@
     "config": {
         "allow-plugins": {
             "kylekatarnls/update-helper": true
+        },
+        "platform": {
+            "php": "8.0"
         }
     }
 }

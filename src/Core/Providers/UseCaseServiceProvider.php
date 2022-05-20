@@ -85,18 +85,17 @@ class UseCaseServiceProvider extends AbstractServiceProvider
 
         $this->getContainer()
             ->add(LogoutUseCaseInterface::class, function (){
-                return new LogoutUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+                return new LogoutUseCase();
             });
 
         $this->getContainer()
             ->add(ProfileUseCaseInterface::class, function (){
-                return new ProfileUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+                return new ProfileUseCase();
             });
 
         $this->getContainer()
             ->add(TaskIndexUseCaseInterface::class, function (){
                 return new TaskIndexUseCase(
-                    $this->getContainer()->get(UserRepositoryInterface::class),
                     $this->getContainer()->get(TaskRepositoryInterface::class)
                 );
             });

@@ -5,7 +5,6 @@ namespace App\UseCase;
 use App\Core\Repositories\TaskRepositoryInterface;
 use App\Domain\Inputs\TaskUpdateInput;
 use Core\Exceptions\NotFoundException;
-use Exception;
 
 class TaskUpdateUseCase implements TaskUpdateUseCaseInterface
 {

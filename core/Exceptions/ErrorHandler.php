@@ -33,11 +33,11 @@ final class ErrorHandler
         }
         catch (NestedValidationException $exception)
         {
-            return JsonResponse::validationError(array_values($exception->getMessages()));
+            return JsonResponse::validationError($this->parseErrors($exception->getMessages()));
         }
         catch (ValidationException $exception)
         {
-            return JsonResponse::validationError($exception->getMessage());
+            return JsonResponse::validationError([$exception->getMessage()]);
         }
         catch (MethodNotAllowedException $exception){
             $server->emit("error" , [$exception]);
@@ -72,28 +72,49 @@ final class ErrorHandler
 
         if ($response instanceof NestedValidationException)
         {
-            return JsonResponse::validationError(array_values($response->getMessages()));
-        }elseif ($response instanceof ValidationException)
+            return JsonResponse::validationError($this->parseErrors($response->getMessages()));
+        }
+        elseif ($response instanceof ValidationException)
         {
-            return JsonResponse::validationError($response->getMessage());
-        }elseif ($response instanceof MethodNotAllowedException ){
+            return JsonResponse::validationError([$response->getMessage()]);
+        }
+        elseif ($response instanceof MethodNotAllowedException ){
             $server->emit("error" , [$response]);
             return JsonResponse::methodNotAllowed($response->getMessage());
-        }elseif ($response instanceof NotFoundException ){
+        }
+        elseif ($response instanceof NotFoundException ){
             $server->emit("error" , [$response]);
             return JsonResponse::notFound($response->getMessage());
-        }elseif ($response instanceof AuthorizationException ){
+        }
+        elseif ($response instanceof AuthorizationException ){
             $server->emit("error" , [$response]);
             return JsonResponse::unAuthorized($response->getMessage());
-        }elseif ($response instanceof ForbiddenException ){
+        }
+        elseif ($response instanceof ForbiddenException ){
             $server->emit("error" , [$response]);
             return JsonResponse::Aborted($response->getMessage());
-        }elseif ($response instanceof Throwable){
+        }
+        elseif ($response instanceof Throwable){
             $server->emit("error" , [$response]);
 
             return JsonResponse::internalServerError($response->getMessage());
         }
 
         return $response;
+    }
+
+    private function parseErrors(array $errors){
+        $temp = [];
+        var_dump($errors);
+        foreach($errors as $key => $error_message){
+            if(is_array($error_message))
+                foreach($error_message as $field => $message)
+                {
+                    $temp[] = $message;
+                }            
+            else
+                $temp[] = $error_message;
+        }
+        return $temp;
     }
 }

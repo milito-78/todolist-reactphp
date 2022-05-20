@@ -18,7 +18,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         return $this->findBy("email" , $email);
     }
 
-    public function findByToken(string $token)
+    public function findByToken(string $token): PromiseInterface
     {
         return $this->findBy("api_key" , $token);
     }

@@ -16,7 +16,7 @@ class TaskStoreController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function store(Request $request)
+    public function __invoke(Request $request)
     {
         $input = new TaskStoreInput($request);
         $input->validate();

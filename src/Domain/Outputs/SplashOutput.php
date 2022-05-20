@@ -22,7 +22,7 @@ class SplashOutput{
             ]
         ];
         if($this->user){
-            $response["user"] = [
+            $response["data"]["user"] = [
                 "id"            => $this->user->id,
                 "full_name"     => $this->user->full_name,
                 "email"         => $this->user->email,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Controller\ImageUploadController;
 use App\Core\Controller\LoginController;
 use App\Core\Controller\ProfileController;
 use App\Core\Controller\RegisterController;
@@ -32,5 +33,6 @@ Route::group("user",function () {
             Route::delete("/{task}" , TaskDeleteController::class);
         });
     },["auth"]);
-
 });
+
+Route::post("uploader" , ImageUploadController::class);

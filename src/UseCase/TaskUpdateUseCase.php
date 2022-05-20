@@ -31,7 +31,7 @@ class TaskUpdateUseCase implements TaskUpdateUseCaseInterface
                         return $this->taskRepository
                                     ->update($task["id"],$data)
                                     ->then(function($result){
-                                        return response(null,204);
+                                        return json_no_content();
                                     });
                     });
         

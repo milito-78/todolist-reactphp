@@ -2,6 +2,8 @@
 
 namespace App\Core\Providers;
 
+use App\Core\Repositories\UploadRepositoryInterface;
+use App\Common\Files\Uploader;
 use App\Core\Repositories\TaskRepositoryInterface;
 use App\Core\Repositories\UserRepositoryInterface;
 use App\UseCase\AuthenticateUseCase;
@@ -26,6 +28,8 @@ use App\UseCase\TaskStoreUseCase;
 use App\UseCase\TaskStoreUseCaseInterface;
 use App\UseCase\TaskUpdateUseCase;
 use App\UseCase\TaskUpdateUseCaseInterface;
+use App\UseCase\UploadImageUseCase;
+use App\UseCase\UploadImageUseCaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 class UseCaseServiceProvider extends AbstractServiceProvider
@@ -54,7 +58,9 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             TaskStoreUseCaseInterface::class,
             TaskStoreUseCase::class,
             TaskUpdateUseCaseInterface::class,
-            TaskUpdateUseCase::class
+            TaskUpdateUseCase::class,
+            UploadImageUseCaseInterface::class,
+            UploadImageUseCase::class
         ];
 
         return in_array($id, $services);
@@ -118,6 +124,14 @@ class UseCaseServiceProvider extends AbstractServiceProvider
         $this->getContainer()
             ->add(TaskUpdateUseCaseInterface::class, function (){
                 return new TaskUpdateUseCase($this->getContainer()->get(TaskRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(UploadImageUseCaseInterface::class, function (){
+                return new UploadImageUseCase(
+                    new Uploader($this->getContainer()->get("filesystem")),
+                    $this->getContainer()->get(UploadRepositoryInterface::class)
+                );
             });
     }
 }

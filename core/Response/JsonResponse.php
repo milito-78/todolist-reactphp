@@ -7,7 +7,6 @@ use Psr\Http\Message\StreamInterface;
 use React\Http\Io\HttpBodyStream;
 use React\Stream\ReadableStreamInterface;
 use RingCentral\Psr7\Response as Psr7Response;
-use React\Http\Message\Response;
 use function is_string;
 
 final class JsonResponse extends Psr7Response implements StatusCodeInterface
@@ -20,7 +19,15 @@ final class JsonResponse extends Psr7Response implements StatusCodeInterface
     {
         if (is_array($data)){
             $data = json_encode($data);
-        }else {
+        }elseif (
+                !(
+                    isset($headers["Content-Type"])
+                    &&
+                    $headers["Content-Type"] != "application/json"
+                    &&
+                    $headers["Content-Type"] != "text/plain"
+                )
+        ){
             $data = $data ? json_encode($data) : null;
         }
 

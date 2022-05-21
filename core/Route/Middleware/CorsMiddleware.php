@@ -11,9 +11,8 @@ class CorsMiddleware
         {
             return json_no_content();
         }
-
         $response = $next($serverRequest);
-        if ($response instanceof Promise)
+        if ($response instanceof Promise || $response instanceof \React\Promise\FulfilledPromise)
             return $response->then(function ($response){
                 return $this->addCorsHeaders($response);
             });
@@ -23,7 +22,8 @@ class CorsMiddleware
 
     private function addCorsHeaders($response)
     {
-        $response =  $response->withHeader("Content-type", "application/json");
+        if (!$response->hasHeader("Content-type"))
+            $response =  $response->withHeader("Content-type", "application/json");
         $response =  $response->withHeader("Access-Control-Allow-Origin", "*");
         $response =  $response->withHeader("Access-Control-Allow-Credentials", "true");
         $response =  $response->withHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS, HEAD");

@@ -2,6 +2,7 @@
 namespace Core\Route\Middleware;
 
 use Core\Response\JsonResponse;
+use Psr\Http\Message\ResponseInterface;
 use React\Promise\Promise;
 
 
@@ -11,7 +12,7 @@ class JsonResponseMiddleware
     {
         $response = $next($serverRequest);
 
-        if ($response instanceof Promise)
+        if ($response instanceof Promise || $response instanceof \React\Promise\FulfilledPromise)
         {
             return $response->then(function ($response){
                 if (!$response instanceof JsonResponse)

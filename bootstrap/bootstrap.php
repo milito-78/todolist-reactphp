@@ -1,12 +1,13 @@
 <?php
-
+use React\Http\Middleware\StreamingRequestMiddleware;
+use React\Http\Middleware\RequestBodyBufferMiddleware;
+use React\Http\Middleware\RequestBodyParserMiddleware;
 use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
-use Core\ {
-    Config\Config,
+use Core\{Config\Config,
     Exceptions\ErrorHandler,
-    Response\JsonRequestDecoder,
-};
+    Filesystem\StaticFiles\StaticFileController,
+    Response\JsonRequestDecoder};
 use Core\DI\DependencyResolver;
 use Dotenv\Dotenv;
 use FastRoute\DataGenerator\GroupCountBased;
@@ -18,12 +19,13 @@ use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
 use React\Http\HttpServer;
 use React\Socket\SocketServer;
+use Core\Filesystem\Factory as FileSystem;
 
 //////////////////////
 use Core\Route\RouteCollector as Router;
-
 $env = Dotenv::createImmutable(__DIR__,"../.env");
 $env->load();
+
 
 $config = new Config();
 $config->loadConfigurationFiles(__DIR__ . '/../config',envGet("APP_ENV","local"));
@@ -42,20 +44,26 @@ foreach ($providers as $provider){
 
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container->add(RouteCollector::class,$routeCollector);
+$filesystem = Filesystem::create();
 
+$container->add("filesystem",$filesystem);
+
+\Core\Route\RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 
 require_once "routes/router.php";
 
 
 $server =  new HttpServer(
     $loop,
+    new StreamingRequestMiddleware(),
+    new RequestBodyBufferMiddleware(8 * 1024 * 1024), // 8 MiB
+    new RequestBodyParserMiddleware(8 * 1024 * 1024, 1), // 8 MiB
     new CorsMiddleware(),
     new ErrorHandler(),
     new JsonRequestDecoder(),
     new JsonResponseMiddleware(),
     new Router($routeCollector,new DependencyResolver),
 );
-
 
 $socket = new SocketServer(
      config("app.socket_server") . ":" . config("app.socket_port"),

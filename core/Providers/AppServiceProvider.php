@@ -7,6 +7,7 @@ use Core\DataBase\Drivers\Mysql\MysqlHandler;
 use Core\DataBase\Exceptions\UnknownDatabaseDriverException;
 use Core\DataBase\Interfaces\DatabaseInterface;
 use Core\DataBase\Interfaces\DriverInterface;
+use Core\Filesystem\AdapterInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use React\EventLoop\Loop;
 use React\MySQL\Factory as Mysql;
@@ -56,6 +57,8 @@ class AppServiceProvider extends AbstractServiceProvider implements BootableServ
         }
 
         $this->getContainer()->add(DriverInterface::class,$handler->getDriver());
+
+        $this->getContainer()->add(AdapterInterface::class,filesystem());
 
     }
 

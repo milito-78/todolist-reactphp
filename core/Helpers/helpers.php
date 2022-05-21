@@ -96,3 +96,10 @@ if(!function_exists("getAuthToken"))
         return count($token) && $token[0] ? $token[0] : null;
     }
 }
+
+if (!function_exists("filesystem")){
+    function filesystem(){
+        global $container;
+        return $container->get((string) "filesystem");
+    }
+}

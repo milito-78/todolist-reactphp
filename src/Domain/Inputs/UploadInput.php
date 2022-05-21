@@ -2,6 +2,7 @@
 
 namespace App\Domain\Inputs;
 
+use Core\Exceptions\ValidationException;
 use Core\Request\Request;
 use Psr\Http\Message\UploadedFileInterface;
 use Respect\Validation\Validator;
@@ -18,16 +19,29 @@ class UploadInput{
 
     public function validate()
     {
-        $imageValidator = Validator::key(
+
+         /*
+          *
+          * // I don't know why respect\validation doesn't work this time :/
+         $imageValidator = Validator::key(
             'image',
-            Validator::allOf(
-                Validator::email(),
-                Validator::notBlank(),
-                Validator::stringType(),
+            Validator::anyOf(
+                Validator::mimetype("image/jpg"),
+                Validator::mimetype("image/jpeg"),
+                Validator::mimetype("image/png"),
             )
         )->setName('image');
 
-        Validator::allOf($imageValidator)->assert($this->request->all());
+        Validator::allOf($imageValidator)->assert(["image" => $this->image()->getClientFilename()]);
+         */
+
+        if (!$image = $this->image())
+            throw new ValidationException("image is required");
+
+        $mime = $image->getClientMediaType();
+        if (!in_array($mime,["image/jpg","image/jpeg","image/png"]))
+            throw new ValidationException("image type is invalid");
+
         $this->is_validated = true;
     }
 

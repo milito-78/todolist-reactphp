@@ -4,6 +4,7 @@ namespace Core\Exceptions;
 
 use Core\Response\JsonResponse;
 use React\Http\Message\ServerRequest;
+use React\Promise\FulfilledPromise;
 use React\Promise\Promise;
 use Respect\Validation\Exceptions\NestedValidationException;
 use RuntimeException;
@@ -18,7 +19,7 @@ final class ErrorHandler
         try {
             $response = $next($request);
             
-            if ($response instanceof Promise)
+            if ($response instanceof Promise || $response instanceof FulfilledPromise)
             {
                 return $response->then(function ($response){
                     $response = $this->checkErrorResponse($response);
@@ -105,7 +106,7 @@ final class ErrorHandler
 
     private function parseErrors(array $errors){
         $temp = [];
-        var_dump($errors);
+
         foreach($errors as $key => $error_message){
             if(is_array($error_message))
                 foreach($error_message as $field => $message)

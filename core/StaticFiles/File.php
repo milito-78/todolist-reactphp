@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Filesystem\StaticFiles;
+namespace Core\StaticFiles;
 
 final class File
 {

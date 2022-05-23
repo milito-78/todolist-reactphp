@@ -1,10 +1,9 @@
 <?php
 
 
-namespace Core\Filesystem\StaticFiles;
+namespace Core\StaticFiles;
 
 
-use Core\Exceptions\NotFoundException;
 use Core\Request\Controller;
 use Core\Response\JsonResponse;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,7 +27,7 @@ class StaticFileController extends Controller
                 }
             )
             ->otherwise(
-                function (\Narrowspark\MimeType\Exception\FileNotFoundException|FileNotFound $exception) {
+                function (FileNotFound $exception) {
                     return JsonResponse::notFound("Route not found!");
                 }
             )->otherwise(

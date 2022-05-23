@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd50c6d5c7a1a3b0e093a932f499e265",
+    "content-hash": "750330b622d20b6abff4c09591e17503",
     "packages": [
         {
             "name": "cakephp/core",
@@ -124,16 +124,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "2.1.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce"
+                "reference": "1ca8f21980e770095a31456042471a57bc4c68fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/331b4d5dbaeab3827976273e9356b3b453c300ce",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/1ca8f21980e770095a31456042471a57bc4c68fb",
+                "reference": "1ca8f21980e770095a31456042471a57bc4c68fb",
                 "shasum": ""
             },
             "require": {
@@ -143,18 +143,12 @@
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "alcaeus/mongo-php-adapter": "^1.1",
                 "cache/integration-tests": "dev-master",
-                "doctrine/coding-standard": "^8.0",
-                "mongodb/mongodb": "^1.1",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-                "predis/predis": "~1.0",
+                "doctrine/coding-standard": "^9",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
-                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
-                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
-            },
-            "suggest": {
-                "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
+                "symfony/cache": "^4.4 || ^5.4 || ^6",
+                "symfony/var-exporter": "^4.4 || ^5.4 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -203,7 +197,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/cache/issues",
-                "source": "https://github.com/doctrine/cache/tree/2.1.1"
+                "source": "https://github.com/doctrine/cache/tree/2.2.0"
             },
             "funding": [
                 {
@@ -219,7 +213,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-17T14:49:29+00:00"
+            "time": "2022-05-20T20:07:39+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -1482,64 +1476,6 @@
             "time": "2022-05-10T09:36:00+00:00"
         },
         {
-            "name": "narrowspark/mimetypes",
-            "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/narrowspark/mimetypes.git",
-                "reference": "990cced3a92d4ffd348838338da44d547ee0c0fd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/narrowspark/mimetypes/zipball/990cced3a92d4ffd348838338da44d547ee0c0fd",
-                "reference": "990cced3a92d4ffd348838338da44d547ee0c0fd",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "ext-fileinfo": "*",
-                "ext-json": "*",
-                "mindscreen/yarnlock": "^1.0.1",
-                "narrowspark/coding-standard": "^3.0.0",
-                "phpunit/phpunit": "^8.3.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Narrowspark\\MimeType\\": "src/"
-                },
-                "exclude-from-classmap": [
-                    "tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Daniel Bannert",
-                    "email": "d.bannert@anolilab.de",
-                    "homepage": "http://www.anolilab.de",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP MIME Types Guesser and extension mapping.",
-            "keywords": [
-                "guesser",
-                "mimetype",
-                "mimetypes",
-                "narrowspark"
-            ],
-            "support": {
-                "issues": "https://github.com/narrowspark/mimetypes/issues",
-                "source": "https://github.com/narrowspark/mimetypes"
-            },
-            "time": "2020-01-06T20:43:25+00:00"
-        },
-        {
             "name": "nikic/fast-route",
             "version": "v1.3.0",
             "source": {
@@ -2343,6 +2279,73 @@
                 }
             ],
             "time": "2022-03-17T11:10:22+00:00"
+        },
+        {
+            "name": "react/filesystem",
+            "version": "0.2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/filesystem.git",
+                "reference": "41fefa4dfbdce19933d65d03b50862a9d97896cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/filesystem/zipball/41fefa4dfbdce19933d65d03b50862a9d97896cd",
+                "reference": "41fefa4dfbdce19933d65d03b50862a9d97896cd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0",
+                "react/event-loop": "^1.2",
+                "react/promise": "^2.8",
+                "react/promise-stream": "^1.2",
+                "react/stream": "^1.2",
+                "wyrihaximus/react-child-process-promise-closure": "^1.0"
+            },
+            "require-dev": {
+                "clue/block-react": "^1.4",
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "ext-uv": "* for better I/O performance"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Filesystem\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                }
+            ],
+            "description": "Asynchronous filesystem abstraction.",
+            "keywords": [
+                "asynchronous",
+                "filesystem"
+            ],
+            "support": {
+                "issues": "https://github.com/reactphp/filesystem/issues",
+                "source": "https://github.com/reactphp/filesystem/tree/0.2.x"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/WyriHaximus",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/clue",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-02-23T18:06:30+00:00"
         },
         {
             "name": "react/http",
@@ -4723,7 +4726,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "react/filesystem": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -4731,5 +4736,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }

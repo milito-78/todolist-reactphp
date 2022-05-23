@@ -3,40 +3,29 @@
 namespace App\Common\Files;
 
 use Psr\Http\Message\UploadedFileInterface;
-use Core\Filesystem\AdapterInterface;
+use React\Filesystem\AdapterInterface;
+use function React\Promise\resolve;
 
-class Uploader{
-    const UPLOADS_DIR = "storage/public";
+class Uploader
+{
+    const UPLOADS_DIR           = "storage/public";
     private string $projectRoot = __ROOT__;
 
-    private AdapterInterface $filesystem;
-
-    public function __construct(AdapterInterface $adapter)
+    public function upload(UploadedFileInterface $file, $dir = "")
     {
-        $this->filesystem = $adapter;
-    }
+        $name       = $this->makeFileName($file);
+        $uploadPath = $this->projectRoot . '/' . $this->makeFilePath($dir);
 
-    public function upload(UploadedFileInterface $file, $dir = "/")
-    {
-        $name = $this->makeFileName($file);
+        if (!is_dir($uploadPath)) 
+        {
+            mkdir($uploadPath);
+        }
 
-        $uploadPath = $this->makeFilePath($file,$name);
+        $fullPath =  $uploadPath . $name;
 
-
-        /*if (!file_exists($this->projectRoot . $dir)) {
-            mkdir($this->projectRoot . $dir);
-        }*/
-
-        $fullPath = $this->projectRoot . $dir . $uploadPath;
-
-        return $this->filesystem->file($fullPath)
-            ->putContents((string)$file->getStream())
-            ->then(
-                function () use ($name)
-                {
-                    return $name;
-                }
-            );
+        $content = (string)$file->getStream();
+        file_put_contents($fullPath,$content);
+        return resolve($name);
     }
 
     private function makeFileName(UploadedFileInterface $file) :string
@@ -53,7 +42,7 @@ class Uploader{
         );
     }
 
-    private function makeFilePath(UploadedFileInterface $file,$name): string
+    private function makeFilePath($name): string
     {
         return implode(
             '',
@@ -65,8 +54,9 @@ class Uploader{
         );
     }
 
-    public static function getImagePath($image)
+    public static function getImagePath($image): string
     {
-        return config("app.url") . "/" . self::UPLOADS_DIR . "/" . $image;
+        return config("app.url") . ":" .config("app.socket_port") . "/" . self::UPLOADS_DIR . "/" . $image;
     }
+
 }

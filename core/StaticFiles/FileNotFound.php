@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Core\Filesystem\StaticFiles;
+namespace Core\StaticFiles;
 
 
 use RuntimeException;

@@ -6,7 +6,7 @@ use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
 use Core\{Config\Config,
     Exceptions\ErrorHandler,
-    Filesystem\StaticFiles\StaticFileController,
+    StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};
 use Core\DI\DependencyResolver;
 use Dotenv\Dotenv;
@@ -16,10 +16,9 @@ use FastRoute\RouteParser\Std;
 use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Psr\Http\Message\RequestInterface;
 use React\Http\HttpServer;
 use React\Socket\SocketServer;
-use Core\Filesystem\Factory as FileSystem;
+
 
 //////////////////////
 use Core\Route\RouteCollector as Router;
@@ -44,7 +43,7 @@ foreach ($providers as $provider){
 
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container->add(RouteCollector::class,$routeCollector);
-$filesystem = Filesystem::create();
+$filesystem = \React\Filesystem\Factory::create();
 
 $container->add("filesystem",$filesystem);
 
@@ -83,5 +82,7 @@ $container->add("logger" , $logger);
 $server->on("error" , function ($data)use( $logger ) {
     $logger->error(get_class($data) . ' ' . $data->getMessage(),["trace" => $data]);
 });
+
+
 
 return $loop;

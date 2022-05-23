@@ -24,7 +24,7 @@
         "doctrine/migrations": "^3.5",
         "wyrihaximus/react-child-process-promise-closure": "^1.1",
         "illuminate/config": "^9.13",
-        "narrowspark/mimetypes": "^1.6"
+        "react/filesystem": "^0.2@dev"
     },
     "autoload": {
         "psr-4": {
@@ -38,7 +38,8 @@
     },
     "config": {
         "allow-plugins": {
-            "kylekatarnls/update-helper": true
+            "kylekatarnls/update-helper": true,
+            "wyrihaximus/composer-update-bin-autoload-path": true
         }
     }
 }

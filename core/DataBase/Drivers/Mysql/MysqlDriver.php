@@ -92,6 +92,15 @@ class MysqlDriver implements DriverInterface
                     });
     }
 
+    public function limit(string $table, int $limit, int $offset = 0, array $fields = ["*"]): PromiseInterface
+    {
+        $sql = "SELECT " . implode(",",$fields) . " FROM " . $table ." LIMIT ?, ?;";
+        return $this->instance->query($sql,[$limit,$offset])
+            ->then(function(QueryResult $result){
+                return $result->resultRows;
+            });
+    }
+
     public function checkResultRow(QueryResult $result){
         if (!@$result->resultRows[0])
             return null;

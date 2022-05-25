@@ -7,7 +7,7 @@ namespace App\Common\Repositories;
 use Core\DataBase\Interfaces\DatabaseInterface;
 use React\Promise\PromiseInterface;
 
-abstract class Repository implements RepositoryInterface
+abstract class Repository implements RepositoryInterface, PaginateInterface
 {
     private DatabaseInterface $database;
     private string $table = "";
@@ -62,4 +62,5 @@ abstract class Repository implements RepositoryInterface
     {
         return $this->database->query($query,$params);
     }
+
 }

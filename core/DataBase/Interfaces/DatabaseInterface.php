@@ -26,4 +26,5 @@ interface DatabaseInterface
 
     public function findBy(string $table,string $field,string $value,array $fields = ["*"]): PromiseInterface;
 
+    public function limit( string $table, int $limit, int $offset = 0, array $fields = ["*"] ): PromiseInterface;
 }

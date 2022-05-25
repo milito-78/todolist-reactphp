@@ -73,4 +73,9 @@ class Database implements DatabaseInterface
     {
         return $this->driver->findBy($table,$field,$value,$fields);
     }
+
+    public function limit( string $table, int $limit, int $offset = 0, array $fields = ["*"] ): PromiseInterface
+    {
+        return $this->driver->limit($table, $limit,$offset,$fields);
+    }
 }

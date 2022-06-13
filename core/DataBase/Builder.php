@@ -2,43 +2,35 @@
 
 
 namespace Core\DataBase;
-
-
 use Core\DataBase\Exceptions\UnknownDatabaseConnectionException;
 use Core\DataBase\Interfaces\DriverInterface;
 use NilPortugues\Sql\QueryBuilder\Builder\GenericBuilder;
-use NilPortugues\Sql\QueryBuilder\Manipulation\AbstractBaseQuery;
+use NilPortugues\Sql\QueryBuilder\Manipulation\Select;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use React\MySQL\QueryResult;
 use React\Promise\PromiseInterface;
 
-class Builder implements BuilderInterface
-{
-    private DriverInterface $driver;
-    private static array $drivers       = [];
-    private string $table               = "";
-    private ?GenericBuilder $builder    = null;
 
-    private $query = null;
+class Builder {
+    protected string $table = "users";
+    protected DriverInterface $driver;
+    protected static array $drivers = [];
+    protected GenericBuilder $builder;
+    protected $query = null;
+
+    private bool $select_called = false;
 
     public function __construct(DriverInterface $driver, $name = "mysql")
     {
         $this->driver           = $driver;
         self::$drivers[$name]   = $driver;
+        $this->builder          = new GenericBuilder;
     }
 
-    /**
-     * @param string $name
-     * @return BuilderInterface
-     * @throws UnknownDatabaseConnectionException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function connection(string $name): BuilderInterface
+    public function connection(string $name): Builder
     {
-        $container = container();
+        global $container;
+
         if ($container->has($name))
         {
             if (isset(self::$drivers[$name]))
@@ -53,208 +45,244 @@ class Builder implements BuilderInterface
         throw new UnknownDatabaseConnectionException("Database connection name like '" . $name . "' is undefined");
     }
 
-    public function setTable(string $table) : BuilderInterface
+    public function get(array $columns = ["*"]): PromiseInterface
+    {
+        if (!$this->query)
+            $this->query = $this->_select($columns);
+
+
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+
+        return $this->driver
+                        ->query($sql,$values)
+                        ->then(function(QueryResult $result){
+                            return $result->resultRows;
+                        });
+    }
+
+    public function first(array $columns = ["*"]): PromiseInterface
+    {
+        if (!$this->query)
+            $this->query    = $this->_select($columns);
+
+        $this->query = $this->query->limit(0,1);
+
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+
+        return $this->driver->query($sql,array_values($values))
+                            ->then(function(QueryResult $result){
+                                return $this->checkResultRow($result);
+                            });
+    }
+
+    public function table(string $table): static
     {
         $this->table = $table;
         return $this;
     }
 
-    public function getTable(): string
-    {
-        return $this->table;
-    }
-
-    public function builder(): GenericBuilder
-    {
-        if (!$this->builder)
-            return $this->builder = new GenericBuilder();
-
-        return $this->builder;
-    }
-
     public function select(array $columns = ["*"]): static
     {
-        if ($this->query)
-        {
-            $this->query = $this
-                ->query
-                ->select()
-                ->setTable($this->getTable())
-                ->setColumns($columns);
-        }
-        else
-            $this->query = $this
-                            ->builder()
-                            ->select()
-                            ->setTable($this->getTable())
-                            ->setColumns($columns);
-
+        $this->select_called    = true;
+        $this->query            = $this->_select($columns);
         return $this;
     }
 
-    public function get(array $columns = ["*"]) : PromiseInterface
+    private function _select(array $columns = ["*"])
     {
-        if (!$this->query) {
-            $this->query = $this
-                ->builder()
-                ->select()
-                ->setTable($this->getTable())
-                ->setColumns($columns);
-        }
-        $query  =  $this->builder()->write($this->query);
-        $values =  $this->builder()->getValues();
-        $this->reset();
-        return $this->driver->query($query,$values)
-                            ->then(function(QueryResult $result){
-                                return $result->resultRows;
-                            });
+        return $this->builder->select($this->table,$columns);
     }
 
-    public function create(array $values): PromiseInterface
+    public function where($operator = "AND"): static
     {
-        $query  = $this->builder()->insert($this->getTable(),$values);
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-                            ->then(function(QueryResult $result) use ($values){
-                                $values["id"] = $result->insertId;
-                                return $values;
-                            });
+        if (!$this->query)
+            $this->query = $this->builder->select($this->table);
+        $this->query = $this->query->where($operator);
+        return $this;
     }
 
-    public function update(array $conditions,array $values): PromiseInterface
+    public function subWhere($operator = 'OR'): static
     {
-        $query  = $this->builder()->update($this->getTable(),$values);
-        $query = $query->where();
-        foreach ($conditions as $key => $value){
-            $query = $query->equals($key,$value);
-        }
-        $query  = $query->end();
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-                            ->then(function(QueryResult $result){
-                                return (bool)$result->affectedRows;
-                            });
+        $this->query = $this->query->subWhere($operator);
+        return $this;
     }
 
-    public function delete(array $conditions): PromiseInterface
+    public function equals($column, $value): static
     {
-        $query  = $this->builder()->delete($this->getTable());
-        $query = $query->where();
-        foreach ($conditions as $key => $value){
-            $query = $query->equals($key,$value);
-        }
-        $query  = $query->end();
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-            ->then(function(QueryResult $result){
-                return (bool)$result->affectedRows;
-            });
+        $this->query->equals($column, $value);
+        return $this;
     }
 
-    public function find($id,$columns = ["*"]): PromiseInterface
+    public function like($column, $value): static
     {
-        $query = $this->select($columns)
-            ->query
-            ->where()
-            ->equals("id" , $id)
-            ->end()
-            ->limit(1);
-
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-            ->then(function(QueryResult $result){
-                return $this->checkResultRow($result);
-            });
+        $this->query->like($column, $value);
+        return $this;
     }
 
-    public function findBy($column ,$value,$columns = ["*"]): PromiseInterface
+    public function notLike($column, $value): static
     {
-        $query = $this->select($columns)
-            ->query
-            ->where()
-            ->equals($column , $value)
-            ->end()
-            ->limit(1);
-
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-            ->then(function(QueryResult $result){
-                return $this->checkResultRow($result);
-            });
+        $this->query->notLike($column, $value);
+        return $this;
     }
 
-    public function first(array $conditions = [],$columns = ["*"]): PromiseInterface
+    public function greaterThan($column, $value): static
     {
-        $query = $this->select($columns)->query;
-        if (count($conditions)){
-            $query = $query->where();
-                foreach ($conditions as $key => $value)
-                    $query = $query->equals($key,$value);
-            $query->end();
-        }
-        $query->limit(1);
-
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-            ->then(function(QueryResult $result){
-                return $this->checkResultRow($result);
-            });
+        $this->query->greaterThan($column, $value);
+        return $this;
     }
 
-    public function last(array $conditions = [],$columns = ["*"]): PromiseInterface
+    public function greaterThanOrEqual($column, $value): static
     {
-        $query = $this->select($columns)->query;
-        if (count($conditions)){
-            $query = $query->where();
-            foreach ($conditions as $key => $value)
-                $query = $query->equals($key,$value);
-            $query->end();
-        }
-        $query
-            ->orderBy("id",OrderBy::DESC)
-            ->limit(1);
-
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-        $this->reset();
-        return $this->driver->query($sql,$values)
-            ->then(function(QueryResult $result){
-                return $this->checkResultRow($result);
-            });
+        $this->query->greaterThanOrEqual($column, $value);
+        return $this;
     }
 
-    public function query($query, array $params = []): PromiseInterface
+    public function lessThan($column, $value): static
     {
-        return $this->driver->query($query,$params);
+        $this->query->lessThan($column, $value);
+        return $this;
     }
 
-    public function customQueryBuilder(AbstractBaseQuery $query): PromiseInterface
+    public function lessThanOrEqual($column, $value): static
     {
-        $sql    = $this->builder->write($query);
-        $values = $this->builder->getValues();
-
-        return $this->query($sql,$values);
+        $this->query->lessThan($column, $value);
+        return $this;
     }
 
-    private function reset()
+    public function match(array $columns, array $values): static
     {
-        $this->query    = null;
-        $this->builder  = null;
+        $this->query->match($columns, $values);
+        return $this;
     }
 
-    private function checkResultRow(QueryResult $result){
+    public function matchBoolean(array $columns, array $values): static
+    {
+        $this->query->matchBoolean($columns, $values);
+        return $this;
+    }
+
+    public function matchWithQueryExpansion(array $columns, array $values): static
+    {
+        $this->query->matchWithQueryExpansion($columns, $values);
+        return $this;
+    }
+
+    public function in($column, array $values): static
+    {
+        $this->query->in($column, $values);
+        return $this;
+    }
+
+    public function notIn($column, array $values): static
+    {
+        $this->query->notIn($column, $values);
+        return $this;
+    }
+
+    public function between($column, $a, $b): static
+    {
+        $this->query->between($column, $a, $b);
+        return $this;
+    }
+
+    public function notBetween($column, $a, $b): static
+    {
+        $this->query->notBetween($column, $a, $b);
+        return $this;
+    }
+
+    public function isNull($column): static
+    {
+        $this->query->isNull($column);
+        return $this;
+    }
+
+    public function isNotNull($column): static
+    {
+        $this->query->isNotNull($column);
+        return $this;
+    }
+
+    public function exists(Select $select): static
+    {
+        $this->query->exists($select);
+        return $this;
+    }
+
+    public function notExists(Select $select): static
+    {
+        $this->query->notExists($select);
+        return $this;
+    }
+
+    public function addBitClause($column, $value): static
+    {
+        $this->query->addBitClause($column, $value);
+        return $this;
+    }
+
+    public function asLiteral($literal): static
+    {
+        $this->query->asLiteral($literal);
+        return $this;
+    }
+
+    public function end(): static
+    {
+        $this->query = $this->query->end();
+        return $this;
+    }
+
+    public function limit($start, $count = 0): static
+    {
+        $this->query = $this->query->limit($start, $count);
+        return $this;
+    }
+
+    public function orderBy($field,$order = OrderBy::ASC): static
+    {
+        $this->query->orderBy($field, $order);
+        return $this;
+    }
+
+    public function leftJoin($table, $selfColumn = null, $refColumn = null, $columns = []): static
+    {
+        $this->query->leftJoin($table, $selfColumn, $refColumn, $columns);
+        return $this;
+    }
+
+    public function join($table, $selfColumn = null, $refColumn = null, $columns = [], $joinType = null ): static
+    {
+        $this->query->join($table, $selfColumn, $refColumn, $columns,$joinType);
+        return $this;
+    }
+
+    public function rightJoin($table, $selfColumn = null, $refColumn = null, $columns = []): static
+    {
+        $this->query->rightJoin($table, $selfColumn, $refColumn, $columns);
+        return $this;
+    }
+
+    public function crossJoin($table, $selfColumn = null, $refColumn = null, $columns = []): static
+    {
+        $this->query->crossJoin($table, $selfColumn, $refColumn, $columns);
+        return $this;
+    }
+
+    public function innerJoin($table, $selfColumn = null, $refColumn = null, $columns = []): static
+    {
+        $this->query->innerJoin($table, $selfColumn, $refColumn, $columns);
+        return $this;
+    }
+
+    public static function query():static
+    {
+        return container()->get(self::class);
+    }
+    
+    public function checkResultRow(QueryResult $result){
         if (!@$result->resultRows[0])
             return null;
         return $result->resultRows[0];

@@ -2,12 +2,10 @@
 namespace Core\Providers;
 
 
-use Core\DataBase\Database;
+use Core\DataBase\Builder;
 use Core\DataBase\Drivers\Mysql\MysqlHandler;
 use Core\DataBase\Exceptions\UnknownDatabaseDriverException;
-use Core\DataBase\Interfaces\DatabaseInterface;
 use Core\DataBase\Interfaces\DriverInterface;
-use Core\Filesystem\AdapterInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use React\EventLoop\Loop;
 use React\MySQL\Factory as Mysql;
@@ -20,9 +18,8 @@ class AppServiceProvider extends AbstractServiceProvider implements BootableServ
     public function provides(string $id): bool
     {
         $services = [
-            DatabaseInterface::class,
-            Database::class,
             DriverInterface::class,
+            Builder::class
         ];
 
         return in_array($id, $services);
@@ -30,15 +27,6 @@ class AppServiceProvider extends AbstractServiceProvider implements BootableServ
 
     public function register(): void
     {
-        $this->getContainer()
-            ->add(DatabaseInterface::class,function (){
-                return new Database(
-                    $this->getContainer()->get(DriverInterface::class),
-                    config("database.default","mysql")
-                );
-            });
-
-
         if (config("database.default","mysql") == "mysql")
         {
             $mysql = new Mysql($this->getContainer()->get((string)"loop"));
@@ -58,8 +46,9 @@ class AppServiceProvider extends AbstractServiceProvider implements BootableServ
 
         $this->getContainer()->add(DriverInterface::class,$handler->getDriver());
 
-        $this->getContainer()->add(AdapterInterface::class,filesystem());
-
+        $this->getContainer()->add(Builder::class)
+                            ->addArgument(DriverInterface::class)
+                            ->addArgument(config("database.default","mysql"));
     }
 
     public function boot(): void

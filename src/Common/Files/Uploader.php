@@ -3,7 +3,6 @@
 namespace App\Common\Files;
 
 use Psr\Http\Message\UploadedFileInterface;
-use React\Filesystem\AdapterInterface;
 use function React\Promise\resolve;
 
 class Uploader

@@ -37,3 +37,15 @@ Route::group("user",function () {
 });
 
 Route::post("uploader" , ImageUploadController::class);
+
+Route::get("/test",function (RequestInterface $request){
+    return \Core\DataBase\Builder::query()->table("users")
+        ->select()
+        ->where()
+        ->equals("id",2)
+        ->end()
+        ->first()
+        ->then(function ($data){
+            return response($data);
+        });
+});

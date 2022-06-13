@@ -24,7 +24,8 @@
         "doctrine/migrations": "^3.5",
         "wyrihaximus/react-child-process-promise-closure": "^1.1",
         "illuminate/config": "^9.13",
-        "react/filesystem": "^0.2@dev"
+        "react/filesystem": "^0.2@dev",
+        "nilportugues/sql-query-builder": "^1.8"
     },
     "autoload": {
         "psr-4": {

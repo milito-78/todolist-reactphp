@@ -1,5 +1,6 @@
 <?php
 
+use League\Container\Container;
 use Psr\Http\Message\ServerRequestInterface;
 
 if (!function_exists("response"))
@@ -101,5 +102,14 @@ if (!function_exists("filesystem")){
     function filesystem(){
         global $container;
         return $container->get((string) "filesystem");
+    }
+}
+
+if (!function_exists("container"))
+{
+    function container(): Container
+    {
+        global $container;
+        return $container;
     }
 }

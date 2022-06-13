@@ -19,6 +19,4 @@ interface RepositoryInterface
     public function find(int $id,array $fields = ["*"]):PromiseInterface;
 
     public function findBy(string $field,string $value,array $fields = ["*"]):PromiseInterface;
-
-    public function query($query,array $params = []):PromiseInterface;
 }

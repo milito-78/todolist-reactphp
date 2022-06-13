@@ -45,6 +45,49 @@ class Builder {
         throw new UnknownDatabaseConnectionException("Database connection name like '" . $name . "' is undefined");
     }
 
+    public function insert(array $data): PromiseInterface
+    {
+        $this->query  = $this->builder->insert($this->table,$data);
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+        return $this->driver
+                            ->query($sql,$values)
+                            ->then(function(QueryResult $result) use ($data){
+                                $data["id"] = $result->insertId;
+                                return $data;
+                            });
+    }
+
+    public function fetch(array $conditions,array $data): PromiseInterface
+    {
+        $this->query  = $this->builder->update($this->table,$data)->where();
+        foreach ($conditions as $field => $value)
+            $this->query->equals($field, $value);
+        $this->query = $this->query->end();
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+        return $this->driver->query($sql,$values)
+                            ->then(function(QueryResult $result){
+                                return (bool)$result->affectedRows;
+                            });
+    }
+
+    public function remove(array $conditions) : PromiseInterface
+    {
+        $this->query  = $this->builder->delete($this->table)->where();
+        foreach ($conditions as $field => $value)
+            $this->query->equals($field, $value);
+        $this->query = $this->query->end();
+
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+
+        return $this->driver->query($sql,$values)
+            ->then(function(QueryResult $result){
+                return (bool)$result->affectedRows;
+            });
+    }
+
     public function get(array $columns = ["*"]): PromiseInterface
     {
         if (!$this->query)

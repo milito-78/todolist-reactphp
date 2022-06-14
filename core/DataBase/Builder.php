@@ -4,6 +4,8 @@
 namespace Core\DataBase;
 use Core\DataBase\Exceptions\UnknownDatabaseConnectionException;
 use Core\DataBase\Interfaces\DriverInterface;
+use Core\DataBase\Paginatore\PaginateInterface;
+use Core\DataBase\Paginatore\SimplePaginatoreTrait;
 use NilPortugues\Sql\QueryBuilder\Builder\GenericBuilder;
 use NilPortugues\Sql\QueryBuilder\Manipulation\Select;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
@@ -11,7 +13,10 @@ use React\MySQL\QueryResult;
 use React\Promise\PromiseInterface;
 
 
-class Builder {
+class Builder implements PaginateInterface
+{
+    use SimplePaginatoreTrait;
+
     protected string $table = "users";
     protected DriverInterface $driver;
     protected static array $drivers = [];
@@ -329,5 +334,53 @@ class Builder {
         if (!@$result->resultRows[0])
             return null;
         return $result->resultRows[0];
+    }
+
+    public function simplePaginate($per_page = 20, $page = 1, array $columns = ["*"]): PromiseInterface
+    {
+        if (!$this->query)
+            $this->query = $this->_select($columns);
+        list($start,$count) = $this->makePaginateCount($page,$per_page);
+
+        $this->query
+            ->limit($start,$count);
+
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+
+        return $this->driver
+            ->query($sql,$values)
+            ->then(function(QueryResult $result) use ($per_page,$page,$count){
+                return $this->simplePaginateResponse($result->resultRows,$per_page,$page,$count);
+            });
+    }
+
+    public function paginate(int $per_page = 20, int $page = 1, array $columns = ["*"])
+    {
+        throw new \Exception("Doesn't complete");
+
+        if (!$this->query)
+            $this->query = $this->_select($columns);
+        list($start,$count) = $this->makePaginateCount($page,$per_page);
+
+        $count_query    = clone($this->query)->count();
+
+        $count_sql      = $this->builder->write($count_query);
+        $count_values   = $this->builder->getValues();
+
+        $this->query
+            ->limit($start,$count);
+
+        $sql    = $this->builder->write($this->query);
+        $values = $this->builder->getValues();
+        var_dump($sql);
+        return $this->driver
+            ->query($count_sql,$count_values)
+            ->then(function(QueryResult $result) use ($sql,$values,$per_page,$page,$count){
+                $total = $result->resultRows[0]["COUNT(*)"];
+                $this->driver->query($sql,$values)->then(function(QueryResult $result) use ($per_page,$page,$count){
+                    return $this->simplePaginateResponse($result->resultRows,$per_page,$page,$count);
+                });
+            });
     }
 }

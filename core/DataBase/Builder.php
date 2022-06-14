@@ -55,6 +55,7 @@ class Builder implements PaginateInterface
         $this->query  = $this->builder->insert($this->table,$data);
         $sql    = $this->builder->write($this->query);
         $values = $this->builder->getValues();
+
         return $this->driver
                             ->query($sql,$values)
                             ->then(function(QueryResult $result) use ($data){
@@ -373,7 +374,6 @@ class Builder implements PaginateInterface
 
         $sql    = $this->builder->write($this->query);
         $values = $this->builder->getValues();
-        var_dump($sql);
         return $this->driver
             ->query($count_sql,$count_values)
             ->then(function(QueryResult $result) use ($sql,$values,$per_page,$page,$count){

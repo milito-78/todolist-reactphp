@@ -17,15 +17,15 @@ class TaskIndexOutput{
         $tasks = $this->getTasks();
 
         return [
-            "data" => [
-                "items" => $tasks
-            ]
+            "data" => $tasks
         ];
     }
 
     private function getTasks(){
-        return array_map(function (Task $task){
+        $this->tasks["data"] = array_map(function (Task $task){
             return $task->toArray();
-        },$this->tasks);
+        },$this->tasks["data"]);
+
+        return $this->tasks;
     }
 }

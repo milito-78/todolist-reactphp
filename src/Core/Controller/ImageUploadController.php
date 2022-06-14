@@ -21,8 +21,6 @@ class ImageUploadController extends Controller
     public function __invoke(Request $request)
     {
         $input = new UploadInput($request);
-        $input->validate();
-
         return $this->uploadImageUseCase->handle($input);
     }
 

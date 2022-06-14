@@ -22,6 +22,11 @@ class MysqlDriver implements DriverInterface
     public function query($query, array $params = []): PromiseInterface
     {
         $query = preg_replace("/:\w+\d+/" ,"?",$query);
+        foreach ($params as $key => $param)
+        {
+            if ($param == "NULL")
+                $params[$key] = null;
+        }
         return $this->instance->query($query,array_values($params));
     }
 

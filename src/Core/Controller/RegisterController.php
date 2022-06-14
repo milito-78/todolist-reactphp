@@ -18,8 +18,6 @@ class RegisterController extends Controller
     public function __invoke(Request $request)
     {
         $input = new RegisterInput($request);
-        $input->validate();
-
         return $this->registerService->handle($input);
     }
 

@@ -17,7 +17,7 @@ trait SimplePaginatoreTrait
         return [$start,$per_page];
     }
 
-    #[ArrayShape(["page" => "", "first_page" => "int", "next_page" => "int", "per_page" => "", "count" => "int", "result" => ""])]
+    #[ArrayShape(["page" => "", "first_page" => "int", "next_page" => "int", "per_page" => "", "count" => "int", "data" => ""])]
     private function simplePaginateResponse(array $result,int $per_page,int $page,int $last_element): array
     {
         $result_count = count($result);
@@ -35,7 +35,7 @@ trait SimplePaginatoreTrait
             "next_page"     => $next_page_exists ? $page + 1 : 0,
             "per_page"      => $per_page,
             "count"         => $result_count,
-            "result"        => $result
+            "data"          => $result
         ];
     }
 

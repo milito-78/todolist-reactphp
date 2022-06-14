@@ -23,6 +23,8 @@ class UploadImageUseCase implements UploadImageUseCaseInterface
 
     public function handle(UploadInput $input)
     {
+        $input->validate();
+
         return $this->uploader
             ->upload($input->image())
             ->then(function ($image_name){

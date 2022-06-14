@@ -23,7 +23,7 @@ class TaskIndexUseCase implements TaskIndexUseCaseInterface
         $user = $request->getAuth();
 
         return $this->taskRepository
-                    ->getTasksForUser($user["id"])
+                    ->getTasksForUser($user["id"],$request->input("page")??1)
                     ->then(function($tasks){
                         $tasks = $this->mapTasks($tasks);
                         $output = new TaskIndexOutput($tasks);
@@ -31,10 +31,12 @@ class TaskIndexUseCase implements TaskIndexUseCaseInterface
                     });
     }
 
-    private function mapTasks(array $tasks)
+    private function mapTasks(array $tasks): array
     {
-        return array_map(function ($task){
+        $tasks["data"] = array_map(function ($task){
             return new Task($task);
-        },$tasks);
+        },$tasks["data"]);
+
+        return $tasks;
     }
 }

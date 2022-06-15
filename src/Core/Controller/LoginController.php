@@ -18,7 +18,6 @@ class LoginController extends Controller
     
     public function __invoke(Request $request)
     {
-        var_dump(password_hash("12345678", PASSWORD_BCRYPT));
         $input = new LoginInput($request);
         return $this->loginService->handle($input);
     }

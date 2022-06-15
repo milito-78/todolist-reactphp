@@ -113,3 +113,15 @@ if (!function_exists("container"))
         return $container;
     }
 }
+
+if (!function_exists("emit")){
+    function emit(string $type,string $event,$data){
+        if ($type == "server"){
+            global $server;
+            $server->emit($event,$data);
+        }else{
+            global $socket;
+            $socket->emit($event,$data);
+        }
+    }
+}

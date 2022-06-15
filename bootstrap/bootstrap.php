@@ -79,10 +79,9 @@ $logger->pushHandler(new FirePHPHandler());
 
 $container->add("logger" , $logger);
 
-$server->on("error" , function ($data)use( $logger ) {
-    $logger->error(get_class($data) . ' ' . $data->getMessage(),["trace" => $data]);
-});
 
+$event = new \App\Core\Providers\EventServiceProvider();
+$event->register();
 
 
 return $loop;

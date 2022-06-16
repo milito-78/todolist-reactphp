@@ -17,8 +17,8 @@ class UploadCleanerEvent
 
     public function __invoke($image_path)
     {
-        $this->uploadRepository->deleteByName($image_path)->then(function ($res) use ($image_path){
-            echo $image_path . " photo delete from database status : " . ($res? "true" : "false");
+        $this->uploadRepository->deleteByName($image_path)->then(function (bool $res) use ($image_path){
+            echo $image_path . " photo delete from database status : " . ($res? "true" : "false"). "\n";
         });
     }
 }

@@ -4,7 +4,6 @@
 namespace App\Core\Repositories;
 
 use App\Common\Repositories\Repository;
-use Core\DataBase\Builder;
 use React\Promise\PromiseInterface;
 
 class UploadRepository extends Repository implements UploadRepositoryInterface
@@ -17,8 +16,15 @@ class UploadRepository extends Repository implements UploadRepositoryInterface
 
     public function deleteByName($name): PromiseInterface
     {
-        return $this->_query()->remove(["image_name" => $name])->then(function ($result){
-            return $result;
-        });
+        return $this->_query()->remove(["image_name" => $name]);
+    }
+
+    public function getExpiredFiles(): PromiseInterface
+    {
+        return $this->_query()
+            ->where()
+            ->lessThanOrEqual("created_at",date('Y-m-d H:i:s', (time() - 60 * 30)))
+            ->end()
+            ->get();
     }
 }

@@ -1,4 +1,8 @@
 <?php
+
+use App\Core\Providers\EventServiceProvider;
+use App\Core\Repositories\UploadRepositoryInterface;
+use React\Filesystem\Factory;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
@@ -6,6 +10,7 @@ use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
 use Core\{Config\Config,
     Exceptions\ErrorHandler,
+    Route\RouteFacade,
     StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};
 use Core\DI\DependencyResolver;
@@ -43,11 +48,11 @@ foreach ($providers as $provider){
 
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container->add(RouteCollector::class,$routeCollector);
-$filesystem = \React\Filesystem\Factory::create();
+$filesystem = Factory::create();
 
 $container->add("filesystem",$filesystem);
 
-\Core\Route\RouteFacade::get('/storage/public/{file}',StaticFileController::class);
+RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 
 require_once "routes/router.php";
 
@@ -80,8 +85,23 @@ $logger->pushHandler(new FirePHPHandler());
 $container->add("logger" , $logger);
 
 
-$event = new \App\Core\Providers\EventServiceProvider();
+$event = new EventServiceProvider();
 $event->register();
 
+$loop->addPeriodicTimer(60,function (){
+    /** @var UploadRepositoryInterface $uploadRepository */
+    $uploadRepository = container()->get(UploadRepositoryInterface::class);
+    echo "cron start \n";
+
+    $uploadRepository->getExpiredFiles()->then(function ($images) use ($uploadRepository){
+        foreach ($images as $image)
+        {
+            $uploadRepository->delete($image["id"])->then(function ($res) use($image){
+                echo $image["id"] . " photo delete from database status : " . ($res? "true" : "false") . "\n";
+            });
+        }
+    });
+
+});
 
 return $loop;

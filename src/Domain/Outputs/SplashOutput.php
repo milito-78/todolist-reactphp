@@ -17,12 +17,11 @@ class SplashOutput{
     {
         $response = [
             "data" => [
-                "user" => null,
                 "option" => $this->option
             ]
         ];
         if($this->user){
-            $response["data"]["user"] = [
+            $response["data"]["option"]["user"] = [
                 "id"            => $this->user->id,
                 "full_name"     => $this->user->full_name,
                 "email"         => $this->user->email,

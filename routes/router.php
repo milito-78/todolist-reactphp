@@ -16,15 +16,28 @@ use Psr\Http\Message\RequestInterface;
 
 
 Route::get('/splash'            , SplashController::class);
-
 Route::group("user",function () {
 
     Route::post("register"      , RegisterController::class);
     Route::post("login"         , LoginController::class);
-    
+    /**
+     * TODO forget password
+     */
+    Route::group('forgot-password',function (){
+        Route::post("/send-code"         , function (){});
+        Route::get("/check-code"         ,function (){});
+        Route::post("/reset-password"    ,function (){});
+    });
+
+
+
     Route::group('/',function () {
         Route::get("profile"        , ProfileController::class);
-        Route::patch("logout"       , LogoutController::class);
+        Route::post("logout"       , LogoutController::class);
+        /**
+         * TODO change password, caching
+         */
+        Route::post("change-password" , function (){});
 
         Route::group("tasks",function(){
             Route::get(""           , TaskIndexController::class);

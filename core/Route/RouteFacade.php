@@ -4,15 +4,15 @@
 namespace Core\Route;
 
 /**
- * @method static get($path , callable $function, array $middleware = [])
- * @method static post($path , callable $function, array $middleware = [])
- * @method static put($path , callable $function, array $middleware = [])
- * @method static patch($path , callable $function, array $middleware = [])
- * @method static delete($path , callable $function, array $middleware = [])
- * @method static group($prefix , callable $function, array $middleware = [])
- * @method static getRoutesMiddleware()
+ * @method static void get($path , callable $function, array $middleware = [])
+ * @method static void post($path , callable $function, array $middleware = [])
+ * @method static void put($path , callable $function, array $middleware = [])
+ * @method static void patch($path , callable $function, array $middleware = [])
+ * @method static void delete($path , callable $function, array $middleware = [])
+ * @method static void group($prefix , callable $function, array $middleware = [])
+ * @method static void getRoutesMiddleware()
  *
- * @see \Core\Route\Route
+ * @see \Core\Route\Router
  */
 
 use FastRoute\RouteCollector;

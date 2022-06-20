@@ -290,9 +290,9 @@ class Builder implements PaginateInterface
         return $this;
     }
 
-    public function orderBy($field,$order = OrderBy::ASC): static
+    public function orderBy($field,$order = OrderBy::ASC,$table = null): static
     {
-        $this->query->orderBy($field, $order);
+        $this->query->orderBy($field, $order,$table);
         return $this;
     }
 
@@ -348,7 +348,7 @@ class Builder implements PaginateInterface
 
         $sql    = $this->builder->write($this->query);
         $values = $this->builder->getValues();
-
+        var_dump($sql,$values);
         return $this->driver
             ->query($sql,$values)
             ->then(function(QueryResult $result) use ($per_page,$page,$count){

@@ -24,10 +24,10 @@ class Task
         $this->description  = $data["description"];
         $this->user_id      = $data["user_id"];
         $this->image_path   = $data["image_path"];
-        $this->deadline     = !is_null($data["deadline"])   ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deadline"]) : null; 
-        $this->created_at   = !is_null($data["created_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["created_at"]) : null; 
-        $this->updated_at   = !is_null($data["updated_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["updated_at"]) : null;
-        $this->deleted_at   = !is_null($data["deleted_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deleted_at"]) : null;
+        $this->deadline     = isset($data["deadline"]) && !is_null($data["deadline"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deadline"]) : null;
+        $this->created_at   = isset($data["created_at"]) && !is_null($data["created_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["created_at"]) : null;
+        $this->updated_at   = isset($data["updated_at"]) && !is_null($data["updated_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["updated_at"]) : null;
+        $this->deleted_at   = isset($data["deleted_at"]) && !is_null($data["deleted_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deleted_at"]) : null;
     }
 
     public function toArray() : array

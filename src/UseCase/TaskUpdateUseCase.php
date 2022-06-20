@@ -30,13 +30,25 @@ class TaskUpdateUseCase implements TaskUpdateUseCaseInterface
 
                         return $this->taskRepository
                                     ->update($task["id"],$data)
-                                    ->then(function($result){
+                                    ->then(function($result)use ($task,$data){
+                                        if ($data["image_path"] != $task["image_path"])
+                                        {
+                                            $this->sendImageDeleteSystemEvent($data["image_path"]);
+                                            $this->sendFileDeleteSystemEvent($task["image_path"]);
+                                        }
                                         return json_no_content();
                                     });
                     });
-        
-        
-                    
+    }
+
+    private function sendImageDeleteSystemEvent($image_path){
+        if (!is_null($image_path) && !empty($image_path))
+            emit("server","upload_clean",["image_path"=> $image_path]);
+    }
+
+    private function sendFileDeleteSystemEvent($image_path){
+        if (!is_null($image_path) && !empty($image_path))
+            emit("server","delete_file",["image_path"=> $image_path]);
     }
 
 }

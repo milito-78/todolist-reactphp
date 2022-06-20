@@ -25,7 +25,8 @@
         "wyrihaximus/react-child-process-promise-closure": "^1.1",
         "illuminate/config": "^9.13",
         "react/filesystem": "^0.2@dev",
-        "nilportugues/sql-query-builder": "^1.8"
+        "nilportugues/sql-query-builder": "^1.8",
+      "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {

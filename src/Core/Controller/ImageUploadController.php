@@ -2,8 +2,6 @@
 
 namespace App\Core\Controller;
 
-use App\Common\Files\Uploader;
-use App\Core\Repositories\UploadRepositoryInterface;
 use App\Domain\Inputs\UploadInput;
 use App\UseCase\UploadImageUseCaseInterface;
 use Core\Request\Controller;

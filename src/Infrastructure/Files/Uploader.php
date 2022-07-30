@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Common\Files;
+namespace App\Infrastructure\Files;
 
 use Psr\Http\Message\UploadedFileInterface;
 use function React\Promise\resolve;
-/**
- * TODO make facade for file
-*/
-class Cleaner
+
+class Uploader
 {
     const UPLOADS_DIR           = "storage/public";
     private string $projectRoot = __ROOT__;
 
-    public function remove($file_name, $dir = "")
+    public function upload(UploadedFileInterface $file, $dir = "")
     {
-        $name       = $this->makeFileName($file_name);
+        $name       = $this->makeFileName($file);
         $uploadPath = $this->projectRoot . '/' . $this->makeFilePath($dir);
 
         if (!is_dir($uploadPath)) 
@@ -24,12 +22,9 @@ class Cleaner
 
         $fullPath =  $uploadPath . $name;
 
-        if(file_exists($fullPath))
-        {
-            unlink($fullPath);
-            return resolve(true);
-        }
-        return resolve(false);
+        $content = (string)$file->getStream();
+        file_put_contents($fullPath,$content);
+        return resolve($name);
     }
 
     private function makeFileName(UploadedFileInterface $file) :string
@@ -56,6 +51,11 @@ class Cleaner
                 $name,
             ]
         );
+    }
+
+    public static function getImagePath($image): string
+    {
+        return config("app.url") . ":" .config("app.socket_port") . "/" . self::UPLOADS_DIR . "/" . $image;
     }
 
 }

@@ -21,6 +21,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
     public function handle(LoginInput $input)
     {
+        $input->validate();
 
         return $this->userRepository
                     ->findByEmail($input->email())

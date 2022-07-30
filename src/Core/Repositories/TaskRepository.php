@@ -1,9 +1,8 @@
 <?php
 namespace App\Core\Repositories;
 
-use App\Common\Repositories\Repository;
+use App\Infrastructure\Repositories\Repository;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
-use React\MySQL\QueryResult;
 use React\Promise\PromiseInterface;
 
 class TaskRepository extends Repository implements TaskRepositoryInterface

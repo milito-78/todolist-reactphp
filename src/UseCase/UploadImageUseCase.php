@@ -4,7 +4,7 @@
 namespace App\UseCase;
 
 
-use App\Common\Files\Uploader;
+use App\Infrastructure\Files\Uploader;
 use App\Core\Repositories\UploadRepositoryInterface;
 use App\Domain\Entities\Upload;
 use App\Domain\Inputs\UploadInput;

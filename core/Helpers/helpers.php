@@ -125,3 +125,10 @@ if (!function_exists("emit")){
         }
     }
 }
+
+if (!function_exists("loop")){
+    function loop(){
+        global $loop;
+        return $loop;
+    }
+}

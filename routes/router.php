@@ -1,5 +1,8 @@
 <?php
 
+use App\Core\Controller\Auth\ForgetPassword\CheckCodeController;
+use App\Core\Controller\Auth\ForgetPassword\ForgetPasswordController;
+use App\Core\Controller\Auth\ForgetPassword\ResetPasswordController;
 use App\Core\Controller\ImageUploadController;
 use App\Core\Controller\LoginController;
 use App\Core\Controller\ProfileController;
@@ -20,16 +23,12 @@ Route::group("user",function () {
 
     Route::post("register"      , RegisterController::class);
     Route::post("login"         , LoginController::class);
-    /**
-     * TODO forget password
-     */
+
     Route::group('forgot-password',function (){
-        Route::post("/send-code"         , function (){});
-        Route::get("/check-code"         ,function (){});
-        Route::post("/reset-password"    ,function (){});
+        Route::post("/send-code"         , ForgetPasswordController::class);
+        Route::get("/check-code"         , CheckCodeController::class);
+        Route::post("/reset-password"    , ResetPasswordController::class);
     });
-
-
 
     Route::group('/',function () {
         Route::get("profile"        , ProfileController::class);

@@ -3,7 +3,7 @@
 
 namespace App\Core\Repositories;
 
-use App\Common\Repositories\Repository;
+use App\Infrastructure\Repositories\Repository;
 use React\Promise\PromiseInterface;
 
 class UploadRepository extends Repository implements UploadRepositoryInterface

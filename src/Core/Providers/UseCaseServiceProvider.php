@@ -3,11 +3,15 @@
 namespace App\Core\Providers;
 
 use App\Core\Repositories\UploadRepositoryInterface;
-use App\Common\Files\Uploader;
+use App\Infrastructure\Files\Uploader;
 use App\Core\Repositories\TaskRepositoryInterface;
 use App\Core\Repositories\UserRepositoryInterface;
 use App\UseCase\AuthenticateUseCase;
 use App\UseCase\AuthenticateUseCaseInterface;
+use App\UseCase\CheckCodeUseCase;
+use App\UseCase\CheckCodeUseCaseInterface;
+use App\UseCase\ForgetPasswordUseCase;
+use App\UseCase\ForgetPasswordUseCaseInterface;
 use App\UseCase\LoginUseCase;
 use App\UseCase\LoginUseCaseInterface;
 use App\UseCase\LogoutUseCase;
@@ -16,6 +20,8 @@ use App\UseCase\ProfileUseCase;
 use App\UseCase\ProfileUseCaseInterface;
 use App\UseCase\RegisterUseCaseInterface;
 use App\UseCase\RegisterUseCase;
+use App\UseCase\ResetPasswordUseCase;
+use App\UseCase\ResetPasswordUseCaseInterface;
 use App\UseCase\SplashUseCase;
 use App\UseCase\SplashUseCaseInterface;
 use App\UseCase\TaskDeleteUseCase;
@@ -60,7 +66,13 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             TaskUpdateUseCaseInterface::class,
             TaskUpdateUseCase::class,
             UploadImageUseCaseInterface::class,
-            UploadImageUseCase::class
+            UploadImageUseCase::class,
+            ForgetPasswordUseCaseInterface::class,
+            ForgetPasswordUseCase::class,
+            CheckCodeUseCaseInterface::class,
+            CheckCodeUseCase::class,
+            ResetPasswordUseCaseInterface::class,
+            ResetPasswordUseCase::class,
         ];
 
         return in_array($id, $services);
@@ -127,9 +139,24 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             });
 
         $this->getContainer()
+            ->add(ForgetPasswordUseCaseInterface::class, function (){
+                return new ForgetPasswordUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(CheckCodeUseCaseInterface::class, function (){
+                return new CheckCodeUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(ResetPasswordUseCaseInterface::class, function (){
+                return new ResetPasswordUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
             ->add(UploadImageUseCaseInterface::class, function (){
                 return new UploadImageUseCase(
-                    new Uploader($this->getContainer()->get("filesystem")),
+                    new Uploader(),
                     $this->getContainer()->get(UploadRepositoryInterface::class)
                 );
             });

@@ -3,7 +3,7 @@
 
 namespace App\Core\Events;
 
-use App\Common\Files\Cleaner;
+use App\Infrastructure\Files\Cleaner;
 
 class DeleteFileEvent
 {

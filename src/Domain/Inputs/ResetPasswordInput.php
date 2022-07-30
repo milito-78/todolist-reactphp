@@ -54,8 +54,12 @@ class ResetPasswordInput
         )->setName('token');
 
 
+        $passwordConfirmation = Validator::
+        keyValue('password_confirmation', 'equals', 'password')
+            ->setName("password confirmation");
 
-        Validator::allOf($emailValidator,$codeValidator,$tokenValidator,$passwordValidator)->assert($this->request->all());
+        Validator::allOf($emailValidator,$codeValidator,$tokenValidator,$passwordValidator,$passwordConfirmation)
+            ->assert($this->request->all());
         $this->is_validated = true;
     }
 

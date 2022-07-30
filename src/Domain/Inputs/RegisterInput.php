@@ -42,7 +42,12 @@ class RegisterInput{
             )
         )->setName('password');
 
-        Validator::allOf($emailValidator,$fullnameValidator, $password)->assert($this->request->all());
+        $passwordConfirmation = Validator::
+        keyValue('password_confirmation', 'equals', 'password')
+        ->setName("password confirmation");
+
+        Validator::allOf($emailValidator,$fullnameValidator, $password,$passwordConfirmation)
+            ->assert($this->request->all());
         $this->is_validated = true;
     }
 

@@ -33,9 +33,7 @@ class CronJobServiceProvider extends AbstractServiceProvider
     private function setCronJobs()
     {
         $loop = loop();
-
         $di = new DependencyResolver();
-
         foreach ($this->jobs as $job => $seconds)
         {
             $loop->addPeriodicTimer($seconds,$di->make($job));

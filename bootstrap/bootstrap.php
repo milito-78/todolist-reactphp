@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Providers\CronJobServiceProvider;
 use App\Core\Providers\EventServiceProvider;
 use React\Filesystem\Factory;
 use React\Http\Middleware\StreamingRequestMiddleware;
@@ -9,7 +10,6 @@ use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
 use Core\{Config\Config,
     Exceptions\ErrorHandler,
-    Providers\CronJobServiceProvider,
     Route\RouteFacade,
     StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};

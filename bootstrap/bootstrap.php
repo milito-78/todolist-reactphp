@@ -88,8 +88,6 @@ $container->add("logger" , $logger);
 $event = new EventServiceProvider();
 $event->register();
 
-$loop->addPeriodicTimer(60,new \App\Core\CornJobs\RemoveExtraFilesJob());
-
 $cronJobs = new CronJobServiceProvider();
 $cronJobs->register();
 

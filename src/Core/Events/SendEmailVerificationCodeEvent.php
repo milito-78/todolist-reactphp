@@ -13,21 +13,21 @@ class SendEmailVerificationCodeEvent
     public function __invoke(string $email,string $code)
     {
         /**
-         * @todo queue mail
+         * @todo queue mail && make class for mail
          */
         $mail = new PHPMailer(false);
         try {
 
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
-            $mail->Host       = "smtp.mailtrap.io";
+            $mail->Host       = getenv("MAIL_HOST");
             $mail->SMTPAuth   = true;
-            $mail->Username   = "b839efc30f8eb2";
-            $mail->Password   = "acb9029582ee31";
+            $mail->Username   = getenv("MAIL_USERNAME");
+            $mail->Password   = getenv("acb9029582ee31");
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 2525;
+            $mail->Port       = getenv("MAIL_PORT");
 
-            $mail->setFrom('mail@todolist.com', 'TodoList');
+            $mail->setFrom(getenv('MAIL_SENDER_ADDRESS'), getenv('MAIL_SENDER_NAME'));
             $mail->addAddress($email);     //Add a recipient
 
             $mail->isHTML(true);  //Set email format to HTML

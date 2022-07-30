@@ -2,6 +2,7 @@
 
 
 namespace Core\Route;
+use FastRoute\RouteCollector;
 
 /**
  * @method static void get($path , callable $function, array $middleware = [])
@@ -14,9 +15,6 @@ namespace Core\Route;
  *
  * @see \Core\Route\Router
  */
-
-use FastRoute\RouteCollector;
-
 class RouteFacade
 {
     static private ?Router $router = null;

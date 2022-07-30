@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Controller;
+namespace App\Core\Controller\Auth;
 
 use App\Domain\Inputs\RegisterInput;
 use App\UseCase\RegisterUseCaseInterface;

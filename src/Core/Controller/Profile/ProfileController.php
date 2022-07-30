@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Controller;
+namespace App\Core\Controller\Profile;
 
 use App\UseCase\ProfileUseCaseInterface;
 use Core\Request\Controller;

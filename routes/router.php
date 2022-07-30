@@ -4,11 +4,12 @@ use App\Core\Controller\Auth\ForgetPassword\CheckCodeController;
 use App\Core\Controller\Auth\ForgetPassword\ForgetPasswordController;
 use App\Core\Controller\Auth\ForgetPassword\ResetPasswordController;
 use App\Core\Controller\ImageUploadController;
-use App\Core\Controller\LoginController;
-use App\Core\Controller\ProfileController;
-use App\Core\Controller\RegisterController;
+use App\Core\Controller\Auth\LoginController;
+use App\Core\Controller\Profile\ChangePasswordController;
+use App\Core\Controller\Profile\ProfileController;
+use App\Core\Controller\Auth\RegisterController;
 use App\Core\Controller\SplashController;
-use App\Core\Controller\LogoutController;
+use App\Core\Controller\Auth\LogoutController;
 use App\Core\Controller\Task\TaskDeleteController;
 use App\Core\Controller\Task\TaskIndexController;
 use App\Core\Controller\Task\TaskShowController;
@@ -32,11 +33,8 @@ Route::group("user",function () {
 
     Route::group('/',function () {
         Route::get("profile"        , ProfileController::class);
-        Route::post("logout"       , LogoutController::class);
-        /**
-         * TODO change password, caching
-         */
-        Route::post("change-password" , function (){});
+        Route::post("logout"        , LogoutController::class);
+        Route::patch("change-password" , ChangePasswordController::class);
 
         Route::group("tasks",function(){
             Route::get(""           , TaskIndexController::class);

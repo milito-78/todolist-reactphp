@@ -8,6 +8,8 @@ use App\Core\Repositories\TaskRepositoryInterface;
 use App\Core\Repositories\UserRepositoryInterface;
 use App\UseCase\AuthenticateUseCase;
 use App\UseCase\AuthenticateUseCaseInterface;
+use App\UseCase\ChangePasswordUseCase;
+use App\UseCase\ChangePasswordUseCaseInterface;
 use App\UseCase\CheckCodeUseCase;
 use App\UseCase\CheckCodeUseCaseInterface;
 use App\UseCase\ForgetPasswordUseCase;
@@ -73,6 +75,8 @@ class UseCaseServiceProvider extends AbstractServiceProvider
             CheckCodeUseCase::class,
             ResetPasswordUseCaseInterface::class,
             ResetPasswordUseCase::class,
+            ChangePasswordUseCaseInterface::class,
+            ChangePasswordUseCase::class,
         ];
 
         return in_array($id, $services);
@@ -151,6 +155,11 @@ class UseCaseServiceProvider extends AbstractServiceProvider
         $this->getContainer()
             ->add(ResetPasswordUseCaseInterface::class, function (){
                 return new ResetPasswordUseCase($this->getContainer()->get(UserRepositoryInterface::class));
+            });
+
+        $this->getContainer()
+            ->add(ChangePasswordUseCaseInterface::class, function (){
+                return new ChangePasswordUseCase($this->getContainer()->get(UserRepositoryInterface::class));
             });
 
         $this->getContainer()

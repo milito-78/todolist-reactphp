@@ -1,7 +1,6 @@
 <?php
 
 use App\Core\Providers\EventServiceProvider;
-use App\Core\Repositories\UploadRepositoryInterface;
 use React\Filesystem\Factory;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
@@ -10,6 +9,7 @@ use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
 use Core\{Config\Config,
     Exceptions\ErrorHandler,
+    Providers\CronJobServiceProvider,
     Route\RouteFacade,
     StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};
@@ -88,21 +88,9 @@ $container->add("logger" , $logger);
 $event = new EventServiceProvider();
 $event->register();
 
-$loop->addPeriodicTimer(60,function (){
-    /** @var UploadRepositoryInterface $uploadRepository */
-    $uploadRepository = container()->get(UploadRepositoryInterface::class);
-    echo "Remove extra files cron job. Starts at : " . date("Y-m-d H:i:s") . "\n";
+$loop->addPeriodicTimer(60,new \App\Core\CornJobs\RemoveExtraFilesJob());
 
-    $uploadRepository->getExpiredFiles()->then(function ($images) use ($uploadRepository){
-        foreach ($images as $image)
-        {
-
-            $uploadRepository->delete($image["id"])->then(function ($res) use($image){
-                echo $image["id"] . " photo delete from database status : " . ($res? "true" : "false") . "\n";
-            });
-        }
-    });
-
-});
+$cronJobs = new CronJobServiceProvider();
+$cronJobs->register();
 
 return $loop;

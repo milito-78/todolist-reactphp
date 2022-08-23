@@ -103,3 +103,12 @@ if (!function_exists("filesystem")){
         return $container->get((string) "filesystem");
     }
 }
+
+if(!function_exists("emit"))
+{
+    function emit(string $event,array $data)
+    {
+        global $server;
+        $server->emit($event , $data);
+    }
+}

@@ -104,3 +104,22 @@ if (!function_exists("filesystem")){
         return $container->get((string) "filesystem");
     }
 }
+
+if (!function_exists("emit")){
+    function emit(string $type,string $event,$data){
+        if ($type == "server"){
+            global $server;
+            $server->emit($event,$data);
+        }else{
+            global $socket;
+            $socket->emit($event,$data);
+        }
+    }
+}
+
+if (!function_exists("loop")){
+    function loop(){
+        global $loop;
+        return $loop;
+    }
+}

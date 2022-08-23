@@ -32,13 +32,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Core\\" : "core",
-            "App\\" : "src",
-            "React\\Filesystem\\": "Filesystem"
-        },
-        "files": [
-            "core/Helpers/helpers.php"
-        ]
+            "Application\\" : "Application",
+            "Domain\\" : "Domain",
+            "Infrastructure\\" : "Infrastructure",
+            "Persistence\\" : "Persistence"
+        }
     },
     "config": {
         "allow-plugins": {

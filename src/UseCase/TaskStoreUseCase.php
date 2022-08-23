@@ -24,9 +24,14 @@ class TaskStoreUseCase implements TaskStoreUseCaseInterface
                     ->create($data)
                     ->then(function($task){
                         $output = new TaskStoreOutput(new Task($task));
+                        $this->sendImageDeleteSystemEvent($task["image_path"]);
                         return response($output->output(),201);
                     });
-                    
+    }
+
+    private function sendImageDeleteSystemEvent($image_path){
+        if (!is_null($image_path) && !empty($image_path))
+            emit("server","upload_clean",["image_path"=> $image_path]);
     }
 
 }

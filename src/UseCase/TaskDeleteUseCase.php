@@ -29,9 +29,12 @@ class TaskDeleteUseCase implements TaskDeleteUseCaseInterface
                         }
                         return $this->taskRepository
                                     ->delete($task["id"])
-                                    ->then(function(bool $result){
+                                    ->then(function(bool $result) use ($task){
                                         if($result)
                                         {
+                                            $this->sendImageDeleteSystemEvent($task["image_path"]);
+                                            $this->sendFileDeleteSystemEvent($task["image_path"]);
+
                                             return response([
                                                 "message" => "Task deleted successfully"
                                             ],200);
@@ -40,6 +43,16 @@ class TaskDeleteUseCase implements TaskDeleteUseCaseInterface
                                     });
                         
                     });
+    }
+
+    private function sendImageDeleteSystemEvent($image_path){
+        if (!is_null($image_path) && !empty($image_path))
+            emit("server","upload_clean",["image_path"=> $image_path]);
+    }
+
+    private function sendFileDeleteSystemEvent($image_path){
+        if (!is_null($image_path) && !empty($image_path))
+            emit("server","delete_file",["image_path"=> $image_path]);
     }
 
 }

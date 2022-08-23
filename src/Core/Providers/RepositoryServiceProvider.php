@@ -9,7 +9,6 @@ use App\Core\Repositories\UploadRepository;
 use App\Core\Repositories\UploadRepositoryInterface;
 use App\Core\Repositories\UserRepository;
 use App\Core\Repositories\UserRepositoryInterface;
-use Core\DataBase\Interfaces\DatabaseInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
 class RepositoryServiceProvider extends AbstractServiceProvider
@@ -22,7 +21,6 @@ class RepositoryServiceProvider extends AbstractServiceProvider
             UserRepository::class,
             TaskRepositoryInterface::class,
             TaskRepository::class,
-            DatabaseInterface::class,
             UploadRepositoryInterface::class,
             UploadRepository::class
         ];
@@ -33,20 +31,12 @@ class RepositoryServiceProvider extends AbstractServiceProvider
     public function register(): void
     {
         $this->getContainer()
-            ->add(UserRepositoryInterface::class,function (){
-                return new UserRepository($this->getContainer()->get(DatabaseInterface::class));
-            });
+            ->add(UserRepositoryInterface::class,UserRepository::class);
     
         $this->getContainer()
-            ->add(TaskRepositoryInterface::class,function (){
-                return new TaskRepository($this->getContainer()->get(DatabaseInterface::class));
-            });
+            ->add(TaskRepositoryInterface::class,TaskRepository::class);
     
         $this->getContainer()
-            ->add(UploadRepositoryInterface::class,function (){
-                return new UploadRepository($this->getContainer()->get(DatabaseInterface::class));
-            });
-
-        
+            ->add(UploadRepositoryInterface::class,UploadRepository::class);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use League\Container\Container;
 use Psr\Http\Message\ServerRequestInterface;
 
 if (!function_exists("response"))
@@ -101,14 +102,5 @@ if (!function_exists("filesystem")){
     function filesystem(){
         global $container;
         return $container->get((string) "filesystem");
-    }
-}
-
-if(!function_exists("emit"))
-{
-    function emit(string $event,array $data)
-    {
-        global $server;
-        $server->emit($event , $data);
     }
 }

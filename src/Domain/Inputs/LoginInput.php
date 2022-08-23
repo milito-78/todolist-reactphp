@@ -55,11 +55,6 @@ class LoginInput{
         return $this->request->email;
     }
 
-    public function fullName() : string
-    {
-        return $this->request->full_name;
-    }
-
     public function password(): string
     {
         return $this->request->password;

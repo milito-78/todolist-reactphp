@@ -4,7 +4,7 @@
 namespace App\UseCase;
 
 
-use App\Common\Files\Uploader;
+use App\Infrastructure\Files\Uploader;
 use App\Core\Repositories\UploadRepositoryInterface;
 use App\Domain\Entities\Upload;
 use App\Domain\Inputs\UploadInput;
@@ -23,6 +23,8 @@ class UploadImageUseCase implements UploadImageUseCaseInterface
 
     public function handle(UploadInput $input)
     {
+        $input->validate();
+
         return $this->uploader
             ->upload($input->image())
             ->then(function ($image_name){

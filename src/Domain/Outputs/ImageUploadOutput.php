@@ -1,7 +1,7 @@
 <?php 
 namespace App\Domain\Outputs;
 
-use App\Common\Files\Uploader;
+use App\Infrastructure\Files\Uploader;
 use App\Domain\Entities\Upload;
 
 class ImageUploadOutput{

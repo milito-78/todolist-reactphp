@@ -43,7 +43,7 @@ class RegisterUseCase implements RegisterUseCaseInterface
     }
 
 
-    private function generateApiKey()
+    private function generateApiKey(): string
     {
         return md5(uniqid(rand(), true));
     }

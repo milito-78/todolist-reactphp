@@ -4,7 +4,7 @@
 namespace App\Core\Repositories;
 
 
-use App\Common\Repositories\RepositoryInterface;
+use App\Infrastructure\Repositories\RepositoryInterface;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {

@@ -4,7 +4,7 @@
 namespace Persistence\Shared;
 
 use Application\Interfaces\Persistence\RepositoryInterface;
-use Core\DataBase\Builder;
+use Persistence\Shared\DataBase\Builder;
 use React\Promise\PromiseInterface;
 
 abstract class Repository implements RepositoryInterface

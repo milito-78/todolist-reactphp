@@ -2,6 +2,7 @@
 
 
 namespace Persistence\Shared\DataBase;
+
 use Persistence\Shared\DataBase\Exceptions\UnknownDatabaseConnectionException;
 use Persistence\Shared\DataBase\Interfaces\DriverInterface;
 use Persistence\Shared\DataBase\Paginatore\PaginateInterface;

@@ -1,12 +1,14 @@
 <?php
 
 
-namespace Core\Cache\Driver;
+namespace Infrastructure\Cache\Driver;
 
 use Application\Interfaces\Infrastructure\Cache\CacheDriverInterface;
 use Clue\React\Redis\Client;
 use Clue\React\Redis\Factory;
+use React\EventLoop\Loop;
 use React\Promise\PromiseInterface;
+use Infrastructure\App;
 
 class RedisDriver implements CacheDriverInterface
 {
@@ -14,7 +16,7 @@ class RedisDriver implements CacheDriverInterface
 
     public function __construct()
     {
-        $loop = loop();
+        $loop = Loop::get();
 
         $redisFactory = new Factory($loop);
 
@@ -52,15 +54,15 @@ class RedisDriver implements CacheDriverInterface
     }
     private function getPrefix() : string
     {
-        return config("cache.prefix") . ":";
+        return App::config("cache.prefix","redis") . ":";
     }
 
     private function getRedisConfigUrl():string
     {
-        $url = 'redis://' . config("cache.redis.host") .':'. config("cache.redis.port");
-        $query = ["db" => config("cache.redis.cluster",1)];
+        $url = 'redis://' . App::config("cache.redis.host") .':'. App::config("cache.redis.port");
+        $query = ["db" => App::config("cache.redis.cluster",1)];
 
-        if ($password = config("cache.redis.password")){
+        if ($password = App::config("cache.redis.password")){
             $query["password"] = $password;
         }
 

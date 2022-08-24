@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Core\Cache\Driver;
+namespace Infrastructure\Cache\Driver;
 
 use Application\Interfaces\Infrastructure\Cache\CacheDriverInterface;
 use React\Promise\PromiseInterface;

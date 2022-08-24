@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Persistence\Tasks;
+namespace Application\Interfaces\Persistence;
 
 use Application\Interfaces\Persistence\RepositoryInterface;
 

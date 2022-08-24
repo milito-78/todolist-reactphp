@@ -3,6 +3,7 @@
 
 namespace Persistence\Files;
 
+use Application\Interfaces\Persistence\UploadRepositoryInterface;
 use Persistence\Shared\Repository;
 use React\Promise\PromiseInterface;
 

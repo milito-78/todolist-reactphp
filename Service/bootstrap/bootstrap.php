@@ -8,13 +8,12 @@ use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use Core\Route\Middleware\CorsMiddleware;
 use Core\Route\Middleware\JsonResponseMiddleware;
-use Core\{Config\Config,
+use Core\{
     Exceptions\ErrorHandler,
     Route\RouteFacade,
     StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};
 use Core\DI\DependencyResolver;
-use Dotenv\Dotenv;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
@@ -27,30 +26,15 @@ use React\Socket\SocketServer;
 
 //////////////////////
 use Core\Route\RouteCollector as Router;
-$env = Dotenv::createImmutable(__DIR__,"../.env");
-$env->load();
-
-
-$config = new Config();
-$config->loadConfigurationFiles(__DIR__ . '/../config',envGet("APP_ENV","local"));
 
 date_default_timezone_set(config("app.timezone"));
 
-$container = new League\Container\Container();
-
 $loop = React\EventLoop\Loop::get();
 
-$providers = \config("app.providers");
-
-foreach ($providers as $provider){
-    $container->addServiceProvider(new $provider());
-}
 
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container->add(RouteCollector::class,$routeCollector);
 $filesystem = Factory::create();
-
-$container->add("filesystem",$filesystem);
 
 RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 

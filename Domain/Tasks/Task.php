@@ -4,8 +4,9 @@
 namespace Domain\Tasks;
 
 use DateTime;
+use Domain\Common\Entity;
 
-class Task
+class Task extends Entity
 {
     public int $id;
     public string $title;
@@ -13,8 +14,6 @@ class Task
     public int $user_id;
     public ?string $image_path;
     public ?DateTime $deadline;
-    public ?DateTime $created_at;
-    public ?DateTime $updated_at;
     public ?DateTime $deleted_at;
 
     public function __construct(array $data)
@@ -24,9 +23,9 @@ class Task
         $this->description  = $data["description"];
         $this->user_id      = $data["user_id"];
         $this->image_path   = $data["image_path"];
+        $this->setCreatedAt($data);
+        $this->setUpdatedAt($data);
         $this->deadline     = isset($data["deadline"]) && !is_null($data["deadline"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deadline"]) : null;
-        $this->created_at   = isset($data["created_at"]) && !is_null($data["created_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["created_at"]) : null;
-        $this->updated_at   = isset($data["updated_at"]) && !is_null($data["updated_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["updated_at"]) : null;
         $this->deleted_at   = isset($data["deleted_at"]) && !is_null($data["deleted_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deleted_at"]) : null;
     }
 
@@ -45,15 +44,6 @@ class Task
         ];
     }
 
-    public function getCreatedAtDateTimeString()
-    {
-        return $this->created_at ? $this->created_at->format("Y-m-d H:i:s") : null;
-    }
-
-    public function getUpdatedAtDateTimeString()
-    {
-        return $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s") : null;
-    }
 
     public function getDeletedAtDateTimeString()
     {

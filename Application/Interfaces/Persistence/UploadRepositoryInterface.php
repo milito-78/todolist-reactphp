@@ -1,9 +1,6 @@
 <?php
 
-
-namespace Persistence\Files;
-
-use Application\Interfaces\Persistence\RepositoryInterface;
+namespace Application\Interfaces\Persistence;
 
 use React\Promise\PromiseInterface;
 

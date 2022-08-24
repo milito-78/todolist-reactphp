@@ -4,6 +4,7 @@
 namespace Infrastructure\Cache;
 
 use Application\Interfaces\Infrastructure\Cache\CacheInterface;
+use Infrastructure\App;
 use React\Promise\PromiseInterface;
 
 class Cache implements CacheInterface
@@ -14,7 +15,7 @@ class Cache implements CacheInterface
 
     public function __construct()
     {
-        $this->default = config("cache.driver","redis");
+        $this->default = App::config("cache.driver","redis");
     }
 
     public function store($store)

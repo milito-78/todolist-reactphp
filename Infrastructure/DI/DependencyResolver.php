@@ -1,7 +1,7 @@
 <?php
-namespace Core\DI;
+namespace Infrastructure\DI;
 
-use Application\Interfaces\DI\DependencyResolverInterface;
+use Application\Interfaces\Infrastructure\DI\DependencyResolverInterface;
 use League\Container\DefinitionContainerInterface;
 
 class DependencyResolver implements DependencyResolverInterface
@@ -9,9 +9,8 @@ class DependencyResolver implements DependencyResolverInterface
 
     private DefinitionContainerInterface $container;
 
-    public function __construct()
+    public function __construct(DefinitionContainerInterface $container)
     {
-       global $container;
        $this->container = $container;
     }
 

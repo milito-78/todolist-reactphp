@@ -3,8 +3,8 @@
 namespace Infrastructure\Cache;
 
 use Application\Interfaces\Infrastructure\Cache\CacheDriverInterface;
-use Core\Cache\Driver\FileDriver;
-use Core\Cache\Driver\RedisDriver;
+use Infrastructure\Cache\Driver\FileDriver;
+use Infrastructure\Cache\Driver\RedisDriver;
 
 class Factory{
 

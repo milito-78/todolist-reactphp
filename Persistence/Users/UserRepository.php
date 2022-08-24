@@ -3,6 +3,7 @@
 
 namespace Persistence\Users;
 
+use Application\Interfaces\Persistence\UserRepositoryInterface;
 use Persistence\Shared\Repository;
 use React\Promise\PromiseInterface;
 

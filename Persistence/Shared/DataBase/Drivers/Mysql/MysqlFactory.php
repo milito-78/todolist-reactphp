@@ -4,11 +4,12 @@
 namespace Persistence\Shared\DataBase\Drivers\Mysql;
 
 
-use Core\DataBase\Interfaces\DriverInterface;
-use Core\DataBase\Interfaces\HandlerInterface;
+use Persistence\Shared\DataBase\Interfaces\DriverInterface;
+use Persistence\Shared\DataBase\Interfaces\HandlerInterface;
+use React\EventLoop\Loop;
 use React\MySQL\Factory as Mysql;
 
-class MysqlHandler implements HandlerInterface
+class MysqlFactory implements HandlerInterface
 {
     private string $username;
     private string $password;
@@ -17,8 +18,10 @@ class MysqlHandler implements HandlerInterface
     private string $database;
     private Mysql $connection;
 
-    public function __construct(Mysql $mysql,string $database,string $port,string $username,string $password,string $host)
+    public function __construct(string $database,string $port,string $username,string $password,string $host)
     {
+        $mysql = new Mysql(Loop::get());
+
         $this->database     = $database;
         $this->port         = $port;
         $this->username     = $username;

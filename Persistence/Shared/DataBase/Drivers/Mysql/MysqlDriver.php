@@ -1,7 +1,7 @@
 <?php
 namespace Persistence\Shared\DataBase\Drivers\Mysql;
 
-use Core\DataBase\Interfaces\DriverInterface;
+use Persistence\Shared\DataBase\Interfaces\DriverInterface;
 use React\MySQL\ConnectionInterface;
 use React\Promise\PromiseInterface;
 

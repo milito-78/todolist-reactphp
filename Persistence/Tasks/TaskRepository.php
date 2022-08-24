@@ -1,7 +1,7 @@
 <?php
 namespace Persistence\Tasks;
 
-
+use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
 use Persistence\Shared\Repository;
 use React\Promise\PromiseInterface;

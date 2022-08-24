@@ -1,9 +1,6 @@
 <?php
 
-
-namespace Persistence\Users;
-
-use Application\Interfaces\Persistence\RepositoryInterface;
+namespace Application\Interfaces\Persistence;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {

@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Cache;
 
-
+use BadMethodCallException;
 use React\Promise\PromiseInterface;
 
 /**
@@ -22,7 +22,7 @@ class CacheFacade
         if (method_exists($exchange,$name)){
             return $exchange->{$name}(...$arguments);
         }
-        throw new \Exception("Method not exists in Cache class",500);
+        throw new BadMethodCallException("Method not exists in Cache class");
     }
 
     public static function getOrCreateFacade(): Cache

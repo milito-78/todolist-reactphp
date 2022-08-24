@@ -4,16 +4,15 @@
 namespace Domain\Users;
 
 use DateTime;
+use Domain\Common\Entity;
 
-class User
+class User extends Entity
 {
     public int $id;
     public string $full_name;
     public string $email;
     public string $password;
     public string $api_key;
-    public ?DateTime $created_at;
-    public ?DateTime $updated_at;
     public ?DateTime $deleted_at;
 
     public function __construct(array $data)
@@ -23,8 +22,8 @@ class User
         $this->email        = $data["email"];
         $this->password     = $data["password"];
         $this->api_key      = $data["api_key"];
-        $this->created_at   = isset($data["created_at"]) && !is_null($data["created_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["created_at"]) : null;
-        $this->updated_at   = isset($data["updated_at"]) && !is_null($data["updated_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["updated_at"]) : null;
+        $this->setCreatedAt($data);
+        $this->setUpdatedAt($data);
         $this->deleted_at   = isset($data["deleted_at"]) && !is_null($data["deleted_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["deleted_at"]) : null;
     }
 
@@ -39,16 +38,6 @@ class User
             "updated_at" => $this->getUpdatedAtDateTimeString(),
             "deleted_at" => $this->getDeletedAtDateTimeString(),
         ];
-    }
-
-    public function getCreatedAtDateTimeString()
-    {
-        return $this->created_at ? $this->created_at->format("Y-m-d H:i:s") : null;
-    }
-
-    public function getUpdatedAtDateTimeString()
-    {
-        return $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s") : null;
     }
 
     public function getDeletedAtDateTimeString()

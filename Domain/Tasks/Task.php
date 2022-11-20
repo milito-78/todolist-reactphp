@@ -45,12 +45,12 @@ class Task extends Entity
     }
 
 
-    public function getDeletedAtDateTimeString()
+    public function getDeletedAtDateTimeString(): ?string
     {
         return $this->deleted_at ? $this->deleted_at->format("Y-m-d H:i:s") : null;
     }
 
-    public function getDeadlineDateTimeString()
+    public function getDeadlineDateTimeString(): ?string
     {
         return $this->deadline ? $this->deadline->format("Y-m-d H:i:s") : null;
     }

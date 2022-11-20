@@ -16,11 +16,11 @@ class Factory {
         if (preg_match("/mysql/",$driver))
         {
             $driver = new MysqlFactory(
-                App::config("database.connections.mysql.database"),
-                App::config("database.connections.mysql.port"),
-                App::config("database.connections.mysql.username"),
-                App::config("database.connections.mysql.password"),
-                App::config("database.connections.mysql.host"),
+                App::config("config.database.connections.mysql.database"),
+                App::config("config.database.connections.mysql.port"),
+                App::config("config.database.connections.mysql.username"),
+                App::config("config.database.connections.mysql.password"),
+                App::config("config.database.connections.mysql.host"),
             );
             $db = $driver->getDriver();
         }

@@ -2,9 +2,13 @@
 namespace Persistence\Tasks;
 
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
+use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateModel;
+use Domain\Tasks\Task;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
+use Persistence\Shared\DataBase\Builder;
 use Persistence\Shared\Repository;
 use React\Promise\PromiseInterface;
+use function React\Promise\reject;
 
 class TaskRepository extends Repository implements TaskRepositoryInterface
 {
@@ -15,49 +19,62 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
         return "tasks";
     }
 
-    public function getAllTasksForUser($user_id,$page): PromiseInterface
+    public function getByPaginateQuery(GetByPaginateModel $model): PromiseInterface
     {
-        return $this->_query()
-            ->where()
-            ->equals("user_id",$user_id)
-            ->isNull("deleted_at")
-            ->end()
-            ->orderBy("ISNULL(tasks.deadline)",OrderBy::ASC,'')
-            ->orderBy("deadline")
-            ->orderBy("created_at")
-            ->simplePaginate($this->per_page,$page);
+        $query = $this->_query()
+            ->select()
+            ->where();
+        $query = $this->filterByUser($query,$model->getUserId());
+        $query = $this->filterByTime($query,$model->getFilter());
+        return $query->simplePaginate($this->per_page,$model->getPage())
+            ->then(function($tasks){
+                return $this->mapTasks($tasks);
+            });
     }
 
     public function getTaskForUser($task_id,$user_id): PromiseInterface
     {
-        return $this->_query()->where()
-            ->equals("user_id",$user_id)
-            ->equals("id",$task_id)
-            ->end()
-            ->first();
+        $query = $this->_query()->where()
+            ->equals("id",$task_id);
+        $query = $this->filterByUser($query,$user_id);
+        return $query->end()
+            ->first()->then(function ($data){
+                if ($data)
+                    return new Task($data);
+                return reject();
+            });
     }
 
-    public function getDeadlineTasksForUser($user_id, $page): PromiseInterface
+    private function filterByUser(Builder $query,int $user_id) :Builder
     {
-        return $this->_query()
-            ->where()
-            ->equals("user_id",$user_id)
-            ->isNotNull("deadline")
-            ->isNull("deleted_at")
-            ->end()
-            ->orderBy("deadline")
-            ->simplePaginate($this->per_page,$page);
+        return $query->equals("user_id",$user_id);
     }
 
-    public function getByTimeTasksForUser($user_id, $page): PromiseInterface
+    private function filterByTime(Builder $query,?string $time) :Builder
     {
-        return $this->_query()
-            ->where()
-            ->equals("user_id",$user_id)
-            ->between("deadline",date("Y-m-d")." 00:00:00" ,date("Y-m-d")." 23:59:59")
-            ->isNull("deleted_at")
-            ->end()
-            ->orderBy("deadline")
-            ->simplePaginate($this->per_page,$page);
+        if($time == GetByPaginateModel::Filter_Deadline) {
+            $query = $query->isNotNull("deadline")
+                ->isNull("deleted_at")
+                ->end();
+        } elseif($time == GetByPaginateModel::Filter_Time){
+            $query = $query->between("deadline",date("Y-m-d")." 00:00:00" ,date("Y-m-d")." 23:59:59")
+                ->isNull("deleted_at")
+                ->end();
+        }else{
+            $query = $query->isNull("deleted_at")
+                ->end()
+                ->orderBy("ISNULL(tasks.deadline)", OrderBy::ASC, '')
+                ->orderBy("created_at");
+        }
+        return $query->orderBy("deadline");
+    }
+
+    private function mapTasks(array $tasks): array
+    {
+        $tasks["data"] = array_map(function ($task){
+            return new Task($task);
+        },$tasks["data"]);
+
+        return $tasks;
     }
 }

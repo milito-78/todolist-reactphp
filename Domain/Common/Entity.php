@@ -17,12 +17,12 @@ abstract class Entity{
         $this->created_at   = isset($data["created_at"]) && !is_null($data["created_at"]) ? DateTime::createFromFormat("Y-m-d H:i:s",$data["created_at"]) : null; 
     }
 
-    public function getCreatedAtDateTimeString()
+    public function getCreatedAtDateTimeString(): ?string
     {
         return $this->created_at ? $this->created_at->format("Y-m-d H:i:s") : null;
     }
 
-    public function getUpdatedAtDateTimeString()
+    public function getUpdatedAtDateTimeString(): ?string
     {
         return $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s") : null;
     }

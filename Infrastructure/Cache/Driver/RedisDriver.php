@@ -54,15 +54,15 @@ class RedisDriver implements CacheDriverInterface
     }
     private function getPrefix() : string
     {
-        return App::config("cache.prefix","redis") . ":";
+        return App::config("config.cache.prefix","redis") . ":";
     }
 
     private function getRedisConfigUrl():string
     {
-        $url = 'redis://' . App::config("cache.redis.host") .':'. App::config("cache.redis.port");
-        $query = ["db" => App::config("cache.redis.cluster",1)];
+        $url = 'redis://' . App::config("config.cache.redis.host") .':'. App::config("config.cache.redis.port");
+        $query = ["db" => App::config("config.cache.redis.cluster",1)];
 
-        if ($password = App::config("cache.redis.password")){
+        if ($password = App::config("config.cache.redis.password")){
             $query["password"] = $password;
         }
 

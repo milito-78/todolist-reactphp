@@ -3,6 +3,7 @@
 
 namespace Persistence\Shared\DataBase;
 
+use Persistence\App;
 use Persistence\Shared\DataBase\Exceptions\UnknownDatabaseConnectionException;
 use Persistence\Shared\DataBase\Interfaces\DriverInterface;
 use Persistence\Shared\DataBase\Paginatore\PaginateInterface;
@@ -35,7 +36,7 @@ class Builder implements PaginateInterface
 
     public function connection(string $name): Builder
     {
-        global $container;
+        $container = App::container();
 
         if ($container->has($name))
         {
@@ -329,7 +330,7 @@ class Builder implements PaginateInterface
 
     public static function query():static
     {
-        return container()->get(self::class);
+        return App::container()->get(self::class);
     }
     
     public function checkResultRow(QueryResult $result){
@@ -349,7 +350,7 @@ class Builder implements PaginateInterface
 
         $sql    = $this->builder->write($this->query);
         $values = $this->builder->getValues();
-        var_dump($sql,$values);
+
         return $this->driver
             ->query($sql,$values)
             ->then(function(QueryResult $result) use ($per_page,$page,$count){

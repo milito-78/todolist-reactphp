@@ -3,15 +3,12 @@
 
 namespace Application\Interfaces\Persistence;
 
-use Application\Interfaces\Persistence\RepositoryInterface;
+use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateModel;
+use React\Promise\PromiseInterface;
 
 interface TaskRepositoryInterface extends RepositoryInterface
 {
-    public function getAllTasksForUser($user_id,$page);
+    public function getByPaginateQuery(GetByPaginateModel $model):PromiseInterface;
 
-    public function getDeadlineTasksForUser($user_id,$page);
-
-    public function getByTimeTasksForUser($user_id,$page);
-
-    public function getTaskForUser($task_id,$user_id);
+    public function getTaskForUser($task_id,$user_id):PromiseInterface;
 }

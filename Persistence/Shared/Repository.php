@@ -60,10 +60,16 @@ abstract class Repository implements RepositoryInterface
                         ->select($fields)
                         ->where()
                         ->equals($field,$value)
-                        ->end()->first();
+                        ->end()
+                        ->first();
     }
 
-    public function _query(): Builder
+    protected function _query(): Builder
+    {
+        return Builder::query()->table($this->table);
+    }
+
+    public function query(): Builder
     {
         return Builder::query()->table($this->table);
     }

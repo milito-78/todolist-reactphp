@@ -15,7 +15,7 @@ class Cache implements CacheInterface
 
     public function __construct()
     {
-        $this->default = App::config("cache.driver","redis");
+        $this->default = App::config("config.cache.driver","redis");
     }
 
     public function store($store)

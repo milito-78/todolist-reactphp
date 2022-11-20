@@ -36,7 +36,8 @@
             "Domain\\" : "Domain",
             "Common\\" : "Common",
             "Infrastructure\\" : "Infrastructure",
-            "Persistence\\" : "Persistence"
+            "Persistence\\" : "Persistence",
+            "Service\\" : "Service"
         }
     },
     "config": {

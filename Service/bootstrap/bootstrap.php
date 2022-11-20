@@ -1,45 +1,40 @@
 <?php
 
-use App\Core\Providers\EventServiceProvider;
-use App\Core\Repositories\UploadRepositoryInterface;
-use React\Filesystem\Factory;
+use Infrastructure\DI\DependencyResolver;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
-use Core\Route\Middleware\CorsMiddleware;
-use Core\Route\Middleware\JsonResponseMiddleware;
-use Core\{
+use Service\App;
+use Service\Shared\Route\Middleware\CorsMiddleware;
+use Service\Shared\Route\Middleware\JsonResponseMiddleware;
+use Service\Shared\{
     Exceptions\ErrorHandler,
     Route\RouteFacade,
     StaticFiles\StaticFileController,
     Response\JsonRequestDecoder};
-use Core\DI\DependencyResolver;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
-use Monolog\Handler\FirePHPHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use React\Http\HttpServer;
 use React\Socket\SocketServer;
 
 
 //////////////////////
-use Core\Route\RouteCollector as Router;
+use Service\Shared\Route\RouteCollector as Router;
 
-date_default_timezone_set(config("app.timezone"));
+date_default_timezone_set(App::config("config.timezone"));
 
-$loop = React\EventLoop\Loop::get();
-
+$loop           = React\EventLoop\Loop::get();
 
 $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
+
+$container = App::container();
+
 $container->add(RouteCollector::class,$routeCollector);
-$filesystem = Factory::create();
 
 RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 
-require_once "routes/router.php";
-
+require_once "router.php";
 
 $server =  new HttpServer(
     $loop,
@@ -50,43 +45,23 @@ $server =  new HttpServer(
     new ErrorHandler(),
     new JsonRequestDecoder(),
     new JsonResponseMiddleware(),
-    new Router($routeCollector,new DependencyResolver),
+    new Router($routeCollector,new DependencyResolver($container)),
 );
 
 $socket = new SocketServer(
-     config("app.socket_server") . ":" . config("app.socket_port"),
+    App::config("config.socket_server") . ":" . App::config("config.socket_port"),
     [],
     $loop
 );
 
 $server->listen($socket);
 
-$logger = new Logger('errors');
-$logger->pushHandler(new StreamHandler(__DIR__.'/../storage/logs/app.log', Logger::DEBUG));
-$logger->pushHandler(new FirePHPHandler());
-
-
-$container->add("logger" , $logger);
-
-
-$event = new EventServiceProvider();
-$event->register();
-
-$loop->addPeriodicTimer(60,function (){
-    /** @var UploadRepositoryInterface $uploadRepository */
-    $uploadRepository = container()->get(UploadRepositoryInterface::class);
-    echo "Remove extra files cron job. Starts at : " . date("Y-m-d H:i:s") . "\n";
-
-    $uploadRepository->getExpiredFiles()->then(function ($images) use ($uploadRepository){
-        foreach ($images as $image)
-        {
-
-            $uploadRepository->delete($image["id"])->then(function ($res) use($image){
-                echo $image["id"] . " photo delete from database status : " . ($res? "true" : "false") . "\n";
-            });
-        }
-    });
-
+$server->on("error", function ($exception){
+    \Common\Logger\LoggerFacade::error($exception->getMessage(),["exception" => $exception]);
 });
+
+$container->add("HttpServer" , $server);
+
+$container->add("HttpSocket" , $socket);
 
 return $loop;

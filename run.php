@@ -4,6 +4,7 @@ require "vendor/autoload.php";
 
 use Dotenv\Dotenv;
 
+
 const __ROOT__ = __DIR__;
 
 
@@ -30,3 +31,6 @@ $infrastructure->init($container);
 
 $persistence = new \Persistence\App();
 $persistence->init($container);
+
+$webService = new \Service\App();
+$webService->init($container);

@@ -33,15 +33,18 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         return in_array($id, $services);
     }
 
+    /**
+     * @throws Shared\DataBase\Exceptions\UnknownDatabaseDriverException
+     */
     public function register(): void
     {
-        $db = Factory::createDriver(App::config("database.default","mysql"));
+        $db = Factory::createDriver(App::config("config.database.default","mysql"));
 
         $this->getContainer()->add(DriverInterface::class,$db);
 
         $this->getContainer()->add(Builder::class)
                             ->addArgument(DriverInterface::class)
-                            ->addArgument(App::config("database.default","mysql"));
+                            ->addArgument(App::config("config.database.default","mysql"));
 
 
         $this->getContainer()

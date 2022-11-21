@@ -6,6 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Service\Tasks\Controller\TaskIndexController;
 use Service\Tasks\Controller\TaskShowController;
 use Service\Tasks\Controller\TaskStoreController;
+use Service\Users\Login\LoginController;
 use Service\Users\Register\RegisterController;
 
 //Route::get('/splash'            , SplashController::class);
@@ -13,7 +14,7 @@ use Service\Users\Register\RegisterController;
 Route::group("user",function () {
 
    Route::post("register"      , RegisterController::class);
-//    Route::post("login"         , LoginController::class);
+   Route::post("login"         , LoginController::class);
 
     Route::group('forgot-password',function (){
 //        Route::post("/send-code"         , ForgetPasswordController::class);

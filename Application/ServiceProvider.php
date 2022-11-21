@@ -11,6 +11,8 @@ use Application\Users\Queries\GetUserByEmail\GetUserByEmailQuery;
 use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
 use Application\Users\Queries\GetUserByToken\GetByTokenQuery;
 use Application\Users\Queries\GetUserByToken\GetByTokenQueryInterface;
+use Application\Users\Queries\LoginUser\ILoginUserQuery;
+use Application\Users\Queries\LoginUser\LoginUserQuery;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
 
@@ -28,6 +30,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             CreateUserCommand::class,
             IRegisterUserCommand::class,
             RegisterUserCommand::class,
+            ILoginUserQuery::class,
+            LoginUserQuery::class,
         ];
 
         return in_array($id, $services);
@@ -50,6 +54,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $this->getContainer()
         ->add(
             IRegisterUserCommand::class,new RegisterUserCommand($this->getContainer()->get(ICreateUserCommand::class),$this->getContainer()->get(IGetUserByEmailQuery::class))
+        );
+        $this->getContainer()
+        ->add(
+            ILoginUserQuery::class,new LoginUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class))
         );
     }
 

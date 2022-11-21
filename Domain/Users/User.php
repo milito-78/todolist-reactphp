@@ -44,7 +44,9 @@ class User extends Entity
     {
         return $this->deleted_at ? $this->deleted_at->format("Y-m-d H:i:s") : null;
     }
-
+    public function isPasswordCorrect(string $password):string {
+        return password_verify($password,$this->password);
+    }
     public static function hashedPassword(string $password):string {
         return password_hash($password, PASSWORD_BCRYPT);
     }

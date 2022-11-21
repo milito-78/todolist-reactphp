@@ -45,4 +45,11 @@ class User extends Entity
         return $this->deleted_at ? $this->deleted_at->format("Y-m-d H:i:s") : null;
     }
 
+    public static function hashedPassword(string $password):string {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+    public static function checkPassword(string $password,string $hashed):string {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
 }

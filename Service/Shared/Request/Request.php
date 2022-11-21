@@ -36,9 +36,9 @@ class Request implements ServerRequestInterface
         return null;
     }
 
-    public function input($input)
+    public function input($input,$default = null)
     {
-        return $this->{$input};
+        return $this->{$input} ?? $default;
     }
 
     public function all()

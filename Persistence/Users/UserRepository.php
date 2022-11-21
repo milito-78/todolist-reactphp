@@ -17,16 +17,12 @@ class UserRepository extends Repository implements UserRepositoryInterface
 
     public function findByEmail($email): PromiseInterface
     {
-        return $this->findBy("email" , $email)->then(function ($result){
-            return new User($result);
-        });
+        return $this->findBy("email" , $email);
     }
 
     public function findByToken(string $token): PromiseInterface
     {
-        return $this->findBy("api_key" , $token)->then(function ($result){
-            return new User($result);
-        });
+        return $this->findBy("api_key" , $token);
     }
 
 }

@@ -2,6 +2,15 @@
 
 namespace Application;
 
+use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Users\Commands\CreateUser\CreateUserCommand;
+use Application\Users\Commands\CreateUser\ICreateUserCommand;
+use Application\Users\Commands\RegisterUser\IRegisterUserCommand;
+use Application\Users\Commands\RegisterUser\RegisterUserCommand;
+use Application\Users\Queries\GetUserByEmail\GetUserByEmailQuery;
+use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
+use Application\Users\Queries\GetUserByToken\GetByTokenQuery;
+use Application\Users\Queries\GetUserByToken\GetByTokenQueryInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
 
@@ -11,7 +20,14 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
     public function provides(string $id): bool
     {
         $services = [
-            
+            GetByTokenQueryInterface::class,
+            GetByTokenQuery::class,
+            IGetUserByEmailQuery::class,
+            GetUserByEmailQuery::class,
+            ICreateUserCommand::class,
+            CreateUserCommand::class,
+            IRegisterUserCommand::class,
+            RegisterUserCommand::class,
         ];
 
         return in_array($id, $services);
@@ -19,7 +35,22 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
 
     public function register(): void
     {
-
+        $this->getContainer()
+        ->add(
+            GetByTokenQueryInterface::class,new GetByTokenQuery($this->getContainer()->get(UserRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IGetUserByEmailQuery::class,new GetUserByEmailQuery($this->getContainer()->get(UserRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            ICreateUserCommand::class,new CreateUserCommand($this->getContainer()->get(UserRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IRegisterUserCommand::class,new RegisterUserCommand($this->getContainer()->get(ICreateUserCommand::class),$this->getContainer()->get(IGetUserByEmailQuery::class))
+        );
     }
 
     public function boot(): void

@@ -1,8 +1,9 @@
 <?php
 
-namespace Infrastructure\Cache;
+namespace Infrastructure\Cache\Facade;
 
 use BadMethodCallException;
+use Infrastructure\Cache\Cache as CacheBase;
 use React\Promise\PromiseInterface;
 
 /**
@@ -10,11 +11,11 @@ use React\Promise\PromiseInterface;
  * @method static void set($key,$value=null,$expire=null)
  * @method static PromiseInterface get($key,$default = null)
  *
- *  * @see Cache
+ *  * @see CacheBase
  */
-class CacheFacade
+class Cache
 {
-    static private ?Cache $cache = null;
+    static private ?CacheBase $cache = null;
 
     public static function __callStatic($name, $arguments)
     {
@@ -25,10 +26,10 @@ class CacheFacade
         throw new BadMethodCallException("Method not exists in Cache class");
     }
 
-    public static function getOrCreateFacade(): Cache
+    public static function getOrCreateFacade(): CacheBase
     {
         if (!self::$cache)
-            return self::$cache = new Cache();
+            return self::$cache = new CacheBase();
         return self::$cache;
     }
 }

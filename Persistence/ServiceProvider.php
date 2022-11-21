@@ -2,11 +2,13 @@
 
 namespace Persistence;
 
+use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Application\Interfaces\Persistence\UploadRepositoryInterface;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
+use Persistence\Codes\CodeRepository;
 use Persistence\Files\UploadRepository;
 use Persistence\Shared\DataBase\Builder;
 use Persistence\Shared\DataBase\Factory;
@@ -27,7 +29,9 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             TaskRepositoryInterface::class,
             TaskRepository::class,
             UploadRepositoryInterface::class,
-            UploadRepository::class
+            UploadRepository::class,
+            ICodeRepository::class,
+            CodeRepository::class,
         ];
 
         return in_array($id, $services);
@@ -55,6 +59,9 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
 
         $this->getContainer()
             ->add(UploadRepositoryInterface::class,UploadRepository::class);
+
+        $this->getContainer()
+            ->add(ICodeRepository::class,CodeRepository::class);
     }
 
     public function boot(): void

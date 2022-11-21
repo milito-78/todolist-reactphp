@@ -2,11 +2,20 @@
 
 namespace Application;
 
+use Application\Codes\Commands\CreateCode\CreateCodeCommand;
+use Application\Codes\Commands\CreateCode\ICreateCodeCommand;
+use Application\Codes\Commands\SaveCode\ISaveCodeCommand;
+use Application\Codes\Commands\SaveCode\SaveCodeCommand;
+use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
+use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
+use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
 use Application\Users\Commands\CreateUser\CreateUserCommand;
 use Application\Users\Commands\CreateUser\ICreateUserCommand;
 use Application\Users\Commands\RegisterUser\IRegisterUserCommand;
 use Application\Users\Commands\RegisterUser\RegisterUserCommand;
+use Application\Users\Queries\ForgetPassword\ForgetPasswordUserQuery;
+use Application\Users\Queries\ForgetPassword\IForgetPasswordUserQuery;
 use Application\Users\Queries\GetUserByEmail\GetUserByEmailQuery;
 use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
 use Application\Users\Queries\GetUserByToken\GetByTokenQuery;
@@ -32,6 +41,14 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             RegisterUserCommand::class,
             ILoginUserQuery::class,
             LoginUserQuery::class,
+            IGetCodeByTokenQuery::class,
+            GetCodeByTokenQuery::class,
+            ISaveCodeCommand::class,
+            SaveCodeCommand::class,
+            ICreateCodeCommand::class,
+            CreateCodeCommand::class,
+            IForgetPasswordUserQuery::class,
+            ForgetPasswordUserQuery::class,
         ];
 
         return in_array($id, $services);
@@ -58,6 +75,22 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $this->getContainer()
         ->add(
             ILoginUserQuery::class,new LoginUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class))
+        );
+        $this->getContainer()
+        ->add(
+            ISaveCodeCommand::class,new SaveCodeCommand($this->getContainer()->get(ICodeRepository::class))
+        );
+        $this->getContainer()
+        ->add(
+            IGetCodeByTokenQuery::class,new GetCodeByTokenQuery($this->getContainer()->get(ICodeRepository::class))
+        );
+        $this->getContainer()
+        ->add(
+            ICreateCodeCommand::class,new CreateCodeCommand($this->getContainer()->get(IGetCodeByTokenQuery::class),$this->getContainer()->get(ISaveCodeCommand::class))
+        );
+        $this->getContainer()
+        ->add(
+            IForgetPasswordUserQuery::class,new ForgetPasswordUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class),$this->getContainer()->get(ICreateCodeCommand::class))
         );
     }
 

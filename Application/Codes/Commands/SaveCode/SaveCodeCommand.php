@@ -16,13 +16,13 @@ class SaveCodeCommand implements ISaveCodeCommand{
             $token = $this->generateToken($payload);
         }
 
-        $expire = $this->expiredAfter();
-        $code   = $code?? $this->generateRandomCode();
+        $expire_time_stamp  = $this->expiredAfter();
+        $expire             = $this->expireSecs();
 
         return $this->codeRepository
-            ->saveCode($token,$this->saveData($code,$expire),$expire)
+            ->saveCode($token,$this->saveData($code,$expire_time_stamp),$expire)
             ->then(function($_no_matter) use ($token,$code,$expire){
-                return new SaveCodeModel($code,$token,$expire - time());
+                return new SaveCodeModel($code,$token,$expire);
             });
     }
 
@@ -31,7 +31,7 @@ class SaveCodeCommand implements ISaveCodeCommand{
     }
 
     private function expiredAfter():int{
-       return time() + (2 * 60);
+       return time() + $this->expireSecs();
     }
 
     private function generateToken(array $payload) : string{
@@ -40,5 +40,9 @@ class SaveCodeCommand implements ISaveCodeCommand{
 
     private function saveData(string $code ,int $exp) : string{
         return $code . "-" . $exp;
+    }
+
+    private function expireSecs() : int{
+        return (2 * 60);
     }
 }

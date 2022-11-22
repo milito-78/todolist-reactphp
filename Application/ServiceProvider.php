@@ -14,6 +14,8 @@ use Application\Users\Commands\CreateUser\CreateUserCommand;
 use Application\Users\Commands\CreateUser\ICreateUserCommand;
 use Application\Users\Commands\RegisterUser\IRegisterUserCommand;
 use Application\Users\Commands\RegisterUser\RegisterUserCommand;
+use Application\Users\Queries\CheckForgetPasswordCode\CheckForgetPasswordCodeQuery;
+use Application\Users\Queries\CheckForgetPasswordCode\ICheckForgetPasswordCodeQuery;
 use Application\Users\Queries\ForgetPassword\ForgetPasswordUserQuery;
 use Application\Users\Queries\ForgetPassword\IForgetPasswordUserQuery;
 use Application\Users\Queries\GetUserByEmail\GetUserByEmailQuery;
@@ -49,6 +51,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             CreateCodeCommand::class,
             IForgetPasswordUserQuery::class,
             ForgetPasswordUserQuery::class,
+            ICheckForgetPasswordCodeQuery::class,
+            CheckForgetPasswordCodeQuery::class,
         ];
 
         return in_array($id, $services);
@@ -91,6 +95,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $this->getContainer()
         ->add(
             IForgetPasswordUserQuery::class,new ForgetPasswordUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class),$this->getContainer()->get(ICreateCodeCommand::class))
+        );
+        $this->getContainer()
+        ->add(
+            ICheckForgetPasswordCodeQuery::class,new CheckForgetPasswordCodeQuery($this->getContainer()->get(IGetCodeByTokenQuery::class),$this->getContainer()->get(IGetUserByEmailQuery::class))
         );
     }
 

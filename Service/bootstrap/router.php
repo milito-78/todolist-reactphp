@@ -6,6 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Service\Tasks\Controller\TaskIndexController;
 use Service\Tasks\Controller\TaskShowController;
 use Service\Tasks\Controller\TaskStoreController;
+use Service\Users\CheckCode\CheckCodeController;
 use Service\Users\ForgetPassword\ForgetPasswordController;
 use Service\Users\Login\LoginController;
 use Service\Users\Register\RegisterController;
@@ -19,7 +20,7 @@ Route::group("user",function () {
 
     Route::group('forgot-password',function (){
        Route::post("/send-code"         , ForgetPasswordController::class);
-//        Route::get("/check-code"         , CheckCodeController::class);
+       Route::get("/check-code"         , CheckCodeController::class);
 //        Route::post("/reset-password"    , ResetPasswordController::class);
     });
 

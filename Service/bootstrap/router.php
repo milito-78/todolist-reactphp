@@ -10,6 +10,7 @@ use Service\Users\CheckCode\CheckCodeController;
 use Service\Users\ForgetPassword\ForgetPasswordController;
 use Service\Users\Login\LoginController;
 use Service\Users\Register\RegisterController;
+use Service\Users\ResetPassword\ResetPasswordController;
 
 //Route::get('/splash'            , SplashController::class);
 
@@ -21,7 +22,7 @@ Route::group("user",function () {
     Route::group('forgot-password',function (){
        Route::post("/send-code"         , ForgetPasswordController::class);
        Route::get("/check-code"         , CheckCodeController::class);
-//        Route::post("/reset-password"    , ResetPasswordController::class);
+       Route::post("/reset-password"    , ResetPasswordController::class);
     });
 
     Route::group('/',function () {

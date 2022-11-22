@@ -25,4 +25,9 @@ class UserRepository extends Repository implements UserRepositoryInterface
         return $this->findBy("api_key" , $token);
     }
 
+    public function updateByEmail(string $email,array $data): PromiseInterface
+    {
+        return $this->_query()->fetch([ "email" => $email ], $data );
+    }
+
 }

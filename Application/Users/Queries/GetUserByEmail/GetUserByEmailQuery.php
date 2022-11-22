@@ -22,6 +22,6 @@ class GetUserByEmailQuery implements IGetUserByEmailQuery {
 			if(!is_null($result))
 				return new User($result);
             return reject(new NotFoundUserException);
-        });;
+        });
 	}
 }

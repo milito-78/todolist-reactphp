@@ -28,8 +28,9 @@ class AuthMiddleware
                         $request->addAuth($user);
                         return $next($request);
                     },function(){
-                    return JsonResponse::unAuthorized("Token is invalid");
-                });
+                        return JsonResponse::unAuthorized("Token is invalid");
+                    }
+                );
         }
         else
         {

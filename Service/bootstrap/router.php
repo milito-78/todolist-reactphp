@@ -3,6 +3,7 @@
 
 use Service\Shared\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
+use Service\Options\Splash\SplashController;
 use Service\Tasks\Controller\TaskIndexController;
 use Service\Tasks\Controller\TaskShowController;
 use Service\Tasks\Controller\TaskStoreController;
@@ -12,7 +13,7 @@ use Service\Users\Login\LoginController;
 use Service\Users\Register\RegisterController;
 use Service\Users\ResetPassword\ResetPasswordController;
 
-//Route::get('/splash'            , SplashController::class);
+Route::get('/splash'            , SplashController::class);
 
 Route::group("user",function () {
 

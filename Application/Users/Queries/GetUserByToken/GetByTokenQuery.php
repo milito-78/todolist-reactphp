@@ -5,6 +5,9 @@ namespace Application\Users\Queries\GetUserByToken;
 
 
 use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Users\Queries\GetUserByEmail\Exceptions\NotFoundUserException;
+use Domain\Users\User;
+
 use function React\Promise\reject;
 use function React\Promise\resolve;
 
@@ -24,6 +27,10 @@ class GetByTokenQuery implements GetByTokenQueryInterface
             return reject();
         }
 
-        return $this->userRepository->findByToken($token);
+        return $this->userRepository->findByToken($token)->then(function ($result){
+			if(!is_null($result))
+				return new User($result);
+            return reject();
+        });
     }
 }

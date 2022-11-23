@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Persistence\Shared\DataBase\Paginatore;
+namespace Persistence\Shared\DataBase\Paginator;
 
 
 use JetBrains\PhpStorm\ArrayShape;
 
-trait SimplePaginatoreTrait
+trait SimplePaginatorTrait
 {
     private function makePaginateCount($page,$per_page): array
     {

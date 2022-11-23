@@ -1,6 +1,6 @@
 <?php
 
-namespace Persistence\Shared\DataBase\Paginatore;
+namespace Persistence\Shared\DataBase\Paginator;
 
 
 interface PaginateInterface

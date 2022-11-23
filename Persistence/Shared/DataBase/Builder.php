@@ -6,8 +6,8 @@ namespace Persistence\Shared\DataBase;
 use Persistence\App;
 use Persistence\Shared\DataBase\Exceptions\UnknownDatabaseConnectionException;
 use Persistence\Shared\DataBase\Interfaces\DriverInterface;
-use Persistence\Shared\DataBase\Paginatore\PaginateInterface;
-use Persistence\Shared\DataBase\Paginatore\SimplePaginatoreTrait;
+use Persistence\Shared\DataBase\Paginator\PaginateInterface;
+use Persistence\Shared\DataBase\Paginator\SimplePaginatorTrait;
 use NilPortugues\Sql\QueryBuilder\Builder\GenericBuilder;
 use NilPortugues\Sql\QueryBuilder\Manipulation\Select;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
@@ -17,7 +17,7 @@ use React\Promise\PromiseInterface;
 
 class Builder implements PaginateInterface
 {
-    use SimplePaginatoreTrait;
+    use SimplePaginatorTrait;
 
     protected string $table = "users";
     protected DriverInterface $driver;

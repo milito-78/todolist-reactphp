@@ -2,6 +2,7 @@
 namespace Service\Users\Common\Resources;
 
 use Domain\Users\User;
+use Service\Shared\Resources\IArrayable;
 
 class UserResource implements IArrayable{
 

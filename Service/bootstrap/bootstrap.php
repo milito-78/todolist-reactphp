@@ -5,6 +5,7 @@ use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use Service\App;
+use React\Filesystem\Factory;
 use Service\Shared\Route\Middleware\CorsMiddleware;
 use Service\Shared\Route\Middleware\JsonResponseMiddleware;
 use Service\Shared\{
@@ -31,6 +32,10 @@ $routeCollector = new RouteCollector( new Std() ,new GroupCountBased() );
 $container = App::container();
 
 $container->add(RouteCollector::class,$routeCollector);
+
+$filesystem = Factory::create();
+
+$container->add("filesystem",$filesystem);
 
 RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 

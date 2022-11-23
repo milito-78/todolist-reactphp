@@ -5,7 +5,7 @@ namespace Service\Shared\StaticFiles;
 use Infrastructure\Files\File;
 use Infrastructure\Files\FileNotFound;
 use React\Promise\PromiseInterface;
-
+use Service\App;
 use Service\Shared\Helpers\Helpers;
 use function React\Promise\reject;
 use function React\Promise\resolve;
@@ -16,13 +16,12 @@ final class Webroot
 
     public function __construct()
     {
-        
         $this->projectRoot = __ROOT__;
     }
 
     public function file(string $path): PromiseInterface
     {
-        $filesystem = Helpers::filesystem();
+        $filesystem = App::container()->get((string)"filesystem");
 
         $file = $filesystem->file($this->projectRoot . $path);
 

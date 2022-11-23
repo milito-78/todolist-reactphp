@@ -157,7 +157,7 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         );
         $this->getContainer()
         ->add(
-            ICreateTaskForUserCommand::class,new CreateTaskForUserCommand($this->getContainer()->get(ICreateTaskCommand::class),$this->getContainer()->get(IGetTaskByIdQuery::class))
+            ICreateTaskForUserCommand::class,new CreateTaskForUserCommand($this->getContainer()->get(ICreateTaskCommand::class),$this->getContainer()->get(IGetTaskForUserByIdQuery::class))
         );
         $this->getContainer()
         ->add(

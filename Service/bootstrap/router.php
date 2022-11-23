@@ -6,6 +6,7 @@ use Service\Options\Splash\SplashController;
 use Service\Tasks\Controller\TaskIndexController;
 use Service\Tasks\Controller\TaskShowController;
 use Service\Tasks\Controller\TaskStoreController;
+use Service\Users\ChangePassword\ChangePasswordController;
 use Service\Users\CheckCode\CheckCodeController;
 use Service\Users\ForgetPassword\ForgetPasswordController;
 use Service\Users\Login\LoginController;
@@ -30,7 +31,7 @@ Route::group("user",function () {
     Route::group('/',function () {
        Route::get("profile"             , ProfileController::class);
        Route::post("logout"             , LogoutController::class);
-//        Route::patch("change-password" , ChangePasswordController::class);
+       Route::patch("change-password"   , ChangePasswordController::class);
 
         Route::group("tasks",function(){
             Route::get(""           , TaskIndexController::class);

@@ -10,6 +10,8 @@ use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
 use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
 use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Users\Commands\ChangePassword\ChangePasswordCommand;
+use Application\Users\Commands\ChangePassword\IChangePasswordCommand;
 use Application\Users\Commands\CreateUser\CreateUserCommand;
 use Application\Users\Commands\CreateUser\ICreateUserCommand;
 use Application\Users\Commands\RegisterUser\IRegisterUserCommand;
@@ -57,6 +59,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             CheckForgetPasswordCodeQuery::class,
             IResetPasswordCommand::class,
             ResetPasswordCommand::class,
+            IChangePasswordCommand::class,
+            ChangePasswordCommand::class
         ];
 
         return in_array($id, $services);
@@ -107,6 +111,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $this->getContainer()
         ->add(
             IResetPasswordCommand::class,new ResetPasswordCommand($this->getContainer()->get(ICheckForgetPasswordCodeQuery::class),$this->getContainer()->get(UserRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IChangePasswordCommand::class,new ChangePasswordCommand($this->getContainer()->get(UserRepositoryInterface::class))
         );
     }
 

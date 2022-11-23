@@ -1,5 +1,5 @@
 <?php
-namespace Application\Tasks\Queries\GetTaskById;
+namespace Application\Tasks\Queries\GetTaskForUserById;
 
 
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
@@ -9,17 +9,17 @@ use React\Promise\PromiseInterface;
 
 use function React\Promise\reject;
 
-class GetTaskByIdQuery implements IGetTaskByIdQuery
+class GetTaskForUserByIdQuery implements IGetTaskForUserByIdQuery
 {
 
     public function __construct(private TaskRepositoryInterface $taskRepository)
     {
     }
 
-    public function Execute(int $task_id) : PromiseInterface
+    public function Execute(int $user_id, int $task_id) : PromiseInterface
     {
         return $this->taskRepository
-                    ->find($task_id)
+                    ->getTaskForUser($task_id,$user_id)
                     ->then(function ($data){
                         if ($data)
                             return new Task($data);

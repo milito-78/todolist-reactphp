@@ -2,7 +2,7 @@
 namespace Service\Tasks\TaskShow;
 
 use Application\Tasks\Queries\GetTaskById\Exceptions\NotFoundTaskException;
-use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
+use Application\Tasks\Queries\GetTaskForUserById\IGetTaskForUserByIdQuery;
 use Domain\Tasks\Task;
 use Service\Shared\Exceptions\NotFoundException;
 use Service\Shared\Helpers\Helpers;
@@ -13,7 +13,7 @@ use Service\Tasks\Common\Resources\TaskResource;
 class TaskShowController extends Controller
 {
 
-    public function __construct(private IGetTaskByIdQuery $query)
+    public function __construct(private IGetTaskForUserByIdQuery $query)
     {
     }
 

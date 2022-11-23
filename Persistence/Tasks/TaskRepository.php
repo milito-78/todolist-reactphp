@@ -19,14 +19,23 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
         return "tasks";
     }
 
-    public function getByPaginateQuery(GetByPaginateModel $model): PromiseInterface
+    public function getByPaginateQuery( string $filter, int $page): PromiseInterface
     {
         $query = $this->_query()
             ->select()
             ->where();
-        $query = $this->filterByUser($query,$model->getUserId());
-        $query = $this->filterByTime($query,$model->getFilter());
-        return $query->simplePaginate($this->per_page,$model->getPage());
+        $query = $this->filterByTime($query,$filter);
+        return $query->simplePaginate($this->per_page,$page);
+    }
+
+    public function getByForUserPaginateQuery(int $user, string $filter, int $page): PromiseInterface
+    {
+        $query = $this->_query()
+            ->select()
+            ->where();
+        $query = $this->filterByUser($query,$user);
+        $query = $this->filterByTime($query,$filter);
+        return $query->simplePaginate($this->per_page,$page);
     }
 
     public function getTaskForUser($task_id,$user_id): PromiseInterface

@@ -4,7 +4,7 @@ namespace Application\Tasks\Commands\CreateTaskForUser;
 
 use Application\Tasks\Commands\CreateTask\CreateTaskModel;
 use Application\Tasks\Commands\CreateTask\ICreateTaskCommand;
-use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
+use Application\Tasks\Queries\GetTaskForUserById\IGetTaskForUserByIdQuery;
 use Domain\Tasks\Task;
 use Service\Shared\Helpers\Helpers;
 
@@ -13,7 +13,7 @@ class CreateTaskForUserCommand implements ICreateTaskForUserCommand
 
     public function __construct(
         private ICreateTaskCommand $command,
-        private IGetTaskByIdQuery $query
+        private IGetTaskForUserByIdQuery $query
     )
     {
     }

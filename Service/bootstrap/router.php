@@ -4,6 +4,7 @@ use Service\Shared\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
 use Service\Options\Splash\SplashController;
 use Service\Tasks\CreateTask\TaskStoreController;
+use Service\Tasks\DeleteTask\TaskDeleteController;
 use Service\Tasks\TaskShow\TaskShowController;
 use Service\Tasks\TasksList\TaskIndexController;
 use Service\Users\ChangePassword\ChangePasswordController;
@@ -38,7 +39,7 @@ Route::group("user",function () {
          Route::post(""                , TaskStoreController::class);
          Route::get("/{task}"          , TaskShowController::class);
 //            Route::patch("/{task}"  , TaskUpdateController::class);
-//            Route::delete("/{task}" , TaskDeleteController::class);
+         Route::delete("/{task}"       , TaskDeleteController::class);
       });
    },["auth"]);
 });

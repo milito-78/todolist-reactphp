@@ -15,8 +15,14 @@ use Application\Tasks\Commands\CreateTask\CreateTaskCommand;
 use Application\Tasks\Commands\CreateTask\ICreateTaskCommand;
 use Application\Tasks\Commands\CreateTaskForUser\CreateTaskForUserCommand;
 use Application\Tasks\Commands\CreateTaskForUser\ICreateTaskForUserCommand;
+use Application\Tasks\Commands\DeleteTaskForUser\DeleteTaskForUserCommand;
+use Application\Tasks\Commands\DeleteTaskForUser\IDeleteTaskForUserCommand;
 use Application\Tasks\Queries\GetTaskById\GetTaskByIdQuery;
 use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
+use Application\Tasks\Queries\GetTaskForUserById\GetTaskForUserByIdQuery;
+use Application\Tasks\Queries\GetTaskForUserById\IGetTaskForUserByIdQuery;
+use Application\Tasks\Queries\GetTasksForUserWithPaginate\GetTasksForUserWithPaginateQuery;
+use Application\Tasks\Queries\GetTasksForUserWithPaginate\IGetTasksForUserWithPaginateQuery;
 use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateQuery;
 use Application\Tasks\Queries\GetTasksWithPaginate\IGetByPaginateQuery;
 use Application\Users\Commands\ChangePassword\ChangePasswordCommand;
@@ -135,7 +141,15 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         );
         $this->getContainer()
         ->add(
+            IGetTasksForUserWithPaginateQuery::class,new GetTasksForUserWithPaginateQuery($this->getContainer()->get(TaskRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
             IGetTaskByIdQuery::class,new GetTaskByIdQuery($this->getContainer()->get(TaskRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IGetTaskForUserByIdQuery::class,new GetTaskForUserByIdQuery($this->getContainer()->get(TaskRepositoryInterface::class))
         );
         $this->getContainer()
         ->add(
@@ -145,18 +159,28 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             ICreateTaskForUserCommand::class,new CreateTaskForUserCommand($this->getContainer()->get(ICreateTaskCommand::class),$this->getContainer()->get(IGetTaskByIdQuery::class))
         );
+        $this->getContainer()
+        ->add(
+            IDeleteTaskForUserCommand::class,new DeleteTaskForUserCommand($this->getContainer()->get(IGetTaskForUserByIdQuery::class),$this->getContainer()->get(TaskRepositoryInterface::class))
+        );
     }
 
     private function tasksProvides():array{
         return [
+            IGetTasksForUserWithPaginateQuery::class,
+            GetTasksForUserWithPaginateQuery::class,
             IGetByPaginateQuery::class,
             GetByPaginateQuery::class,
+            IGetTaskForUserByIdQuery::class,
+            GetTaskForUserByIdQuery::class,
             IGetTaskByIdQuery::class,
             GetTaskByIdQuery::class,
             ICreateTaskCommand::class,
             CreateTaskCommand::class,
             ICreateTaskForUserCommand::class,
             CreateTaskForUserCommand::class,
+            IDeleteTaskForUserCommand::class,
+            DeleteTaskForUserCommand::class,
         ];
     }
     

@@ -1,20 +1,21 @@
 <?php
-namespace Application\Tasks\Queries\GetTasksWithPaginate;
+namespace Application\Tasks\Queries\GetTasksForUserWithPaginate;
 
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Domain\Tasks\Task;
 
-class GetByPaginateQuery implements IGetByPaginateQuery
+class GetTasksForUserWithPaginateQuery implements IGetTasksForUserWithPaginateQuery
 {
 
     public function __construct(private TaskRepositoryInterface $taskRepository)
     {
     }
 
-    public function Execute(GetByPaginateModel $model)
+    public function Execute(GetTasksForUserWithPaginateModel $model)
     {
         return $this->taskRepository
-                    ->getByPaginateQuery(
+                    ->getByForUserPaginateQuery(
+                        $model->getUserId(),
                         $model->getFilter(),
                         $model->getPage()
                     )

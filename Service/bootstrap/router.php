@@ -22,25 +22,25 @@ Route::group("user",function () {
    Route::post("register"      , RegisterController::class);
    Route::post("login"         , LoginController::class);
 
-    Route::group('forgot-password',function (){
-       Route::post("/send-code"         , ForgetPasswordController::class);
-       Route::get("/check-code"         , CheckCodeController::class);
-       Route::post("/reset-password"    , ResetPasswordController::class);
-    });
+   Route::group('forgot-password',function (){
+      Route::post("/send-code"         , ForgetPasswordController::class);
+      Route::get("/check-code"         , CheckCodeController::class);
+      Route::post("/reset-password"    , ResetPasswordController::class);
+   });
 
-    Route::group('/',function () {
-       Route::get("profile"             , ProfileController::class);
-       Route::post("logout"             , LogoutController::class);
-       Route::patch("change-password"   , ChangePasswordController::class);
+   Route::group('/',function () {
+      Route::get("profile"             , ProfileController::class);
+      Route::post("logout"             , LogoutController::class);
+      Route::patch("change-password"   , ChangePasswordController::class);
 
-        Route::group("tasks",function(){
-            Route::get(""           , TaskIndexController::class);
-            Route::post(""          , TaskStoreController::class);
-            Route::get("/{task}"    , TaskShowController::class);
+      Route::group("tasks",function(){
+         Route::get(""                 , TaskIndexController::class);
+         Route::post(""                , TaskStoreController::class);
+         Route::get("/{task}"          , TaskShowController::class);
 //            Route::patch("/{task}"  , TaskUpdateController::class);
 //            Route::delete("/{task}" , TaskDeleteController::class);
-        });
-    },["auth"]);
+      });
+   },["auth"]);
 });
 
 //Route::post("uploader" , ImageUploadController::class);

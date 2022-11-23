@@ -35,11 +35,7 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
             ->equals("id",$task_id);
         $query = $this->filterByUser($query,$user_id);
         return $query->end()
-            ->first()->then(function ($data){
-                if ($data)
-                    return new Task($data);
-                return reject();
-            });
+            ->first();
     }
 
     private function filterByUser(Builder $query,int $user_id) :Builder

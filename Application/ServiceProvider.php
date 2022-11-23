@@ -11,6 +11,8 @@ use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
 use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Tasks\Queries\GetTaskById\GetTaskByIdQuery;
+use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
 use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateQuery;
 use Application\Tasks\Queries\GetTasksWithPaginate\IGetByPaginateQuery;
 use Application\Users\Commands\ChangePassword\ChangePasswordCommand;
@@ -127,12 +129,18 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             IGetByPaginateQuery::class,new GetByPaginateQuery($this->getContainer()->get(TaskRepositoryInterface::class))
         );
+        $this->getContainer()
+        ->add(
+            IGetTaskByIdQuery::class,new GetTaskByIdQuery($this->getContainer()->get(TaskRepositoryInterface::class))
+        );
     }
 
     private function tasksProvides():array{
         return [
             IGetByPaginateQuery::class,
-            GetByPaginateQuery::class
+            GetByPaginateQuery::class,
+            IGetTaskByIdQuery::class,
+            GetTaskByIdQuery::class,
         ];
     }
     

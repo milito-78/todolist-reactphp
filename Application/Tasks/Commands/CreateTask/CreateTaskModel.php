@@ -1,19 +1,17 @@
 <?php
+namespace Application\Tasks\Commands\CreateTask;
 
+class CreateTaskModel{
 
-namespace Application\Tasks\Commands\CreateTaskForUser;
-
-
-class CreateTaskForUserModel
-{
     public function __construct(
         public int $user_id,
         public string $title,
         public string $description,
         public ?string $deadline,
-        public ?string $image 
+        public ?string $image
     )
     {
+       
     }
 
     public function toArray()

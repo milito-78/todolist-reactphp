@@ -1,22 +1,37 @@
 <?php
-
-
 namespace Application\Tasks\Commands\CreateTaskForUser;
 
 
-use Application\Interfaces\Persistence\TaskRepositoryInterface;
+use Application\Tasks\Commands\CreateTask\CreateTaskModel;
+use Application\Tasks\Commands\CreateTask\ICreateTaskCommand;
+use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
+use Domain\Tasks\Task;
+use Service\Shared\Helpers\Helpers;
 
-class CreateTaskForUserCommand implements CreateTaskForUserCommandInterface
+class CreateTaskForUserCommand implements ICreateTaskForUserCommand
 {
-    private TaskRepositoryInterface $taskRepository;
 
-    public function __construct(TaskRepositoryInterface $taskRepository)
+    public function __construct(
+        private ICreateTaskCommand $command,
+        private IGetTaskByIdQuery $query
+    )
     {
-        $this->taskRepository = $taskRepository;
     }
 
     public function Execute(CreateTaskForUserModel $model)
     {
+        $createModel = new CreateTaskModel(
+            $model->user_id,
+            $model->title,
+            $model->description,
+            $model->deadline,
+            $model->image
+        );
 
+        return $this->command
+                    ->Execute($createModel)
+                    ->then(function(Task $task){
+                        return $this->query->Execute($task->user_id,$task->id);
+                    });
     }
 }

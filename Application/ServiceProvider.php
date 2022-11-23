@@ -11,6 +11,10 @@ use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
 use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Tasks\Commands\CreateTask\CreateTaskCommand;
+use Application\Tasks\Commands\CreateTask\ICreateTaskCommand;
+use Application\Tasks\Commands\CreateTaskForUser\CreateTaskForUserCommand;
+use Application\Tasks\Commands\CreateTaskForUser\ICreateTaskForUserCommand;
 use Application\Tasks\Queries\GetTaskById\GetTaskByIdQuery;
 use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
 use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateQuery;
@@ -133,6 +137,14 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             IGetTaskByIdQuery::class,new GetTaskByIdQuery($this->getContainer()->get(TaskRepositoryInterface::class))
         );
+        $this->getContainer()
+        ->add(
+            ICreateTaskCommand::class,new CreateTaskCommand($this->getContainer()->get(TaskRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            ICreateTaskForUserCommand::class,new CreateTaskForUserCommand($this->getContainer()->get(ICreateTaskCommand::class),$this->getContainer()->get(IGetTaskByIdQuery::class))
+        );
     }
 
     private function tasksProvides():array{
@@ -141,6 +153,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             GetByPaginateQuery::class,
             IGetTaskByIdQuery::class,
             GetTaskByIdQuery::class,
+            ICreateTaskCommand::class,
+            CreateTaskCommand::class,
+            ICreateTaskForUserCommand::class,
+            CreateTaskForUserCommand::class,
         ];
     }
     

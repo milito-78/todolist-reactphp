@@ -4,7 +4,7 @@
 namespace Application\Tasks\Commands\CreateTaskForUser;
 
 
-interface CreateTaskForUserCommandInterface
+interface ICreateTaskForUserCommand
 {
     public function Execute(CreateTaskForUserModel $model);
 }

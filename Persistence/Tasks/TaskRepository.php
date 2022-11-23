@@ -26,10 +26,7 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
             ->where();
         $query = $this->filterByUser($query,$model->getUserId());
         $query = $this->filterByTime($query,$model->getFilter());
-        return $query->simplePaginate($this->per_page,$model->getPage())
-            ->then(function($tasks){
-                return $this->mapTasks($tasks);
-            });
+        return $query->simplePaginate($this->per_page,$model->getPage());
     }
 
     public function getTaskForUser($task_id,$user_id): PromiseInterface
@@ -69,12 +66,4 @@ class TaskRepository extends Repository implements TaskRepositoryInterface
         return $query->orderBy("deadline");
     }
 
-    private function mapTasks(array $tasks): array
-    {
-        $tasks["data"] = array_map(function ($task){
-            return new Task($task);
-        },$tasks["data"]);
-
-        return $tasks;
-    }
 }

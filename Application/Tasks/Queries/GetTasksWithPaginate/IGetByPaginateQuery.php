@@ -1,6 +1,6 @@
 <?php
 namespace Application\Tasks\Queries\GetTasksWithPaginate;
 
-interface GetByPaginateQueryInterface {
+interface IGetByPaginateQuery {
     public function Execute(GetByPaginateModel $model);
 }

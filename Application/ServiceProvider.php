@@ -9,7 +9,10 @@ use Application\Codes\Commands\SaveCode\SaveCodeCommand;
 use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
 use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
 use Application\Interfaces\Persistence\ICodeRepository;
+use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
+use Application\Tasks\Queries\GetTasksWithPaginate\GetByPaginateQuery;
+use Application\Tasks\Queries\GetTasksWithPaginate\IGetByPaginateQuery;
 use Application\Users\Commands\ChangePassword\ChangePasswordCommand;
 use Application\Users\Commands\ChangePassword\IChangePasswordCommand;
 use Application\Users\Commands\CreateUser\CreateUserCommand;
@@ -120,11 +123,17 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
     }
     
     private function tasks(){
-
+        $this->getContainer()
+        ->add(
+            IGetByPaginateQuery::class,new GetByPaginateQuery($this->getContainer()->get(TaskRepositoryInterface::class))
+        );
     }
 
     private function tasksProvides():array{
-        return [];
+        return [
+            IGetByPaginateQuery::class,
+            GetByPaginateQuery::class
+        ];
     }
     
     private function codes(){

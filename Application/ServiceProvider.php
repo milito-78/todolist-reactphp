@@ -36,38 +36,28 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
     
     public function provides(string $id): bool
     {
-        $services = [
-            GetByTokenQueryInterface::class,
-            GetByTokenQuery::class,
-            IGetUserByEmailQuery::class,
-            GetUserByEmailQuery::class,
-            ICreateUserCommand::class,
-            CreateUserCommand::class,
-            IRegisterUserCommand::class,
-            RegisterUserCommand::class,
-            ILoginUserQuery::class,
-            LoginUserQuery::class,
-            IGetCodeByTokenQuery::class,
-            GetCodeByTokenQuery::class,
-            ISaveCodeCommand::class,
-            SaveCodeCommand::class,
-            ICreateCodeCommand::class,
-            CreateCodeCommand::class,
-            IForgetPasswordUserCommand::class,
-            ForgetPasswordUserCommand::class,
-            ICheckForgetPasswordCodeQuery::class,
-            CheckForgetPasswordCodeQuery::class,
-            IResetPasswordCommand::class,
-            ResetPasswordCommand::class,
-            IChangePasswordCommand::class,
-            ChangePasswordCommand::class
-        ];
+        $services = array_merge(
+            $this->usersProvides(),
+            $this->codesProvides(),
+            $this->tasksProvides()
+        );
 
         return in_array($id, $services);
     }
 
     public function register(): void
     {
+        $this->codes();
+        $this->users();
+        $this->tasks();
+    }
+
+    public function boot(): void
+    {
+        
+    }
+
+    private function users(){
         $this->getContainer()
         ->add(
             GetByTokenQueryInterface::class,new GetByTokenQuery($this->getContainer()->get(UserRepositoryInterface::class))
@@ -88,18 +78,7 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             ILoginUserQuery::class,new LoginUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class))
         );
-        $this->getContainer()
-        ->add(
-            ISaveCodeCommand::class,new SaveCodeCommand($this->getContainer()->get(ICodeRepository::class))
-        );
-        $this->getContainer()
-        ->add(
-            IGetCodeByTokenQuery::class,new GetCodeByTokenQuery($this->getContainer()->get(ICodeRepository::class))
-        );
-        $this->getContainer()
-        ->add(
-            ICreateCodeCommand::class,new CreateCodeCommand($this->getContainer()->get(IGetCodeByTokenQuery::class),$this->getContainer()->get(ISaveCodeCommand::class))
-        );
+
         $this->getContainer()
         ->add(
             IForgetPasswordUserCommand::class,new ForgetPasswordUserCommand($this->getContainer()->get(IGetUserByEmailQuery::class),$this->getContainer()->get(ICreateCodeCommand::class))
@@ -117,10 +96,61 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             IChangePasswordCommand::class,new ChangePasswordCommand($this->getContainer()->get(UserRepositoryInterface::class))
         );
     }
+    private function usersProvides():array{
+        return [
+            GetByTokenQueryInterface::class,
+            GetByTokenQuery::class,
+            IGetUserByEmailQuery::class,
+            GetUserByEmailQuery::class,
+            ICreateUserCommand::class,
+            CreateUserCommand::class,
+            IRegisterUserCommand::class,
+            RegisterUserCommand::class,
+            ILoginUserQuery::class,
+            LoginUserQuery::class,
+            IForgetPasswordUserCommand::class,
+            ForgetPasswordUserCommand::class,
+            ICheckForgetPasswordCodeQuery::class,
+            CheckForgetPasswordCodeQuery::class,
+            IResetPasswordCommand::class,
+            ResetPasswordCommand::class,
+            IChangePasswordCommand::class,
+            ChangePasswordCommand::class
+        ];
+    }
+    
+    private function tasks(){
 
-    public function boot(): void
-    {
-        
+    }
+
+    private function tasksProvides():array{
+        return [];
+    }
+    
+    private function codes(){
+        $this->getContainer()
+        ->add(
+            ISaveCodeCommand::class,new SaveCodeCommand($this->getContainer()->get(ICodeRepository::class))
+        );
+        $this->getContainer()
+        ->add(
+            IGetCodeByTokenQuery::class,new GetCodeByTokenQuery($this->getContainer()->get(ICodeRepository::class))
+        );
+        $this->getContainer()
+        ->add(
+            ICreateCodeCommand::class,new CreateCodeCommand($this->getContainer()->get(IGetCodeByTokenQuery::class),$this->getContainer()->get(ISaveCodeCommand::class))
+        );
+    }
+
+    private function codesProvides():array{
+        return [
+            IGetCodeByTokenQuery::class,
+            GetCodeByTokenQuery::class,
+            ISaveCodeCommand::class,
+            SaveCodeCommand::class,
+            ICreateCodeCommand::class,
+            CreateCodeCommand::class,
+        ];
     }
 
 }

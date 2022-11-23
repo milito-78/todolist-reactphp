@@ -1,8 +1,8 @@
 <?php
-namespace Application\Users\Queries\ForgetPassword;
+namespace Application\Users\Commands\ForgetPassword;
 
 use React\Promise\PromiseInterface;
 
-interface IForgetPasswordUserQuery {
+interface IForgetPasswordUserCommand {
     public function Execute(string $email): PromiseInterface ;
 }

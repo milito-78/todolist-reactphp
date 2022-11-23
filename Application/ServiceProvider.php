@@ -14,14 +14,14 @@ use Application\Users\Commands\ChangePassword\ChangePasswordCommand;
 use Application\Users\Commands\ChangePassword\IChangePasswordCommand;
 use Application\Users\Commands\CreateUser\CreateUserCommand;
 use Application\Users\Commands\CreateUser\ICreateUserCommand;
+use Application\Users\Commands\ForgetPassword\ForgetPasswordUserCommand;
+use Application\Users\Commands\ForgetPassword\IForgetPasswordUserCommand;
 use Application\Users\Commands\RegisterUser\IRegisterUserCommand;
 use Application\Users\Commands\RegisterUser\RegisterUserCommand;
 use Application\Users\Commands\ResetPassword\IResetPasswordCommand;
 use Application\Users\Commands\ResetPassword\ResetPasswordCommand;
 use Application\Users\Queries\CheckForgetPasswordCode\CheckForgetPasswordCodeQuery;
 use Application\Users\Queries\CheckForgetPasswordCode\ICheckForgetPasswordCodeQuery;
-use Application\Users\Queries\ForgetPassword\ForgetPasswordUserQuery;
-use Application\Users\Queries\ForgetPassword\IForgetPasswordUserQuery;
 use Application\Users\Queries\GetUserByEmail\GetUserByEmailQuery;
 use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
 use Application\Users\Queries\GetUserByToken\GetByTokenQuery;
@@ -53,8 +53,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             SaveCodeCommand::class,
             ICreateCodeCommand::class,
             CreateCodeCommand::class,
-            IForgetPasswordUserQuery::class,
-            ForgetPasswordUserQuery::class,
+            IForgetPasswordUserCommand::class,
+            ForgetPasswordUserCommand::class,
             ICheckForgetPasswordCodeQuery::class,
             CheckForgetPasswordCodeQuery::class,
             IResetPasswordCommand::class,
@@ -102,7 +102,7 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         );
         $this->getContainer()
         ->add(
-            IForgetPasswordUserQuery::class,new ForgetPasswordUserQuery($this->getContainer()->get(IGetUserByEmailQuery::class),$this->getContainer()->get(ICreateCodeCommand::class))
+            IForgetPasswordUserCommand::class,new ForgetPasswordUserCommand($this->getContainer()->get(IGetUserByEmailQuery::class),$this->getContainer()->get(ICreateCodeCommand::class))
         );
         $this->getContainer()
         ->add(

@@ -1,5 +1,5 @@
 <?php
-namespace Application\Users\Queries\ForgetPassword;
+namespace Application\Users\Commands\ForgetPassword;
 
 use Application\Codes\Commands\CreateCode\ICreateCodeCommand;
 use Application\Codes\Commands\SaveCode\SaveCodeModel;
@@ -7,7 +7,7 @@ use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
 use Domain\Users\User;
 use React\Promise\PromiseInterface;
 
-class ForgetPasswordUserQuery  implements IForgetPasswordUserQuery {
+class ForgetPasswordUserCommand  implements IForgetPasswordUserCommand {
     /**
      */
     public function __construct(

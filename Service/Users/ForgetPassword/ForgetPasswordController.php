@@ -3,7 +3,7 @@ namespace Service\Users\ForgetPassword;
 
 use Application\Codes\Commands\CreateCode\SendBeforeModel;
 use Application\Codes\Commands\SaveCode\SaveCodeModel;
-use Application\Users\Queries\ForgetPassword\IForgetPasswordUserQuery;
+use Application\Users\Commands\ForgetPassword\IForgetPasswordUserCommand;
 use Application\Users\Queries\GetUserByEmail\Exceptions\NotFoundUserException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
@@ -12,7 +12,7 @@ use Service\Shared\Request\Request;
 class ForgetPasswordController extends Controller
 {
 
-    public function __construct(private IForgetPasswordUserQuery $query)
+    public function __construct(private IForgetPasswordUserCommand $query)
     {
     }
     

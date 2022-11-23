@@ -16,6 +16,10 @@ class SaveCodeCommand implements ISaveCodeCommand{
             $token = $this->generateToken($payload);
         }
 
+        if(is_null($code)){
+            $code = $this->generateRandomCode();
+        }
+
         $expire_time_stamp  = $this->expiredAfter();
         $expire             = $this->expireSecs();
 

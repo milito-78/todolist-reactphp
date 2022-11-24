@@ -7,6 +7,7 @@ use Service\Tasks\CreateTask\TaskStoreController;
 use Service\Tasks\DeleteTask\TaskDeleteController;
 use Service\Tasks\TaskShow\TaskShowController;
 use Service\Tasks\TasksList\TaskIndexController;
+use Service\Tasks\UpdateTask\TaskUpdateController;
 use Service\Users\ChangePassword\ChangePasswordController;
 use Service\Users\CheckCode\CheckCodeController;
 use Service\Users\ForgetPassword\ForgetPasswordController;
@@ -37,8 +38,8 @@ Route::group("user",function () {
       Route::group("tasks",function(){
          Route::get(""                 , TaskIndexController::class);
          Route::post(""                , TaskStoreController::class);
+         Route::patch("/{task}"        , TaskUpdateController::class);
          Route::get("/{task}"          , TaskShowController::class);
-//            Route::patch("/{task}"  , TaskUpdateController::class);
          Route::delete("/{task}"       , TaskDeleteController::class);
       });
    },["auth"]);

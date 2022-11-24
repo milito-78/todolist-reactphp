@@ -17,6 +17,8 @@ use Application\Tasks\Commands\CreateTaskForUser\CreateTaskForUserCommand;
 use Application\Tasks\Commands\CreateTaskForUser\ICreateTaskForUserCommand;
 use Application\Tasks\Commands\DeleteTaskForUser\DeleteTaskForUserCommand;
 use Application\Tasks\Commands\DeleteTaskForUser\IDeleteTaskForUserCommand;
+use Application\Tasks\Commands\UpdateUserTask\IUpdateUserTaskCommand;
+use Application\Tasks\Commands\UpdateUserTask\UpdateUserTaskCommand;
 use Application\Tasks\Queries\GetTaskById\GetTaskByIdQuery;
 use Application\Tasks\Queries\GetTaskById\IGetTaskByIdQuery;
 use Application\Tasks\Queries\GetTaskForUserById\GetTaskForUserByIdQuery;
@@ -163,6 +165,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             IDeleteTaskForUserCommand::class,new DeleteTaskForUserCommand($this->getContainer()->get(IGetTaskForUserByIdQuery::class),$this->getContainer()->get(TaskRepositoryInterface::class))
         );
+        $this->getContainer()
+        ->add(
+            IUpdateUserTaskCommand::class,new UpdateUserTaskCommand($this->getContainer()->get(IGetTaskForUserByIdQuery::class),$this->getContainer()->get(TaskRepositoryInterface::class))
+        );
     }
 
     private function tasksProvides():array{
@@ -181,6 +187,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             CreateTaskForUserCommand::class,
             IDeleteTaskForUserCommand::class,
             DeleteTaskForUserCommand::class,
+            IUpdateUserTaskCommand::class,
+            UpdateUserTaskCommand::class,
         ];
     }
     

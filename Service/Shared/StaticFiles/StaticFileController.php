@@ -5,7 +5,7 @@ namespace Service\Shared\StaticFiles;
 
 
 use Infrastructure\Files\File;
-use Infrastructure\Files\FileNotFound;
+use Infrastructure\Files\Exceptions\FileNotFound;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Response\JsonResponse;

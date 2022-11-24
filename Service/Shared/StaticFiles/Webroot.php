@@ -3,7 +3,7 @@
 namespace Service\Shared\StaticFiles;
 
 use Infrastructure\Files\File;
-use Infrastructure\Files\FileNotFound;
+use Infrastructure\Files\Exceptions\FileNotFound;
 use React\Promise\PromiseInterface;
 use Service\App;
 use Service\Shared\Helpers\Helpers;

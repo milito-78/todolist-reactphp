@@ -1,11 +1,10 @@
 <?php
 
-namespace Infrastructure\Files;
+namespace Infrastructure\Files\Exceptions;
 
 
 use RuntimeException;
 
 final class FileNotFound extends RuntimeException
 {
-
 }

@@ -2,6 +2,7 @@
 namespace Infrastructure\Files;
 
 use Application\Interfaces\Infrastructure\Files\IFileSystem;
+use Infrastructure\Files\Entities\File;
 use Psr\Http\Message\UploadedFileInterface;
 use React\Promise\ExtendedPromiseInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -39,7 +40,7 @@ class FileSystem implements IFileSystem{
 
         $fullPath =  $uploadPath . $name;
 
-        $content = (string)$this->file->getStream();
+        $content = (string)$file->getStream();
         file_put_contents($fullPath,$content);
 
         return resolve($name);    
@@ -74,9 +75,7 @@ class FileSystem implements IFileSystem{
      * @return ExtendedPromiseInterface
      */
     public function delete(string $paths): ExtendedPromiseInterface{
-        $uploadPath = $this->projectRoot . '/' . $paths;
-
-        $fullPath =  $uploadPath . $this->file;
+        $fullPath = $this->projectRoot . '/' . $paths;
 
         if(file_exists($fullPath))
         {

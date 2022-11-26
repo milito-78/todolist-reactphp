@@ -5,7 +5,6 @@ use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use Service\App;
-use React\Filesystem\Factory;
 use Service\Shared\Route\Middleware\CorsMiddleware;
 use Service\Shared\Route\Middleware\JsonResponseMiddleware;
 use Service\Shared\{
@@ -17,7 +16,6 @@ use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
 use React\Http\HttpServer;
-use React\Socket\SocketServer;
 
 
 //////////////////////
@@ -33,9 +31,6 @@ $container = App::container();
 
 $container->add(RouteCollector::class,$routeCollector);
 
-$filesystem = Factory::create();
-
-$container->add("filesystem",$filesystem);
 
 RouteFacade::get('/storage/public/{file}',StaticFileController::class);
 
@@ -53,11 +48,7 @@ $server =  new HttpServer(
     new Router($routeCollector,new DependencyResolver($container)),
 );
 
-$socket = new SocketServer(
-    App::config("config.socket_server") . ":" . App::config("config.socket_port"),
-    [],
-    $loop
-);
+$socket = App::container()->get("SocketSystem");
 
 $server->listen($socket);
 
@@ -66,7 +57,5 @@ $server->on("error", function ($exception){
 });
 
 $container->add("HttpServer" , $server);
-
-$container->add("HttpSocket" , $socket);
 
 return $loop;

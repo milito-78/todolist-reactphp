@@ -21,6 +21,4 @@ class ImageUploadController extends Controller
         $input = new UploadInput($request);
         return $this->uploadImageUseCase->handle($input);
     }
-
-
 }

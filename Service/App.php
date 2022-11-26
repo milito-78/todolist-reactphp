@@ -60,7 +60,7 @@ class App {
         if (self::$socket)
             return self::$socket;
 
-        self::$socket = self::container()->get("HttpSocket");
+        self::$socket = self::container()->get("SocketSystem");
         if (!self::$socket)
             throw new \Exception("Socket not ready for now. Please init before use it.");
         return self::$socket;

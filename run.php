@@ -3,6 +3,8 @@
 require "vendor/autoload.php";
 
 use Dotenv\Dotenv;
+use Infrastructure\Socket\SocketFactory;
+use React\Filesystem\Factory;
 
 
 const __ROOT__ = __DIR__;
@@ -16,11 +18,20 @@ if (!function_exists("envGet"))
     }
 }
 
+$loop           = React\EventLoop\Loop::get();
 
 $env = Dotenv::createImmutable(__DIR__,".env");
 $env->load();
 
 $container = new League\Container\Container();
+
+$filesystem = Factory::create();
+
+$container->add("filesystem",$filesystem);
+
+$socket = SocketFactory::create($loop);
+
+$container->add("SocketSystem" , $socket);
 
 
 $application = new \Application\App();

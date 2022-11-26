@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Files;
+namespace Infrastructure\Files\Entities;
 
 final class File
 {

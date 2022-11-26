@@ -30,7 +30,7 @@ interface IFileSystem{
      *
      * @param string $path
      * @param string $target
-     * @return void
+     * @return ExtendedPromiseInterface
      */
     public function copy(string $path, string $target):ExtendedPromiseInterface;
 

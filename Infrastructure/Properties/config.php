@@ -15,5 +15,10 @@ return [
 
     "filesystem" => [
         "driver" => envGet("FILESYSTEM_DRIVER","local"),
+    ],
+
+    "socket" => [
+        "socket_server" => envGet("SOCKET_SERVER","127.0.0.1"),
+        "socket_port"   => envGet("SOCKET_PORT","3000"),
     ]
 ];

@@ -11,5 +11,9 @@ return [
             "password"  => envGet("REDIS_PASSWORD"),
             "cluster"   => 0
         ]
+    ],
+
+    "filesystem" => [
+        "driver" => envGet("FILESYSTEM_DRIVER","local"),
     ]
 ];

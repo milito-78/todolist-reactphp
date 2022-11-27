@@ -5,6 +5,6 @@ namespace Infrastructure\Files\Exceptions;
 
 use RuntimeException;
 
-final class FileNotFound extends RuntimeException
+final class FileNotFoundException extends RuntimeException
 {
 }

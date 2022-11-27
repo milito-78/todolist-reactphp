@@ -8,6 +8,8 @@ use Application\Codes\Commands\SaveCode\ISaveCodeCommand;
 use Application\Codes\Commands\SaveCode\SaveCodeCommand;
 use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
 use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
+use Application\Files\Queries\ShowFile\IShowFileQuery;
+use Application\Files\Queries\ShowFile\ShowFileQuery;
 use Application\Interfaces\Persistence\ICodeRepository;
 use Application\Interfaces\Persistence\TaskRepositoryInterface;
 use Application\Interfaces\Persistence\UserRepositoryInterface;
@@ -56,7 +58,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $services = array_merge(
             $this->usersProvides(),
             $this->codesProvides(),
-            $this->tasksProvides()
+            $this->tasksProvides(),
+            $this->filesProvides(),
         );
 
         return in_array($id, $services);
@@ -67,6 +70,7 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         $this->codes();
         $this->users();
         $this->tasks();
+        $this->files();
     }
 
     public function boot(): void
@@ -215,6 +219,20 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             SaveCodeCommand::class,
             ICreateCodeCommand::class,
             CreateCodeCommand::class,
+        ];
+    }
+
+    private function files(){
+        $this->getContainer()
+        ->add(
+            IShowFileQuery::class,new ShowFileQuery()
+        );
+    }
+
+    private function filesProvides():array{
+        return [
+            IShowFileQuery::class,
+            ShowFileQuery::class,
         ];
     }
 

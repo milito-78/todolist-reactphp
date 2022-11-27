@@ -3,10 +3,8 @@
 
 namespace Service\Shared\StaticFiles;
 
-
+use Application\Files\Queries\ShowFile\IShowFileQuery;
 use Infrastructure\Files\Entities\File;
-use Infrastructure\Files\Exceptions\FileNotFound;
-use Infrastructure\Files\Storage;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Response\JsonResponse;
@@ -15,16 +13,17 @@ use React\Promise\PromiseInterface;
 
 class StaticFileController extends Controller
 {
+    public function __construct(private IShowFileQuery $query)
+    {
+    }
 
     public function __invoke(ServerRequestInterface $request,$file): PromiseInterface
     {
-        return Storage::get($request->getUri()->getPath())
+        return $this->query->Execute($request->getUri()->getPath())
             ->then(
-                function (File $file) {
-                    return Helpers::response($file->contents,200, ['Content-Type' => $file->mimeType]);
-                }
-            )->otherwise(
-                function (FileNotFound $exception) {
+                function (?File $file) {
+                    if($file)
+                        return Helpers::response($file->contents,200, ['Content-Type' => $file->mimeType]);
                     return JsonResponse::notFound("Route not found!");
                 }
             )->otherwise(

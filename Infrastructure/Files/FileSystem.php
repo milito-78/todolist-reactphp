@@ -3,9 +3,9 @@ namespace Infrastructure\Files;
 
 use Application\Interfaces\Infrastructure\Files\IFileSystem;
 use Infrastructure\Files\Entities\File;
+use Infrastructure\Files\Exceptions\FileNotFoundException;
 use Psr\Http\Message\UploadedFileInterface;
 use React\Promise\ExtendedPromiseInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use React\Filesystem\AdapterInterface;
 
 use function React\Promise\reject;

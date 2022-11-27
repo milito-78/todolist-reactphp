@@ -2,6 +2,7 @@
 
 use Service\Shared\Route\RouteFacade as Route;
 use Psr\Http\Message\RequestInterface;
+use Service\Files\UploadFile\UploadFileController;
 use Service\Options\Splash\SplashController;
 use Service\Tasks\CreateTask\TaskStoreController;
 use Service\Tasks\DeleteTask\TaskDeleteController;
@@ -45,4 +46,4 @@ Route::group("user",function () {
    },["auth"]);
 });
 
-//Route::post("uploader" , ImageUploadController::class);
+Route::post("uploader" , UploadFileController::class);

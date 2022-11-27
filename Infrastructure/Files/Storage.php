@@ -4,7 +4,7 @@ namespace Infrastructure\Files;
 use Application\Interfaces\Infrastructure\Files\IFileSystem;
 use BadMethodCallException;
 use React\Promise\ExtendedPromiseInterface;
-
+use Psr\Http\Message\UploadedFileInterface;
 /**
  * Storage class
  * @method static IFileSystem driver(?string $driver)

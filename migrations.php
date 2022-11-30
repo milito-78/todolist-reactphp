@@ -7,6 +7,6 @@ return [
 
 
     'migrations_paths' => [
-        'App\Migrations' => __DIR__ . "/migrations",
+        'Persistence\Migrations' => __DIR__ . "/Persistence/migrations",
     ],
 ];

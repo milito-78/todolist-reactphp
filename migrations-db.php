@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dbname' => 'todolist',
+    'dbname' => 'todolist_test',
     'user' => 'root',
     'password' => '',
     'host' => 'localhost',

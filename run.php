@@ -37,11 +37,12 @@ $container->add("SocketSystem" , $socket);
 $application = new \Application\App();
 $application->init($container);
 
-$infrastructure = new \Infrastructure\App();
-$infrastructure->init($container);
 
 $persistence = new \Persistence\App();
 $persistence->init($container);
+
+$infrastructure = new \Infrastructure\App();
+$infrastructure->init($container);
 
 $webService = new \Service\App();
 $webService->init($container);

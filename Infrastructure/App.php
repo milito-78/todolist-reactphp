@@ -2,16 +2,20 @@
 
 namespace Infrastructure;
 
+use Application\Interfaces\Infrastructure\DI\DependencyResolverInterface;
 use Infrastructure\Config\Config;
+use Infrastructure\Cronjob\Cronjob;
+use Infrastructure\DI\DependencyResolver;
 use League\Container\DefinitionContainerInterface;
 
 class App {
     static private ?Config $config = null;
+    static private ?DependencyResolverInterface $di = null;
     static private ?DefinitionContainerInterface $container = null;
 
     public function __construct()
     {
-        self::getConfigInstance();
+        self::getConfigInstance(); 
     }
 
 
@@ -49,6 +53,17 @@ class App {
     public function init(DefinitionContainerInterface $container) {
         $this->setContainer($container);
         $container->addServiceProvider(new ServiceProvider());
+        (new Cronjob)->init();
+    }
+
+    public static function make($class,$params = []):mixed{
+        return self::di()->make($class,$params);
+    }
+
+    private static function di(){
+        if(self::$di)
+            return self::$di;
+        return self::$di = new DependencyResolver(self::container());
     }
 
     public static function path()

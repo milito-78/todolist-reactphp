@@ -12,6 +12,8 @@ use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
 use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
 use Application\Files\Commands\Delete\DeleteCommand;
 use Application\Files\Commands\Delete\IDeleteCommand;
+use Application\Files\Commands\DeleteExpiredFiles\DeleteExpiredFilesCommand;
+use Application\Files\Commands\DeleteExpiredFiles\IDeleteExpiredFilesCommand;
 use Application\Files\Commands\DeleteFile\DeleteFileCommand;
 use Application\Files\Commands\DeleteFile\IDeleteFileCommand;
 use Application\Files\Commands\Upload\IUploadCommand;
@@ -258,6 +260,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             IDeleteFileCommand::class,new DeleteFileCommand()
         );
+        $this->getContainer()
+        ->add(
+            IDeleteExpiredFilesCommand::class,new DeleteExpiredFilesCommand($this->getContainer()->get(UploadRepositoryInterface::class))
+        );
     }
 
     private function filesProvides():array{
@@ -270,6 +276,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             DeleteFileCommand::class,
             IDeleteCommand::class,
             DeleteCommand::class,
+            IDeleteExpiredFilesCommand::class,
+            DeleteExpiredFilesCommand::class
         ];
     }
 

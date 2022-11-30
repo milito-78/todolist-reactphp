@@ -6,6 +6,7 @@ use Application\Codes\Commands\SaveCode\SaveCodeModel;
 use Application\Users\Queries\GetUserByEmail\IGetUserByEmailQuery;
 use Domain\Users\User;
 use React\Promise\PromiseInterface;
+use Service\Shared\Helpers\Helpers;
 
 class ForgetPasswordUserCommand  implements IForgetPasswordUserCommand {
     /**
@@ -32,7 +33,6 @@ class ForgetPasswordUserCommand  implements IForgetPasswordUserCommand {
     }
 
     private function sendCode(string $email,string $code){
-        echo "Send Email : " . $email . " - " . $code . PHP_EOL; 
-        //TODO send Code
+        Helpers::emit("server","send_verify_code_email",["email" => $email,"code" => $code]);
     }
 }

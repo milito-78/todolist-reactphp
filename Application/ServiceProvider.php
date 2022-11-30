@@ -6,8 +6,14 @@ use Application\Codes\Commands\CreateCode\CreateCodeCommand;
 use Application\Codes\Commands\CreateCode\ICreateCodeCommand;
 use Application\Codes\Commands\SaveCode\ISaveCodeCommand;
 use Application\Codes\Commands\SaveCode\SaveCodeCommand;
+use Application\Codes\Commands\SendCode\ISendCodeCommand;
+use Application\Codes\Commands\SendCode\SendCodeCommand;
 use Application\Codes\Queries\GetCodeByToken\GetCodeByTokenQuery;
 use Application\Codes\Queries\GetCodeByToken\IGetCodeByTokenQuery;
+use Application\Files\Commands\Delete\DeleteCommand;
+use Application\Files\Commands\Delete\IDeleteCommand;
+use Application\Files\Commands\DeleteFile\DeleteFileCommand;
+use Application\Files\Commands\DeleteFile\IDeleteFileCommand;
 use Application\Files\Commands\Upload\IUploadCommand;
 use Application\Files\Commands\Upload\UploadCommand;
 use Application\Files\Queries\ShowFile\IShowFileQuery;
@@ -212,6 +218,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             ICreateCodeCommand::class,new CreateCodeCommand($this->getContainer()->get(IGetCodeByTokenQuery::class),$this->getContainer()->get(ISaveCodeCommand::class))
         );
+        $this->getContainer()
+        ->add(
+            ISendCodeCommand::class,new SendCodeCommand()
+        );
     }
 
     private function codesProvides():array{
@@ -222,6 +232,8 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             SaveCodeCommand::class,
             ICreateCodeCommand::class,
             CreateCodeCommand::class,
+            ISendCodeCommand::class,
+            SendCodeCommand::class,
         ];
     }
 
@@ -234,6 +246,18 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
         ->add(
             IUploadCommand::class,new UploadCommand($this->getContainer()->get(UploadRepositoryInterface::class))
         );
+        $this->getContainer()
+        ->add(
+            IUploadCommand::class,new UploadCommand($this->getContainer()->get(UploadRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IDeleteCommand::class,new DeleteCommand($this->getContainer()->get(UploadRepositoryInterface::class))
+        );
+        $this->getContainer()
+        ->add(
+            IDeleteFileCommand::class,new DeleteFileCommand()
+        );
     }
 
     private function filesProvides():array{
@@ -242,6 +266,10 @@ class ServiceProvider extends AbstractServiceProvider implements BootableService
             ShowFileQuery::class,
             IUploadCommand::class,
             UploadCommand::class,
+            IDeleteFileCommand::class,
+            DeleteFileCommand::class,
+            IDeleteCommand::class,
+            DeleteCommand::class,
         ];
     }
 

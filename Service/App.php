@@ -4,6 +4,7 @@ namespace Service;
 
 use Infrastructure\Config\Config;
 use League\Container\DefinitionContainerInterface;
+use Service\Shared\Listeners\EventServiceProvider;
 
 class App {
     static private ?Config $config = null;

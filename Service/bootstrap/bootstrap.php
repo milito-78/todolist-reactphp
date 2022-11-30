@@ -16,8 +16,7 @@ use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
 use React\Http\HttpServer;
-
-
+use Service\Shared\Listeners\EventServiceProvider;
 //////////////////////
 use Service\Shared\Route\RouteCollector as Router;
 
@@ -52,10 +51,8 @@ $socket = App::container()->get("SocketSystem");
 
 $server->listen($socket);
 
-$server->on("error", function ($exception){
-    \Common\Logger\LoggerFacade::error($exception->getMessage(),["exception" => $exception]);
-});
-
 $container->add("HttpServer" , $server);
+
+$container->addServiceProvider(new EventServiceProvider());
 
 return $loop;

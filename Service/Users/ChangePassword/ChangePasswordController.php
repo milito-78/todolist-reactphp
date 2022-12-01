@@ -6,6 +6,7 @@ use Application\Users\Queries\LoginUser\Exceptions\CredentialException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class ChangePasswordController extends Controller
 {
@@ -34,7 +35,7 @@ class ChangePasswordController extends Controller
                             "errors"=> [
                                 "current password is incorrect"
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     });;
     }
 

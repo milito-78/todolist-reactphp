@@ -8,6 +8,7 @@ use Domain\Users\User;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 use Service\Users\Common\Resources\UserResource;
 
 class RegisterController extends Controller
@@ -29,14 +30,14 @@ class RegisterController extends Controller
         return $this->command
                     ->Execute($input)
                     ->then(function(User $user){
-                        return Helpers::response($this->response($user));
+                        return Helpers::response($this->response($user),JsonResponse::STATUS_CREATED);
                     },function(UserExistsException $exception){
                         return Helpers::response([
                             "title"=> "Validation Failed!",
                             "errors"=> [
                                 "Email has been registered before"
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     });
     }
 

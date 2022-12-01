@@ -8,6 +8,7 @@ use Application\Users\Queries\GetUserByEmail\Exceptions\NotFoundUserException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class ForgetPasswordController extends Controller
 {
@@ -34,7 +35,7 @@ class ForgetPasswordController extends Controller
                             "errors"=> [
                                 "Email has not registered before"
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     });
     }
 

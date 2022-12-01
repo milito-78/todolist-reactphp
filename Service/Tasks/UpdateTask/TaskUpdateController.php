@@ -9,6 +9,7 @@ use Service\Shared\Exceptions\NotFoundException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class TaskUpdateController extends Controller
 {
@@ -32,9 +33,7 @@ class TaskUpdateController extends Controller
                     ->Execute($request->getAuth()->id,(int)$task,$input)
                     ->then(function(bool $result){
                         if ($result)
-                            return  Helpers::response([
-                                    "message" => "Task update successfully",
-                            ]);
+                            return  Helpers::response(null,JsonResponse::STATUS_NO_CONTENT);
                         throw new Exception("Error during update task. Please try again later");
                     },function (NotFoundTaskException $exception){
                         throw new NotFoundException("Route not found");

@@ -8,6 +8,7 @@ use Service\Shared\Exceptions\NotFoundException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class TaskDeleteController extends Controller
 {
@@ -25,7 +26,7 @@ class TaskDeleteController extends Controller
                         if ($result)
                             return  Helpers::response([
                                     "message" => "Task deleted successfully",
-                            ]);
+                            ],JsonResponse::STATUS_OK);
                         throw new Exception("Error during delete task. Please try again later");
                     },function (NotFoundTaskException $exception){
                         throw new NotFoundException("Route not found");

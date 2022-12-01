@@ -7,6 +7,7 @@ use Domain\Tasks\Task;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 use Service\Tasks\Common\Resources\TaskResource;
 
 class TaskStoreController extends Controller
@@ -30,7 +31,7 @@ class TaskStoreController extends Controller
         return $this->command
                     ->Execute($input)
                     ->then(function(Task $task){
-                        return Helpers::response($this->response($task),201);
+                        return Helpers::response($this->response($task),JsonResponse::STATUS_CREATED);
                     });
     }
 

@@ -8,6 +8,7 @@ use Application\Users\Queries\GetUserByEmail\Exceptions\NotFoundUserException;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class ResetPasswordController extends Controller
 {
@@ -42,21 +43,21 @@ class ResetPasswordController extends Controller
                             "errors"=> [
                                 "verify code is expired"
                             ],
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     })->otherwise(function(CodeExpiredException $exception){
                         return Helpers::response([
                             "title"=> "Validation Failed!",
                             "errors"=> [
                                 "verify code has expired"
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     })->otherwise(function(NotFoundUserException $exception){
                         return Helpers::response([
                             "title"=> "Validation Failed!",
                             "errors"=> [
                                 "Email has not registered before"
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     });
     }
 

@@ -7,6 +7,7 @@ use Domain\Users\User;
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 use Service\Users\Common\Resources\UserResource;
 
 class LoginController extends Controller
@@ -29,7 +30,7 @@ class LoginController extends Controller
                             "errors"=> [
                                $exception->getMessage()
                             ]
-                        ],422);
+                        ],JsonResponse::STATUS_UNPROCESSABLE_ENTITY);
                     });
     }
 

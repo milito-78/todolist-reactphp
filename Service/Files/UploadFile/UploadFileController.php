@@ -3,9 +3,11 @@ namespace Service\Files\UploadFile;
 
 use Application\Files\Commands\Upload\IUploadCommand;
 use Domain\Files\Upload;
+
 use Service\Shared\Helpers\Helpers;
 use Service\Shared\Request\Controller;
 use Service\Shared\Request\Request;
+use Service\Shared\Response\JsonResponse;
 
 class UploadFileController extends Controller{
     public function __construct(private IUploadCommand $command)
@@ -27,7 +29,7 @@ class UploadFileController extends Controller{
                                     "file_path"     => $upload->image_path,
                                 ]
                             ]
-                        ]);
+                        ],JsonResponse::STATUS_CREATED);
                     });
     }
 

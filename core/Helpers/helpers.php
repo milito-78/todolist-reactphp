@@ -105,15 +105,6 @@ if (!function_exists("filesystem")){
     }
 }
 
-if (!function_exists("container"))
-{
-    function container(): Container
-    {
-        global $container;
-        return $container;
-    }
-}
-
 if (!function_exists("emit")){
     function emit(string $type,string $event,$data){
         if ($type == "server"){
